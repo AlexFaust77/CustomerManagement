@@ -25,28 +25,31 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class Cust_Gui {
+public class Cust_Gui extends Application {
 
-	    Button btn_speichernKunde = new Button("Datensatz speichern");
-	    Button btn_abbruchSpeichernKunde = new Button("Abbruch");
-	    Button btn_speichernBestellung = new Button("Bestellung speichern");
-	    Button btn_abbruchBestellung = new Button("Abbruch");
-	    Button btn_suchen = new Button("Kunde suchen");
-	    Button btn_neuerKunde = new Button("Neuer Kunde");
-	    Button btn_neueBestellung = new Button("Neue Bestellung");
-	    Button btn_kundeLoeschen = new Button("Kunde Loeschen");
-	    Button btn_DatenbankAus = new Button("Datenbankauswahl");
-	    Button btn_neueDatenbank = new Button("Neue Datenbank");
-	    Button btn_Ratenplan = new Button("Ratenplan als PDF");
-	    Button btn_RatenplanDruck = new Button("Ratenplan Drucken");
-	    Button btn_bestellungLoeschen = new Button("Bestellung Löschen");
-	    Button btn_bestellungAendern = new Button("Bestellung ändern");
-	    Button btn_RatenplanExcelExport = new Button("Excel Export");
+	    Button btn_Cust_Save = new Button("Datensatz speichern");
+	    Button btn_Cust_NoSave = new Button("Abbruch");
+	    Button btn_Order_Save = new Button("Bestellung speichern");
+	    Button btn_Order_NoSave = new Button("Abbruch");
+	    Button btn_Cust_Search = new Button("Kunde suchen");
+	    Button btn_Cust_New = new Button("Neuer Kunde");
+	    Button btn_Order_New = new Button("Neue Bestellung");
+	    Button btn_Cust_Del = new Button("Kunde Loeschen");
+	    Button btn_Select_Db = new Button("Datenbankauswahl");
+	    Button btn_New_Db = new Button("Neue Datenbank");
+	    Button btn_Plan_Pdf = new Button("Ratenplan als PDF");
+	    Button btn_Plan_Print = new Button("Ratenplan Drucken");
+	    Button btn_Order_Del = new Button("Bestellung Löschen");
+	    Button btn_Order_Change = new Button("Bestellung ändern");
+	    Button btn_Plan_Excel = new Button("Excel Export");
 	
-	
+	    @Override
+	    public void start(Stage primaryStage) {
+	    	
+	    }
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		launch(args);
 
 	}
 
