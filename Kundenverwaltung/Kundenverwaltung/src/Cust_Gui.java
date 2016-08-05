@@ -286,8 +286,8 @@ public class Cust_Gui extends Application {
 	        
 	       Scene scene = new Scene(guiGruppe,1500, 800);      
 	              
-	        GUIZustaende guiPos = new GUIZustaende();
-	                     guiPos.startZustand(this);
+	        Gui_States gui_States = new Gui_States();
+	                   gui_States.gui_State_Start(this);
 	                      
 	        btnHandler btnHandling = new btnHandler(guiPos,this,primaryStage);
 	        FieldListener listenToFields = new FieldListener(guiPos,this,primaryStage);
@@ -329,7 +329,9 @@ public class Cust_Gui extends Application {
 	 public String getCustRes() { return txt_Cust_Res.getText(); }
 	 public void setCustRes(String custRes) { this.txt_Cust_Res.setText(custRes); }
 	 
+	 
 	 public void setTotal(String total ) { this.txt_Total.setText(total); }					    // Stats and Extras
+	 public void setOrderCount(int orderCount) { this.txt_Order_Count.setText("" + orderCount);}
 	 public String getActiveDB () { return txt_Selected_Db.getText();}
 	 public void setActiveDB(String db){this.txt_Selected_Db.setText(db); }
 	 
@@ -375,35 +377,20 @@ public class Cust_Gui extends Application {
      																this.txt_Order_Cust_Nr.setStyle("-fx-control-inner-background: " + color + ";");}
 public void setBestellNummernListe(ObservableList bestellNummern) { this.items = bestellNummern;
          bestellliste.setItems(items);}
-public void setBestellungenAnzahl(int anzahl) { this.txt_AnzBestell.setText("" + anzahl);}
+
 
 public void setEditOrderNr(boolean on_off,String color){ this.txt_Order_Nr.setEditable(on_off);
      													 this.txt_Order_Nr.setStyle("-fx-control-inner-background: " + color + ";");  }
-public void setEditBestelldatum(boolean on_off,String farbe) { this.txt_Bestelldatum.setEditable(ein_aus);
-     this.txt_Bestelldatum.setStyle("-fx-control-inner-background: " + farbe + ";");}
+public void setEditOrderDate(boolean on_off,String color) { this.txt_Order_Date.setEditable(on_off);
+     														this.txt_Order_Date.setStyle("-fx-control-inner-background: " + color + ";");}
 public void setEditPayStart(boolean on_off, String color) { this.txt_Pay_Start.setEditable(on_off);
      														this.txt_Pay_Start.setStyle("-fx-control-inner-background: " + color + ";");}
-
-public void setEditRatenzahl(boolean on_off,String farbe)    { this.txt_Ratenzahl.setEditable(ein_aus);
-     this.txt_Ratenzahl.setStyle("-fx-control-inner-background: " + farbe + ";");}
-public void setEditErsterate(boolean on_off,String farbe) { this.txt_Ersterate.setEditable(ein_aus);
-  this.txt_Ersterate.setStyle("-fx-control-inner-background: " + farbe + ";");}
-public void setEditFolgerate(boolean on_off,String farbe) { this.txt_Folgerate.setEditable(ein_aus); 
-  this.txt_Folgerate.setStyle("-fx-control-inner-background: " + farbe + ";");}
-	 /*txt_Cust_Street
-	  
-	    TextField txt_Order_Count = new TextField();
-	    
-	    TextField txt_Order_Cust_Nr = new TextField();	          				   // Textfields for Orders
-	    TextField txt_Order_Nr = new TextField();
-	    TextField txt_Order_Date = new TextField();
-	    TextField txt_Pay_Start = new TextField();
-	    TextField txt_Pay_End = new TextField();
-	    TextField txt_Rate_Count = new TextField();
-	    TextField txt_First_Rate = new TextField();
-	    TextField txt_Rate = new TextField();
-	    TextField txt_Order_Summary = new TextField();
-	   */ 
+public void setEditRateCount(boolean on_off,String color)    { this.txt_Rate_Count.setEditable(on_off);
+     														   this.txt_Rate_Count.setStyle("-fx-control-inner-background: " + color + ";");}
+public void setEditFirst_Rate(boolean on_off,String color) { this.txt_First_Rate.setEditable(on_off);
+  															 this.txt_First_Rate.setStyle("-fx-control-inner-background: " + color + ";");}
+public void setEditRate(boolean on_off,String color) { this.txt_Rate.setEditable(on_off); 
+  													   this.txt_Rate.setStyle("-fx-control-inner-background: " + color + ";");}
 	       
 	    public void setBtnCustSave(boolean on_off)              { this.btn_Cust_Save.setVisible(on_off);        }    // Button visibillity
 	    public void setBtnCustCancel(boolean on_off)            { this.btn_Cust_NoSave.setVisible(on_off); }
