@@ -76,7 +76,7 @@ public class Cust_Gui extends Application {
 	    Series<String, Double> series_Data = new Series<String, Double>();
 	     
 	    TabPane reg_Panel = new TabPane();
-	    Tab tb_Reg = new Tab();
+	    Tab tb_Table = new Tab();
 	    Tab tb_LineChart = new Tab();
 	    
 	    MenuBar mbar_Cust = new MenuBar();
@@ -260,32 +260,31 @@ public class Cust_Gui extends Application {
 	            vb_Order_Btn.getChildren().addAll(btn_Order_New,btn_Order_Change,btn_Order_Save,btn_Order_NoSave,btn_Order_Del);
 	       mGui_grid.add(vb_Order_Btn,col_9,row_4,1,5); 
   
-	             
-	             
-	        registerPanel.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+	                 
+	       reg_Panel.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-	        tabellenRegister.setText("Bestell - Historie");
-	        tabellenRegister.setContent(tabellenAnsichtFX);
+	       tb_Table.setText("Bestell - Historie");
+	       tb_Table.setContent(fx_Table_View);
 	        
-	        xAxis.setLabel("Monate");
-	        yAxis.setLabel("Rate in Euro");
-	        linechart = new LineChart(xAxis,yAxis);
-	        newLineChartTest.setText("Diagramm - Ratenplan");
-	        newLineChartTest.setContent(linechart);
+	       xAxis.setLabel("Monate");
+	       yAxis.setLabel("Rate in Euro");
+	       linechart = new LineChart(xAxis,yAxis);
+	       tb_LineChart.setText("Diagramm - Ratenplan");
+	       tb_LineChart.setContent(linechart);
 	        
-	        registerPanel.getTabs().addAll(tabellenRegister,newLineChartTest);
+	       reg_Panel.getTabs().addAll(tb_Table,tb_LineChart);
 	               
-	        HBox btn_diaTab_layout = new HBox(1);
-	             btn_diaTab_layout.getChildren().addAll(registerPanel);
-	             HBox.setHgrow(registerPanel, Priority.ALWAYS);
-	             registerPanel.setMaxWidth(Double.MAX_VALUE);
-	        positionsGitter.add(btn_diaTab_layout, sp1,17,10,3); 
+	       HBox btn_diaTab_layout = new HBox(1);
+	            btn_diaTab_layout.getChildren().addAll(reg_Panel);
+	            HBox.setHgrow(reg_Panel, Priority.ALWAYS);
+	            reg_Panel.setMaxWidth(Double.MAX_VALUE);
+	       mGui_grid.add(btn_diaTab_layout, col_1,17,10,3); 
 	                                            //   page.add(Node, colIndex, rowIndex, colSpan, rowSpan):
 	                    
-	        Group guiGruppe = new Group();
-	              guiGruppe.getChildren().addAll(positionsGitter,kdVerwMenuBar);
+	       Group guiGruppe = new Group();
+	             guiGruppe.getChildren().addAll(mGui_grid,mbar_Cust);
 	        
-	        Scene scene = new Scene(guiGruppe,1500, 800);      
+	       Scene scene = new Scene(guiGruppe,1500, 800);      
 	              
 	        GUIZustaende guiPos = new GUIZustaende();
 	                     guiPos.startZustand(this);
@@ -311,6 +310,159 @@ public class Cust_Gui extends Application {
 		launch(args);
 
 	}
+	
+	 
+	    
+	 //   public void setDatenbankAus( String text ) { this.txt_DatenbankAus.setText(text); }
+	 public String getCustNr() { return txt_Cust_Nr.getText(); }							   // Customer Getter and Setter
+	 public void setCustNr(String custNr) { this.txt_Cust_Nr.setText(custNr); }
+	 public String getCustLastName() { return txt_Cust_LastName.getText(); }
+	 public void setCustLastName( String custLastName ) { this.txt_Cust_LastName.setText(custLastName); }
+	 public String getCustName() { return txt_Cust_Name.getText(); }
+	 public void setCustName( String custName ) { this.txt_Cust_Name.setText(custName); }
+	 public String getCustStreet() { return txt_Cust_Street.getText(); }
+	 public void setCustStreet( String custStreet ) { this.txt_Cust_Street.setText(custStreet); }
+	 public String getCustHNr() { return txt_Cust_HNr.getText(); }
+	 public void setCustHNr(String custHNr) { this.txt_Cust_HNr.setText(custHNr); }
+	 public String getCustPc() { return txt_Cust_Pc.getText(); }
+	 public void setCustPc(String custPc) { this.txt_Cust_Pc.setText(custPc); }
+	 public String getCustRes() { return txt_Cust_Res.getText(); }
+	 public void setCustRes(String custRes) { this.txt_Cust_Res.setText(custRes); }
+	 
+	 public void setTotal(String total ) { this.txt_Total.setText(total); }					    // Stats and Extras
+	 public String getActiveDB () { return txt_Selected_Db.getText();}
+	 public void setActiveDB(String db){this.txt_Selected_Db.setText(db); }
+	 
+	 public String getOrderCustNr () { return txt_Order_Cust_Nr.getText(); }					// Orders Getter and Setter
+     public void setOrderCustNr(String orderCustNr ) { this.txt_Order_Cust_Nr.setText(orderCustNr); }
+     public String getOrderNr() { return txt_Order_Nr.getText(); }
+     public void setOrderNr(String orderNr)   { this.txt_Order_Nr.setText(orderNr); }
+     public String getOrderDate() { return txt_Order_Date.getText(); }
+     public void setOrderDate(String orderDate)    { this.txt_Order_Date.setText(orderDate); }
+     public String getPayStart() { return txt_Pay_Start.getText(); }
+     public void setPayStart(String payStart)   { this.txt_Pay_Start.setText(payStart); }
+     public String getPayEnd() { return txt_Pay_End.getText(); }
+	 public void setPayEnd(String payEnd)    { this.txt_Pay_End.setText(payEnd);}
+	 public String getRateCount() { return txt_Rate_Count.getText(); }
+	 public void setRateCount(int rateCount){ this.txt_Rate_Count.setText(Integer.toString(rateCount)); }
+	 public String getFirstRate() { return txt_First_Rate.getText(); }
+	 public void setFirstRate(String firstRate){ this.txt_First_Rate.setText(firstRate); }
+	 public String getRate() { return txt_Rate.getText(); }
+	 public void setRate(String rate){ this.txt_Rate.setText(rate);}
+	 public void setOrderSummary(String orderSummary){ this. txt_Order_Summary.setText(orderSummary); }
+	 public String getOrderSummary() { return  txt_Order_Summary.getText(); }
+	    
+	    
+	    public void setBadResult() { this.txt_DatenbankAus.setStyle("-fx-control-inner-background: red;"); }  
+	    public void setGoodResult() { this.txt_DatenbankAus.setStyle("-fx-control-inner-background: green;"); }
+	    
+	 public void setEditCustNr(boolean on_off,String color)    { this.txt_Cust_Nr.setEditable(on_off); 				// Customer Field Design and activation
+        													   this.txt_Cust_Nr.setStyle("-fx-control-inner-background: " + color + ";"); }
+	 public void setEditLastName(boolean on_off,String color)   { this.txt_Cust_LastName.setEditable(on_off);
+     															  this.txt_Cust_LastName.setStyle("-fx-control-inner-background: " + color + ";");}
+	 public void setEditCustName(boolean on_off,String color) { this.txt_Cust_Name.setEditable(on_off);
+     															this.txt_Cust_Name.setStyle("-fx-control-inner-background: " + color + ";");}
+     public void setEditCustStreet(boolean on_off,String color) { this.txt_Cust_Street.setEditable(on_off); 
+        	             										  this.txt_Cust_Street.setStyle("-fx-control-inner-background: " + color + ";");}
+     public void setEditCustHNr(boolean on_off,String color)  { this.txt_Cust_HNr.setEditable(on_off); 
+        												  this.txt_Cust_HNr.setStyle("-fx-control-inner-background: " + color + ";");}
+     public void setEditCustPc(boolean on_off, String color)    { this.txt_Cust_Pc.setEditable(on_off);
+        													 this.txt_Cust_Pc.setStyle("-fx-control-inner-background: " + color + ";");}
+     public void setEdiCustRes(boolean on_off,String color)     { this.txt_Cust_Res.setEditable(on_off);
+     															  this.txt_Cust_Res.setStyle("-fx-control-inner-background: " + color + ";");}
+     
+     public void setEditOrderCustNr(boolean on_off, String color) { this.txt_Order_Cust_Nr.setEditable(on_off);      // Order Fields Design and activation
+     																this.txt_Order_Cust_Nr.setStyle("-fx-control-inner-background: " + color + ";");}
+public void setBestellNummernListe(ObservableList bestellNummern) { this.items = bestellNummern;
+         bestellliste.setItems(items);}
+public void setBestellungenAnzahl(int anzahl) { this.txt_AnzBestell.setText("" + anzahl);}
+
+public void setEditOrderNr(boolean on_off,String color){ this.txt_Order_Nr.setEditable(on_off);
+     													 this.txt_Order_Nr.setStyle("-fx-control-inner-background: " + color + ";");  }
+public void setEditBestelldatum(boolean on_off,String farbe) { this.txt_Bestelldatum.setEditable(ein_aus);
+     this.txt_Bestelldatum.setStyle("-fx-control-inner-background: " + farbe + ";");}
+public void setEditPayStart(boolean on_off, String color) { this.txt_Pay_Start.setEditable(on_off);
+     														this.txt_Pay_Start.setStyle("-fx-control-inner-background: " + color + ";");}
+
+public void setEditRatenzahl(boolean on_off,String farbe)    { this.txt_Ratenzahl.setEditable(ein_aus);
+     this.txt_Ratenzahl.setStyle("-fx-control-inner-background: " + farbe + ";");}
+public void setEditErsterate(boolean on_off,String farbe) { this.txt_Ersterate.setEditable(ein_aus);
+  this.txt_Ersterate.setStyle("-fx-control-inner-background: " + farbe + ";");}
+public void setEditFolgerate(boolean on_off,String farbe) { this.txt_Folgerate.setEditable(ein_aus); 
+  this.txt_Folgerate.setStyle("-fx-control-inner-background: " + farbe + ";");}
+	 /*txt_Cust_Street
+	  
+	    TextField txt_Order_Count = new TextField();
+	    
+	    TextField txt_Order_Cust_Nr = new TextField();	          				   // Textfields for Orders
+	    TextField txt_Order_Nr = new TextField();
+	    TextField txt_Order_Date = new TextField();
+	    TextField txt_Pay_Start = new TextField();
+	    TextField txt_Pay_End = new TextField();
+	    TextField txt_Rate_Count = new TextField();
+	    TextField txt_First_Rate = new TextField();
+	    TextField txt_Rate = new TextField();
+	    TextField txt_Order_Summary = new TextField();
+	   */ 
+	       
+	    public void setBtnCustSave(boolean on_off)              { this.btn_Cust_Save.setVisible(on_off);        }    // Button visibillity
+	    public void setBtnCustCancel(boolean on_off)            { this.btn_Cust_NoSave.setVisible(on_off); }
+	    public void setBtnOrderSave(boolean on_off)             { this.btn_Order_Save.setVisible(on_off);   }
+	    public void setBtnOrderNoSave(boolean on_off)           { this.btn_Order_NoSave.setVisible(on_off);     } 
+	    
+	    /*
+	     * Button btn_Cust_Save = new Button("Datensatz speichern");   				// Gui Buttons
+	    Button btn_Cust_NoSave = new Button("Abbruch");
+	    Button btn_Order_Save = new Button("Bestellung speichern");
+	    Button btn_Order_NoSave = new Button("Abbruch");
+	    Button btn_Cust_Search = new Button("Kunde suchen");
+	    Button btn_Cust_New = new Button("Neuer Kunde");
+	    Button btn_Order_New = new Button("Neue Bestellung");
+	    Button btn_Cust_Del = new Button("Kunde Loeschen");
+	    Button btn_Select_Db = new Button("Datenbankauswahl");
+	    Button btn_New_Db = new Button("Neue Datenbank");
+	    Button btn_Plan_Pdf = new Button("Ratenplan als PDF");
+	    Button btn_Plan_Print = new Button("Ratenplan Drucken");
+	    Button btn_Order_Del = new Button("Bestellung Löschen");
+	    Button btn_Order_Change = new Button("Bestellung ändern");
+	    Button btn_Plan_Excel = new Button("Excel Export");
+	     * 
+	     * 
+	     * */
+	    
+	    public Integer getBestellFlag() { return bestell_Flag; }
+	    public ObservableList getBestellNummernListe() { return bestellliste.getItems(); } 
+	        
+	    public void setBestellFlag(Integer flag)    { this.bestell_Flag = flag; }
+	    
+	   
+	  
+	   
+	    
+	    public void setRatenzahl(String text)       { this.txt_Ratenzahl.setText(text); }
+	    public void setErsteRate(Double e_rate)     { this.txt_Ersterate.setText(e_rate.toString()); }
+	    
+	    public void setFolgeRate(Double f_rate)     { this.txt_Folgerate.setText(f_rate.toString());}
+	    
+	   
+	    public void setBestellsumme(Double b_summe) { this.txt_Bestellsumme.setText(b_summe.toString()); }
+	       
+	    public void setListBestellnummer(String bestellnummer)   { items.add(bestellnummer);}
+	    
+	    
+	   
+	   
+
+	    //public void setDiagrammDaten(XYChart.Series daten) { this.diagrammArea.getData().add(daten); }
+	    public void setTabellenRegister(TableView tabelle) { this.tabellenRegister.setContent(tabelle);}
+	    public void setTabellenDatenSaetze(ObservableList<DatenModellBest> tabDaten) { this.tabDatenSaetze = tabDaten; }
+	    public void setTableView(TableView tabFX ) { this.tabellenAnsichtFX = tabFX; }
+	   
+//	    public void setJFreeChartDaten(XYSeriesCollection dataset){ this.dataset = dataset; }
+	   
+
+	    
+	    public void setLineData(XYChart.Series data) { this.linechart.getData().add(data); }
 	
     /*
      * TextField txt_Selected_Db = new TextField();
