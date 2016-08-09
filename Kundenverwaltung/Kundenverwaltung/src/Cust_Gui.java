@@ -330,12 +330,12 @@ public class Cust_Gui extends Application {
 	 public void setCustRes(String custRes) { this.txt_Cust_Res.setText(custRes); }
 	 
 	 
-	 public void setTotal(String total ) { this.txt_Total.setText(total); }					    // Stats and Extras
+	 public void setTotal(String total ) { this.txt_Total.setText(total); }					    					// Stats and Extras
 	 public void setOrderCount(int orderCount) { this.txt_Order_Count.setText("" + orderCount);}
 	 public String getActiveDB () { return txt_Selected_Db.getText();}
 	 public void setActiveDB(String db){this.txt_Selected_Db.setText(db); }
 	 
-	 public String getOrderCustNr () { return txt_Order_Cust_Nr.getText(); }					// Orders Getter and Setter
+	 public String getOrderCustNr () { return txt_Order_Cust_Nr.getText(); }					  					// Orders Getter and Setter
      public void setOrderCustNr(String orderCustNr ) { this.txt_Order_Cust_Nr.setText(orderCustNr); }
      public String getOrderNr() { return txt_Order_Nr.getText(); }
      public void setOrderNr(String orderNr)   { this.txt_Order_Nr.setText(orderNr); }
@@ -346,15 +346,19 @@ public class Cust_Gui extends Application {
      public String getPayEnd() { return txt_Pay_End.getText(); }
 	 public void setPayEnd(String payEnd)    { this.txt_Pay_End.setText(payEnd);}
 	 public String getRateCount() { return txt_Rate_Count.getText(); }
-	 public void setRateCount(int rateCount){ this.txt_Rate_Count.setText(Integer.toString(rateCount)); }
+	 public void setRateCount(String rateCount)       { this.txt_Rate_Count.setText(rateCount); }
 	 public String getFirstRate() { return txt_First_Rate.getText(); }
-	 public void setFirstRate(String firstRate){ this.txt_First_Rate.setText(firstRate); }
+	 public void setFirstRate(String firstRate){ this.txt_First_Rate.setText(firstRate); }  
 	 public String getRate() { return txt_Rate.getText(); }
 	 public void setRate(String rate){ this.txt_Rate.setText(rate);}
 	 public void setOrderSummary(String orderSummary){ this. txt_Order_Summary.setText(orderSummary); }
 	 public String getOrderSummary() { return  txt_Order_Summary.getText(); }
-	    
-	    
+	 
+	 public void setFirstRate(Double f_rate)   { this.txt_First_Rate.setText(f_rate.toString()); }                  // Overloaded Methods  - for set Double or String or Int for this Fields
+	 public void setRate(Double f_rate) { this.txt_Rate.setText(f_rate.toString());}
+	 public void setOrderSummary(Double o_summe) { this.txt_Order_Summary.setText(o_summe.toString()); }
+	 public void setRateCount(int rateCount){ this.txt_Rate_Count.setText(Integer.toString(rateCount)); }
+	 
 	    public void setBadResult() { this.txt_DatenbankAus.setStyle("-fx-control-inner-background: red;"); }  
 	    public void setGoodResult() { this.txt_DatenbankAus.setStyle("-fx-control-inner-background: green;"); }
 	    
@@ -370,7 +374,7 @@ public class Cust_Gui extends Application {
         												  this.txt_Cust_HNr.setStyle("-fx-control-inner-background: " + color + ";");}
      public void setEditCustPc(boolean on_off, String color)    { this.txt_Cust_Pc.setEditable(on_off);
         													 this.txt_Cust_Pc.setStyle("-fx-control-inner-background: " + color + ";");}
-     public void setEdiCustRes(boolean on_off,String color)     { this.txt_Cust_Res.setEditable(on_off);
+     public void setEditCustRes(boolean on_off,String color)     { this.txt_Cust_Res.setEditable(on_off);
      															  this.txt_Cust_Res.setStyle("-fx-control-inner-background: " + color + ";");}
      
      public void setEditOrderCustNr(boolean on_off, String color) { this.txt_Order_Cust_Nr.setEditable(on_off);      // Order Fields Design and activation
@@ -387,7 +391,7 @@ public void setEditPayStart(boolean on_off, String color) { this.txt_Pay_Start.s
      														this.txt_Pay_Start.setStyle("-fx-control-inner-background: " + color + ";");}
 public void setEditRateCount(boolean on_off,String color)    { this.txt_Rate_Count.setEditable(on_off);
      														   this.txt_Rate_Count.setStyle("-fx-control-inner-background: " + color + ";");}
-public void setEditFirst_Rate(boolean on_off,String color) { this.txt_First_Rate.setEditable(on_off);
+public void setEditFirstRate(boolean on_off,String color) { this.txt_First_Rate.setEditable(on_off);
   															 this.txt_First_Rate.setStyle("-fx-control-inner-background: " + color + ";");}
 public void setEditRate(boolean on_off,String color) { this.txt_Rate.setEditable(on_off); 
   													   this.txt_Rate.setStyle("-fx-control-inner-background: " + color + ";");}
@@ -426,13 +430,14 @@ public void setEditRate(boolean on_off,String color) { this.txt_Rate.setEditable
 	  
 	   
 	    
-	    public void setRatenzahl(String text)       { this.txt_Ratenzahl.setText(text); }
-	    public void setErsteRate(Double e_rate)     { this.txt_Ersterate.setText(e_rate.toString()); }
 	    
-	    public void setFolgeRate(Double f_rate)     { this.txt_Folgerate.setText(f_rate.toString());}
+	    
+	    
+	    
+	    
 	    
 	   
-	    public void setBestellsumme(Double b_summe) { this.txt_Bestellsumme.setText(b_summe.toString()); }
+	    
 	       
 	    public void setListBestellnummer(String bestellnummer)   { items.add(bestellnummer);}
 	    

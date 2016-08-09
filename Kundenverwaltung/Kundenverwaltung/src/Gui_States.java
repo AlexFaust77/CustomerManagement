@@ -7,46 +7,46 @@ public class Gui_States {
 	    String activ = "green";
 	    String passive = "white";
 	    
-	    public void gui_State_Start(Cust_Gui obj_Cust_Gui) {
-	      // A little Change for commit
-	      obj_Cust_Gui.setEditKdNr(on, activ);
-	      obj_Cust_Gui.setKdnr("");
-	      obj_Cust_Gui.setEditName(off,passive);
-	      obj_Cust_Gui.setName("");
-	      obj_Cust_Gui.setEditVorname(off,passive);
-	      obj_Cust_Gui.setVorname("");
-	      obj_Cust_Gui.setEditStrasse(off,passive);
-	      obj_Cust_Gui.setStrasse("");
-	      obj_Cust_Gui.setEditHausnr(off,passive);
-	      obj_Cust_Gui.setHausnr("");
-	      obj_Cust_Gui.setEditPlz(off,passive);
-	      obj_Cust_Gui.setPlz("");
-	      obj_Cust_Gui.setEditOrt(off,passive);  
-	      obj_Cust_Gui.setOrt("");
-	      obj_Cust_Gui.setGesamtUmsatz("");
-	           
-	      obj_Cust_Gui.setSpeichernKunde(off);
-	      obj_Cust_Gui.setAbbruchSpeichernKunde(off);  
+	public void gui_State_Start(Cust_Gui obj_Cust_Gui) {
+	     
+	      obj_Cust_Gui.setEditCustNr(on, activ);  	 		// GUI Customer Textfields
+	      obj_Cust_Gui.setCustNr("");
+	      obj_Cust_Gui.setEditLastName(off,passive);
+	      obj_Cust_Gui.setCustLastName("");
+	      obj_Cust_Gui.setEditCustName(off,passive);
+	      obj_Cust_Gui.setCustName("");
+	      obj_Cust_Gui.setEditCustStreet(off,passive);
+	      obj_Cust_Gui.setCustStreet("");
+	      obj_Cust_Gui.setEditCustHNr(off,passive);
+	      obj_Cust_Gui.setCustHNr("");
+	      obj_Cust_Gui.setEditCustPc(off,passive);
+	      obj_Cust_Gui.setCustPc("");
+	      obj_Cust_Gui.setEditCustRes(off,passive);  
+	      obj_Cust_Gui.setCustRes("");
+	      obj_Cust_Gui.setTotal("");
 	      
-	      obj_Cust_Gui.setEditBestellkdnr(off,passive);
-	      obj_Cust_Gui.setEditBestellnummer(off,passive);
-	      obj_Cust_Gui.setBestellnummer("");
-	      obj_Cust_Gui.setEditBestelldatum(off,passive);
-	      obj_Cust_Gui.setBestellDatum("");
-	      obj_Cust_Gui.setEditZahlungsart(off,passive);
-	      obj_Cust_Gui.setZahlungsstart("");
-	      obj_Cust_Gui.setZahlungsende("");
-	      obj_Cust_Gui.setEditRatenzahl(off,passive);
-	      obj_Cust_Gui.setRatenzahl("");
-	      obj_Cust_Gui.setEditErsterate(off,passive);
-	      obj_Cust_Gui.setErsteRate("");
-	      obj_Cust_Gui.setEditFolgerate(off,passive);
-	      obj_Cust_Gui.setFolgeRate("");
-	      obj_Cust_Gui.setBestellsumme("");
-	      
-	      obj_Cust_Gui.setSpeichernBestellung(off);
-	      obj_Cust_Gui.setAbbruchBestellung(off);
-	    }
+	      obj_Cust_Gui.setEditOrderCustNr(off,passive);        // GUI Order Textfields
+	      obj_Cust_Gui.setEditOrderNr(off,passive);
+	      obj_Cust_Gui.setOrderNr("");
+	      obj_Cust_Gui.setEditOrderDate(off,passive);
+	      obj_Cust_Gui.setOrderDate("");
+	      obj_Cust_Gui.setEditPayStart(off,passive);
+	      obj_Cust_Gui.setPayStart("");
+	      obj_Cust_Gui.setPayEnd("");
+	      obj_Cust_Gui.setEditRateCount(off,passive);
+	      obj_Cust_Gui.setRateCount("");
+	      obj_Cust_Gui.setEditFirstRate(off,passive);
+	      obj_Cust_Gui.setFirstRate("");
+	      obj_Cust_Gui.setEditRate(off,passive);
+	      obj_Cust_Gui.setRate("");
+	      obj_Cust_Gui.setOrderSummary("");
+     
+	      obj_Cust_Gui.setBtnCustSave(off);					  // GUI Buttons
+	      obj_Cust_Gui.setBtnCustCancel(off);  
+	      obj_Cust_Gui.setBtnOrderSave(off);
+	      obj_Cust_Gui.setBtnOrderNoSave(off);
+	    
+	}
 
 
 	    public void neuenKundenAnlegen(Kundenverwaltung objKdverw) {
