@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,7 +57,7 @@ public class Cust_Gui extends Application {
 	    TextField txt_Cust_Pc = new TextField();
 	    TextField txt_Cust_Res = new TextField();
 	    
-	    TextField txt_Order_Cust_Nr = new TextField();	          				   // Textfields for Orders
+	    TextField txt_Order_Cust_Nr = new TextField();	          				      // Textfields for Orders
 	    TextField txt_Order_Nr = new TextField();
 	    TextField txt_Order_Date = new TextField();
 	    TextField txt_Pay_Start = new TextField();
@@ -65,6 +67,7 @@ public class Cust_Gui extends Application {
 	    TextField txt_Rate = new TextField();
 	    TextField txt_Order_Summary = new TextField();
 	   
+	    private static final Logger logger = AnwendungsLogger.getInstance();			// Logger   ==> Log4j - Framework
 	    
 	    ObservableList<DatenModellBest> tbl_Data_Records = FXCollections.observableArrayList();
 	    ListView<String> lstv_Order_List = new ListView<String>();
@@ -289,13 +292,13 @@ public class Cust_Gui extends Application {
 	        Gui_States gui_States = new Gui_States();
 	                   gui_States.gui_State_Start(this);
 	                      
-	        btnHandler btnHandling = new btnHandler(guiPos,this,primaryStage);
-	        FieldListener listenToFields = new FieldListener(guiPos,this,primaryStage);
+	        Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger);
+	        FieldListener listenToFields = new FieldListener(gui_States,this,primaryStage);
 	        
-	        Feldueberwachung absichern = new Feldueberwachung(guiPos,this,primaryStage);
+	        Feldueberwachung absichern = new Feldueberwachung(gui_States,this,primaryStage);
 	        
-	        dbSpeicher dbBereitsVorhanden = new dbSpeicher();
-	                   dbBereitsVorhanden.pruefenObDbInfovorhanden(guiPos,this);
+	        Save_Database_Information database_Exists = new Save_Database_Information();
+	        						  database_Exists.check_Database_File(gui_States,this,logger);
 	                         
 	        primaryStage.setTitle("Kundenverwaltung");
 	        primaryStage.setScene(scene);
@@ -358,10 +361,8 @@ public class Cust_Gui extends Application {
 	 public void setRate(Double f_rate) { this.txt_Rate.setText(f_rate.toString());}
 	 public void setOrderSummary(Double o_summe) { this.txt_Order_Summary.setText(o_summe.toString()); }
 	 public void setRateCount(int rateCount){ this.txt_Rate_Count.setText(Integer.toString(rateCount)); }
+
 	 
-	    public void setBadResult() { this.txt_DatenbankAus.setStyle("-fx-control-inner-background: red;"); }  
-	    public void setGoodResult() { this.txt_DatenbankAus.setStyle("-fx-control-inner-background: green;"); }
-	    
 	 public void setEditCustNr(boolean on_off,String color)    { this.txt_Cust_Nr.setEditable(on_off); 				// Customer Field Design and activation
         													   this.txt_Cust_Nr.setStyle("-fx-control-inner-background: " + color + ";"); }
 	 public void setEditLastName(boolean on_off,String color)   { this.txt_Cust_LastName.setEditable(on_off);
@@ -379,8 +380,14 @@ public class Cust_Gui extends Application {
      
      public void setEditOrderCustNr(boolean on_off, String color) { this.txt_Order_Cust_Nr.setEditable(on_off);      // Order Fields Design and activation
      																this.txt_Order_Cust_Nr.setStyle("-fx-control-inner-background: " + color + ";");}
+     
+     
+	 public void setBadResult() { this.txt_Selected_Db.setStyle("-fx-control-inner-background: red;"); }  			// Extra Fields Database Status etc.
+	 public void setGoodResult() { this.txt_Selected_Db.setStyle("-fx-control-inner-background: green;"); }
+     
+     
 public void setBestellNummernListe(ObservableList bestellNummern) { this.items = bestellNummern;
-         bestellliste.setItems(items);}
+         															bestellliste.setItems(items);}
 
 
 public void setEditOrderNr(boolean on_off,String color){ this.txt_Order_Nr.setEditable(on_off);
