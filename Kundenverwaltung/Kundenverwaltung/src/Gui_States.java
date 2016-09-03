@@ -49,20 +49,18 @@ public class Gui_States {
 	}
 
 
-	    public void neuenKundenAnlegen(Kundenverwaltung objKdverw) {
+	    public void create_Customer(Cust_Gui obj_Cust_Gui) {  // Activate all Fields you need for new Customer
 	        
-	      objKdverw.setEditKdNr(on, activ);
-	      objKdverw.setEditName(on, activ);
-	      objKdverw.setEditVorname(on, activ);
-	      objKdverw.setEditStrasse(on, activ);
-	      objKdverw.setEditHausnr(on, activ);
-	      objKdverw.setEditPlz(on, activ);
-	      objKdverw.setEditOrt(on, activ);
+	    	obj_Cust_Gui.setEditCustNr(on, activ);
+	    	obj_Cust_Gui.setEditLastName(on, activ);
+	    	obj_Cust_Gui.setEditCustName(on, activ);
+	    	obj_Cust_Gui.setEditCustStreet(on, activ);
+	    	obj_Cust_Gui.setEditCustHNr(on, activ);
+	    	obj_Cust_Gui.setEditCustPc(on, activ);
+	    	obj_Cust_Gui.setEditCustRes(on, activ);
 	       
-	      // Feldfarbe ändern
-	      
-	      objKdverw.setAbbruchSpeichernKunde(ein);
-	      objKdverw.setSpeichernKunde(ein);
+	       	obj_Cust_Gui.setBtnCustCancel(on);
+	    	obj_Cust_Gui.setBtnCustSave(on);
 	        
 	    }
 	    

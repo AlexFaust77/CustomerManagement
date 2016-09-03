@@ -163,10 +163,10 @@ public class SQL_Statements {
 return db_Reached;   
 }
  
-public boolean doubled_Customer_Check(Obj_Customer obj_Customer, String str_cust_Nr,String str_DBname) {
+public boolean doubled_Customer_Check(Obj_Customer obj_Customer, String str_cust_Nr,String str_DBname,Logger logger) {
    boolean customer_Doubled = false;  
          Obj_Customer obj_doub_Cust = new Obj_Customer();
-         obj_doub_Cust = this.getOrders_From_Customer(obj_Customer, str_cust_Nr, str_DBname);
+         obj_doub_Cust = this.getCustomer_AND_Orders(obj_Customer, str_cust_Nr, str_DBname,logger);
     
      if( obj_doub_Cust.getCustNr() != null) {
     	    customer_Doubled = true;
@@ -176,7 +176,7 @@ public boolean doubled_Customer_Check(Obj_Customer obj_Customer, String str_cust
  return customer_Doubled;
  }
  
- public Obj_Customer getOrders_From_Customer(Obj_Customer obj_Customer, String str_cust_Nr,String str_DBname)  {        // All Orders from one Customer
+ public Obj_Customer getCustomer_AND_Orders(Obj_Customer obj_Customer, String str_cust_Nr,String str_DBname, Logger logger)  {        // All Orders from one Customer
          
             this.url = "jdbc:sqlite:" + str_DBname;
             ObservableList<String> lst_Orders = FXCollections.observableArrayList();
