@@ -67,13 +67,14 @@ public class Cust_Gui extends Application {
 	    TextField txt_Rate = new TextField();
 	    TextField txt_Order_Summary = new TextField();
 	   
-	    private static final Logger logger = AnwendungsLogger.getInstance();			// Logger   ==> Log4j - Framework
+	    private static final Logger logger = Logger_Init.getInstance();			// Logger   ==> Log4j - Framework
 	    
-	    ObservableList<DatenModellBest> tbl_Data_Records = FXCollections.observableArrayList();
-	    ListView<String> lstv_Order_List = new ListView<String>();
-	    ObservableList<String> items = FXCollections.observableArrayList();
-	
-	    TableView<DatenModellBest> fx_Table_View = new TableView<DatenModellBest>();
+	    TableView<Obj_Order> fx_Table_View = new TableView<Obj_Order>();
+	    ObservableList<Obj_Order> tbl_Data_Records = FXCollections.observableArrayList();
+	   
+	    ListView<String> lstv_Order_List = new ListView<String>();									// vorher bestellliste
+	    ObservableList<String> lst_Orderlist_Items = FXCollections.observableArrayList();			// vorher Items
+		    
 	    XYChart.Series daten;
 	    ObservableList<XYChart.Series<String, Double>> obs_Lst_Data = FXCollections.observableArrayList();
 	    Series<String, Double> series_Data = new Series<String, Double>();
@@ -118,7 +119,8 @@ public class Cust_Gui extends Application {
 	        
 	        Menu menuInfo = new Menu("Info");
 	        MenuItem menuProgInfo = new MenuItem("Progamm Info");
-	        menuInfo.getItems().addAll(menuProgInfo);
+	        
+	        menuInfo.getItems().addAll(menuProgInfo,m_Exit);
 	        
 	        mbar_Cust.getMenus().addAll(m_File,menuBearbeiten,menuInfo);
 	        mbar_Cust.prefWidthProperty().bind(primaryStage.widthProperty());          // Menuebarsize scale to windowsize
@@ -158,7 +160,7 @@ public class Cust_Gui extends Application {
 	        txt_Pay_End.setFocusTraversable(false);      					         // No Tab selection needed for this textfields
 	        txt_Order_Summary.setFocusTraversable(false);
 	        
-	        lstv_Order_List.setItems(items);      								     // Set Items in listview
+	        lstv_Order_List.setItems(lst_Orderlist_Items);      					 // Set Items in listview
 	        lstv_Order_List.setMaxHeight(260.00);
 
 	        VBox lbl_Customer = new VBox(13);        							     // Customer Labels
@@ -287,15 +289,15 @@ public class Cust_Gui extends Application {
 	       Group guiGruppe = new Group();
 	             guiGruppe.getChildren().addAll(mGui_grid,mbar_Cust);
 	        
-	       Scene scene = new Scene(guiGruppe,1500, 800);      
+	        Scene scene = new Scene(guiGruppe,1500, 800);      
 	              
 	        Gui_States gui_States = new Gui_States();
 	                   gui_States.gui_State_Start(this);
 	                      
-	        Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger);
-	        FieldListener listenToFields = new FieldListener(gui_States,this,primaryStage);
+	        Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger,primaryStage);
+	        // FieldListener listenToFields = new FieldListener(gui_States,this,primaryStage);
 	        
-	        Feldueberwachung absichern = new Feldueberwachung(gui_States,this,primaryStage);
+	        // Feldueberwachung absichern = new Feldueberwachung(gui_States,this,primaryStage);
 	        
 	        Save_Database_Information database_Exists = new Save_Database_Information();
 	        						  database_Exists.check_Database_File(gui_States,this,logger);
@@ -337,7 +339,7 @@ public class Cust_Gui extends Application {
 	 public void setOrderCount(int orderCount) { this.txt_Order_Count.setText("" + orderCount);}
 	 public String getActiveDB () { return txt_Selected_Db.getText();}
 	 public void setActiveDB(String db){this.txt_Selected_Db.setText(db); }
-	 
+	 	 
 	 public String getOrderCustNr () { return txt_Order_Cust_Nr.getText(); }					  					// Orders Getter and Setter
      public void setOrderCustNr(String orderCustNr ) { this.txt_Order_Cust_Nr.setText(orderCustNr); }
      public String getOrderNr() { return txt_Order_Nr.getText(); }
@@ -386,9 +388,9 @@ public class Cust_Gui extends Application {
 	 public void setGoodResult() { this.txt_Selected_Db.setStyle("-fx-control-inner-background: green;"); }
      
      
-public void setBestellNummernListe(ObservableList bestellNummern) { this.items = bestellNummern;
-         															bestellliste.setItems(items);}
-
+public void setBestellNummernListe(ObservableList lst_Orderlist_Items) { this.lst_Orderlist_Items = lst_Orderlist_Items;
+																	lstv_Order_List.setItems(lst_Orderlist_Items);}
+public ObservableList getBestellNummernListe() { return lstv_Order_List.getItems(); } 
 
 public void setEditOrderNr(boolean on_off,String color){ this.txt_Order_Nr.setEditable(on_off);
      													 this.txt_Order_Nr.setStyle("-fx-control-inner-background: " + color + ";");  }
@@ -408,72 +410,26 @@ public void setEditRate(boolean on_off,String color) { this.txt_Rate.setEditable
 	    public void setBtnOrderSave(boolean on_off)             { this.btn_Order_Save.setVisible(on_off);   }
 	    public void setBtnOrderNoSave(boolean on_off)           { this.btn_Order_NoSave.setVisible(on_off);     } 
 	    
-	    /*
-	     * Button btn_Cust_Save = new Button("Datensatz speichern");   				// Gui Buttons
-	    Button btn_Cust_NoSave = new Button("Abbruch");
-	    Button btn_Order_Save = new Button("Bestellung speichern");
-	    Button btn_Order_NoSave = new Button("Abbruch");
-	    Button btn_Cust_Search = new Button("Kunde suchen");
-	    Button btn_Cust_New = new Button("Neuer Kunde");
-	    Button btn_Order_New = new Button("Neue Bestellung");
-	    Button btn_Cust_Del = new Button("Kunde Loeschen");
-	    Button btn_Select_Db = new Button("Datenbankauswahl");
-	    Button btn_New_Db = new Button("Neue Datenbank");
-	    Button btn_Plan_Pdf = new Button("Ratenplan als PDF");
-	    Button btn_Plan_Print = new Button("Ratenplan Drucken");
-	    Button btn_Order_Del = new Button("Bestellung Löschen");
-	    Button btn_Order_Change = new Button("Bestellung ändern");
-	    Button btn_Plan_Excel = new Button("Excel Export");
-	     * 
-	     * 
-	     * */
 	    
-	    public Integer getBestellFlag() { return bestell_Flag; }
-	    public ObservableList getBestellNummernListe() { return bestellliste.getItems(); } 
-	        
-	    public void setBestellFlag(Integer flag)    { this.bestell_Flag = flag; }
+	    public Integer getOrderFlag() { return order_Flag; }
+	    public void setOrderFlag(Integer order_Flag)    { this.order_Flag = order_Flag; }
 	    
 	   
-	  
-	   
+	         
+	    public void setListBestellnummer(String ordernumbers)   { lst_Orderlist_Items.add(ordernumbers);}
 	    
 	    
-	    
-	    
-	    
-	    
-	    
-	   
-	    
-	       
-	    public void setListBestellnummer(String bestellnummer)   { items.add(bestellnummer);}
-	    
-	    
-	   
+
+	  //  public void setTabellenRegister(TableView tabelle) { this.tabellenRegister.setContent(tabelle);}
+	  //  public void setTabellenDatenSaetze(ObservableList<DatenModellBest> tabDaten) { this.tabDatenSaetze = tabDaten; }
+	  //  public void setTableView(TableView tabFX ) { this.tabellenAnsichtFX = tabFX; }
 	   
 
-	    //public void setDiagrammDaten(XYChart.Series daten) { this.diagrammArea.getData().add(daten); }
-	    public void setTabellenRegister(TableView tabelle) { this.tabellenRegister.setContent(tabelle);}
-	    public void setTabellenDatenSaetze(ObservableList<DatenModellBest> tabDaten) { this.tabDatenSaetze = tabDaten; }
-	    public void setTableView(TableView tabFX ) { this.tabellenAnsichtFX = tabFX; }
-	   
-//	    public void setJFreeChartDaten(XYSeriesCollection dataset){ this.dataset = dataset; }
 	   
 
 	    
 	    public void setLineData(XYChart.Series data) { this.linechart.getData().add(data); }
 	
-    /*
-     * TextField txt_Selected_Db = new TextField();
-TextField txt_Cust_Nr = new TextField();
-TextField txt_Cust_LastName = new TextField();
-TextField txt_Cust_Name = new TextField();
-TextField txt_Cust_Street = new TextField();
-TextField txt_Cust_HNr = new TextField();
-TextField txt_Cust_Pc = new TextField();
-TextField txt_Cust_Res = new TextField();
-     *      
-     *      
-     */
+
 
 }

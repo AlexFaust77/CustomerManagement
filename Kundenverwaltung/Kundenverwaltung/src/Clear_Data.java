@@ -27,22 +27,19 @@ public class Clear_Data {
 	    return obj_Customer;
 	    }
 	    
-	    public void cleanLists(ArrayList<String> month, ArrayList<String> abrechnungsmonate,						// Clear all Lists
-	                           ArrayList<String> monatlicheRaten, ArrayList<Bestellung> orderlist,
-	                           ObservableList<Kunde> liste_Obj_Kunde, ArrayList<String> liste_Kundennummern,
-	                           ArrayList<String> monatsliste, ArrayList<String> monthly_Rate) {
+	    public void cleanLists(ArrayList<String> month, 						// Clear all Lists
+	                            ArrayList<Obj_Order> lst_orders,
+	                            ObservableList<Obj_Customer> lst_obj_customer, ArrayList<String> lst_customernr,
+	                            ArrayList<String> lst_monthly_Rate) {
 	        
-	    monate.clear();
-	    abrechnungsmonate.clear();
-	    monatlicheRaten.clear();
-	    obj_Bestellliste.clear();
-	    liste_Obj_Kunde.clear();
-	    liste_Kundennummern.clear();
-	    monatsliste.clear();
-	    monatlicheRate.clear();
-	        
+	    month.clear();
+	    lst_orders.clear();
+	    lst_obj_customer.clear();
+	    lst_customernr.clear();
+	    lst_monthly_Rate.clear();
+        
 	    }
 	
-	
+	// data_cleaner.cleanLists(lst_month,abrechnungsmonate,monatlicheRaten,orderlist,lst_Obj_Customer,lst_All_Customers,monatsliste,lst_monthly_Rate);
 	
 }

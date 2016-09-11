@@ -49,7 +49,7 @@ public class Gui_States {
 	}
 
 
-	    public void create_Customer(Cust_Gui obj_Cust_Gui) {  // Activate all Fields you need for new Customer
+	    public void create_Customer(Cust_Gui obj_Cust_Gui) {   // Activate all Fields you need for new Customer
 	        
 	    	obj_Cust_Gui.setEditCustNr(on, activ);
 	    	obj_Cust_Gui.setEditLastName(on, activ);
@@ -70,50 +70,50 @@ public class Gui_States {
 	        
 	    }
 	    
-	   public void neueBestellungen(Kundenverwaltung objKdverw) {
-	        objKdverw.setEditBestellnummer(on, activ);
-	        objKdverw.setEditBestelldatum(on, activ);
-	        objKdverw.setEditZahlungsart(on, activ);
-	        objKdverw.setEditErsterate(on, activ);
-	        objKdverw.setEditFolgerate(on, activ);
-	        objKdverw.setEditRatenzahl(on, activ);
+	   public void create_Order(Cust_Gui obj_Cust_Gui) {    // Activate all Fields you need for new Order
+		    obj_Cust_Gui.setEditOrderNr(on, activ);
+		    obj_Cust_Gui.setEditOrderDate(on, activ);
+		    obj_Cust_Gui.setEditPayStart(on, activ);
+		    obj_Cust_Gui.setEditFirstRate(on, activ);
+		    obj_Cust_Gui.setEditRate(on, activ);
+		    obj_Cust_Gui.setEditRateCount(on, activ);
 	        
-	        objKdverw.setSpeichernBestellung(on);
-	        objKdverw.setAbbruchBestellung(on);
+		    obj_Cust_Gui.setBtnOrderSave(on);
+		    obj_Cust_Gui.setBtnOrderNoSave(on);
 	    }
-	   public void abbruchBestellung(Kundenverwaltung objKdverw) {
-	      objKdverw.setBestellkdnr("");
-	      objKdverw.setEditBestellnummer(off,passive);
-	      objKdverw.setBestellnummer("");
-	      objKdverw.setEditBestelldatum(off,passive);
-	      objKdverw.setBestellDatum("");
-	      objKdverw.setEditZahlungsart(off,passive);
-	      objKdverw.setZahlungsstart("");
-	      objKdverw.setZahlungsende("");
-	      objKdverw.setEditRatenzahl(off,passive);
-	      objKdverw.setRatenzahl("");
-	      objKdverw.setEditErsterate(off,passive);
-	      objKdverw.setErsteRate("");
-	      objKdverw.setEditFolgerate(off,passive);
-	      objKdverw.setFolgeRate("");
-	      objKdverw.setBestellsumme("");
+	   public void cancel_Order(Cust_Gui obj_Cust_Gui) {
+		   obj_Cust_Gui.setOrderCustNr("");
+		   obj_Cust_Gui.setEditOrderNr(off,passive);
+		   obj_Cust_Gui.setOrderNr("");
+		   obj_Cust_Gui.setEditOrderDate(off,passive);
+		   obj_Cust_Gui.setOrderDate("");
+		   obj_Cust_Gui.setEditPayStart(off,passive);
+		   obj_Cust_Gui.setPayStart("");
+		   obj_Cust_Gui.setPayEnd("");
+		   obj_Cust_Gui.setEditRateCount(off,passive);
+		   obj_Cust_Gui.setRateCount("");
+		   obj_Cust_Gui.setEditFirstRate(off,passive);
+		   obj_Cust_Gui.setFirstRate("");
+		   obj_Cust_Gui.setEditRate(off,passive);
+		   obj_Cust_Gui.setRate("");
+		   obj_Cust_Gui.setOrderSummary("");
 	      
-	      objKdverw.setSpeichernBestellung(aus);
-	      objKdverw.setAbbruchBestellung(aus);
+		   obj_Cust_Gui.setBtnOrderNoSave(off);
+		   obj_Cust_Gui.setBtnOrderNoSave(off);
 	   } 
 	   
-	   public void bestellungAendern(Kundenverwaltung objKdverw) {
-	      objKdverw.setEditBestellnummer(off,passive);
-	      objKdverw.setEditKdNr(off,passive);
+	   public void change_Order(Cust_Gui obj_Cust_Gui) {
+		   obj_Cust_Gui.setEditOrderNr(off,passive);
+		   obj_Cust_Gui.setEditCustNr(off,passive);
 	      
-	      objKdverw.setEditBestelldatum(on, activ);
-	      objKdverw.setEditZahlungsart(on, activ);
-	      objKdverw.setEditRatenzahl(on, activ);
-	      objKdverw.setEditErsterate(on, activ);
-	      objKdverw.setEditFolgerate(on, activ);
+		   obj_Cust_Gui.setEditOrderDate(on, activ);
+		   obj_Cust_Gui.setEditPayStart(on, activ);
+		   obj_Cust_Gui.setEditRateCount(on, activ);
+		   obj_Cust_Gui.setEditFirstRate(on, activ);
+		   obj_Cust_Gui.setEditRate(on, activ);
 	     
-	      objKdverw.setSpeichernBestellung(on);
-	      objKdverw.setAbbruchBestellung(on);
+		   obj_Cust_Gui.setBtnOrderSave(on);
+		   obj_Cust_Gui.setBtnOrderNoSave(on);
 	   }
 	
 	

@@ -19,7 +19,7 @@ public class SQL_Statements {
     Statement sql_Statement = null;
     String url ="jdbc:sqlite:Bestelldb.accdb";
     String sql ="";
-    private static final Logger logger = AnwendungsLogger.getInstance();
+    private static final Logger logger = Logger_Init.getInstance();
     
   public void build_Database(String str_DBname)  {   					// create empty Database
       
