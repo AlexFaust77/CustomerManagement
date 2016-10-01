@@ -1,3 +1,4 @@
+package com.customermanagement.reports;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
@@ -5,6 +6,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import com.customermanagement.entities.Obj_Customer;
 
 import jxl.CellView;
 import jxl.Workbook;
@@ -73,13 +76,13 @@ public class Excel_Export {
 		    
 			 
 			  addCaption(sheet, 0, 0, "Kundennummer : ");						    // Create Head of Table  // Column // Row
-			  addCaption(sheet, 1, 0, obj_Customer.getCustNr());
+			  addCaption(sheet, 1, 0, obj_Customer.getCustNo());
 		    
 			  addCaption(sheet, 0, 1, "Name : ");
 			  addCaption(sheet, 1, 1, obj_Customer.getLastname());
 		    
 			  addCaption(sheet, 0, 2, "Vorname : ");
-			  addCaption(sheet, 1, 2, obj_Customer.getCustName());
+			  addCaption(sheet, 1, 2, obj_Customer.getFirstname());
 		    
 		      addCaption(sheet, 0, 3, "Datum : ");
 		      addCaption(sheet, 1, 3, formatter.format(current_Date));

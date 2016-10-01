@@ -1,3 +1,4 @@
+package com.customermanagement.helpers;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,13 +10,16 @@ import java.io.PrintWriter;
 
 import org.apache.log4j.Logger;
 
+import com.customermanagement.main.Cust_Gui;
+
 public class Save_Database_Information {
 
     String fileName = "InfoSys.txt";
     File database_Info_File = new File(fileName);
     PrintWriter writeFile = null;
     
-    public void save_Database_Info(String str_DBname, Logger logger) {					// Save the last used Database - 
+    // Save the last used Database - 
+    public void save_Database_Info(String str_DBname, Logger logger) {					
     																	                   
         try {
         	writeFile = new PrintWriter(new BufferedWriter(new FileWriter(database_Info_File)));
@@ -27,15 +31,16 @@ public class Save_Database_Information {
             if(writeFile != null) {
                writeFile.flush();
                writeFile.close();
+             logger.info("Database Information Saved - OK");  
             }
         }
         
         
     }
     
-    
-    public void check_Database_File(Gui_States gui_states, Cust_Gui obj_Gui,Logger logger) {				// Load the information about the last used Database
-        
+   // Load the information about the last used Database
+   public void check_Database_File(Gui_States gui_states, Cust_Gui obj_Gui,Logger logger) {				
+    	
         if(database_Info_File.exists() && database_Info_File.isFile() && database_Info_File.canRead()) {
             
            BufferedReader readFile = null;
@@ -48,6 +53,7 @@ public class Save_Database_Information {
                         
                       obj_Gui.setActiveDB(filePath);
                       obj_Gui.setGoodResult();
+                      logger.info("Database Information - Read - OK");
                   }
                 
                 readFile.close();

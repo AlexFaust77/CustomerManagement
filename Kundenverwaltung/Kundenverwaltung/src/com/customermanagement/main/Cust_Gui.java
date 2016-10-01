@@ -1,4 +1,9 @@
+package com.customermanagement.main;
+
 import org.apache.log4j.Logger;
+import com.customermanagement.entities.Obj_Order;
+import com.customermanagement.helpers.*;
+import com.customermanagement.listeners.Button_Listeners;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -29,21 +34,21 @@ import javafx.stage.Stage;
 
 public class Cust_Gui extends Application {
 
-	    Button btn_Cust_Save = new Button("Datensatz speichern");   				// Gui Buttons
-	    Button btn_Cust_NoSave = new Button("Abbruch");
-	    Button btn_Order_Save = new Button("Bestellung speichern");
-	    Button btn_Order_NoSave = new Button("Abbruch");
-	    Button btn_Cust_Search = new Button("Kunde suchen");
-	    Button btn_Cust_New = new Button("Neuer Kunde");
-	    Button btn_Order_New = new Button("Neue Bestellung");
-	    Button btn_Cust_Del = new Button("Kunde Loeschen");
-	    Button btn_Select_Db = new Button("Datenbankauswahl");
-	    Button btn_New_Db = new Button("Neue Datenbank");
-	    Button btn_Plan_Pdf = new Button("Ratenplan als PDF");
+	    public Button btn_Cust_Save = new Button("Datensatz speichern");   				// Gui Buttons
+	    public Button btn_Cust_NoSave = new Button("Abbruch");
+	    public Button btn_Order_Save = new Button("Bestellung speichern");
+	    public Button btn_Order_NoSave = new Button("Abbruch");
+	    public Button btn_Cust_Search = new Button("Kunde suchen");
+	    public Button btn_Cust_New = new Button("Neuer Kunde");
+	    public Button btn_Order_New = new Button("Neue Bestellung");
+	    public Button btn_Cust_Del = new Button("Kunde Loeschen");
+	    public Button btn_Select_Db = new Button("Datenbankauswahl");
+	    public Button btn_New_Db = new Button("Neue Datenbank");
+	    public Button btn_Plan_Pdf = new Button("Ratenplan als PDF");
 	    Button btn_Plan_Print = new Button("Ratenplan Drucken");
-	    Button btn_Order_Del = new Button("Bestellung Löschen");
-	    Button btn_Order_Change = new Button("Bestellung ändern");
-	    Button btn_Plan_Excel = new Button("Excel Export");
+	    public Button btn_Order_Del = new Button("Bestellung Löschen");
+	    public Button btn_Order_Change = new Button("Bestellung ändern");
+	    public Button btn_Plan_Excel = new Button("Excel Export");
 	
 	    TextField txt_Selected_Db = new TextField();               					// Textfield for stats and Extras
 	    TextField txt_Order_Count = new TextField();
@@ -67,12 +72,12 @@ public class Cust_Gui extends Application {
 	    TextField txt_Rate = new TextField();
 	    TextField txt_Order_Summary = new TextField();
 	   
-	    private static final Logger logger = Logger_Init.getInstance();			// Logger   ==> Log4j - Framework
+	    private static final Logger logger = Logger_Init.getInstance();			                     // Logger   ==> Log4j - Framework
 	    
 	    TableView<Obj_Order> fx_Table_View = new TableView<Obj_Order>();
 	    ObservableList<Obj_Order> tbl_Data_Records = FXCollections.observableArrayList();
 	   
-	    ListView<String> lstv_Order_List = new ListView<String>();									// vorher bestellliste
+	    public ListView<String> lstv_Order_List = new ListView<String>();							// vorher bestellliste
 	    ObservableList<String> lst_Orderlist_Items = FXCollections.observableArrayList();			// vorher Items
 		    
 	    XYChart.Series daten;
@@ -80,14 +85,14 @@ public class Cust_Gui extends Application {
 	    Series<String, Double> series_Data = new Series<String, Double>();
 	     
 	    TabPane reg_Panel = new TabPane();
-	    Tab tb_Table = new Tab();
+	    public Tab tb_Table = new Tab();
 	    Tab tb_LineChart = new Tab();
 	    
 	    MenuBar mbar_Cust = new MenuBar();
 	       
 	    Menu m_File= new Menu("Datei");
-	    MenuItem m_Cust_View = new MenuItem("Alle Kunden");
-	    MenuItem m_Exit = new MenuItem("Beenden");
+	    public MenuItem m_Cust_View = new MenuItem("Alle Kunden");
+	    public MenuItem m_Exit = new MenuItem("Beenden");
 	    	    
 	    CategoryAxis xAxis = new CategoryAxis();
 	    NumberAxis yAxis = new NumberAxis();
@@ -421,7 +426,7 @@ public void setEditRate(boolean on_off,String color) { this.txt_Rate.setEditable
 	    
 
 	  //  public void setTabellenRegister(TableView tabelle) { this.tabellenRegister.setContent(tabelle);}
-	  //  public void setTabellenDatenSaetze(ObservableList<DatenModellBest> tabDaten) { this.tabDatenSaetze = tabDaten; }
+	  public void setFxTableItems(ObservableList<Obj_Order> tbl_Data_Records) { this.tbl_Data_Records = tbl_Data_Records; }
 	  //  public void setTableView(TableView tabFX ) { this.tabellenAnsichtFX = tabFX; }
 	   
 

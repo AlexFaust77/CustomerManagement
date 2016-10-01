@@ -1,4 +1,8 @@
+package com.customermanagement.helpers;
 import java.util.ArrayList;
+
+import com.customermanagement.entities.Obj_Customer;
+import com.customermanagement.entities.Obj_Order;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,17 +16,17 @@ public class Clear_Data {
 	    
 	    public Obj_Customer cleanObjCustomer(Obj_Customer obj_Customer) {												// clear Customer Object
 	           
-	    	obj_Customer.setBestellNummern(cleanlist);
+	    	obj_Customer.setOrderlist(cleanlist);
 	    	obj_Customer.setCustTotal(int_empty);
-	    	obj_Customer.setCustHnr(int_empty);
+	    	obj_Customer.setHouseNo(int_empty);
 	    	obj_Customer.setLastname(str_empty);
-	        obj_Customer.setCustRes(str_empty);
-	        obj_Customer.setCustPc(int_empty);
+	        obj_Customer.setResidenz(str_empty);
+	        obj_Customer.setPostcode(int_empty);
 	        obj_Customer.setCustBalance(int_empty);
-	        obj_Customer.setCustStreet(str_empty);
-	        obj_Customer.setCustName(str_empty);
+	        obj_Customer.setStreet(str_empty);
+	        obj_Customer.setFirstname(str_empty);
 	        obj_Customer.setOrderCount(int_empty);
-	        obj_Customer.setCustNr(str_empty);
+	        obj_Customer.setCustNo(str_empty);
 	     
 	    return obj_Customer;
 	    }

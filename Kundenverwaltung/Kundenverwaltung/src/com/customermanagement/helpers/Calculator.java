@@ -1,3 +1,4 @@
+package com.customermanagement.helpers;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -5,6 +6,10 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.customermanagement.database.SQL_Statements;
+import com.customermanagement.entities.Obj_Order;
+import com.customermanagement.main.Cust_Gui;
 
 public class Calculator {
 
@@ -123,7 +128,14 @@ public class Calculator {
 	                         
 	            for(int objektzaehler = 0; objektzaehler < orderlist.size();objektzaehler++){	// convert into fully Order Object List with all ordervalues
 	                               
-	            	Obj_Order temp_order = new Obj_Order();
+	            	//Obj_Order temp_order = new Obj_Order(); // Test 22.09.2016 alt ohne Konstruktor
+	            	
+	            	/*
+	            	 * public Obj_Order(String orderNo, String orderDate, String payStart, String payEnd, int rateCount, double firstRate,
+			double rate, double orderSummary, double custNo) {
+	            	 */
+	            	
+	            	Obj_Order temp_order = new Obj_Order("","","","",0,0.0,0.0,0.0,0.0); // Test 20.09.2016
 	            	obj_Order = dataBase_Request.getOne_Order(temp_order,orderlist.get(objektzaehler).toString(), 
 	            											  obj_Cust_Gui.getCustNr(), obj_Cust_Gui.getActiveDB());
 	           

@@ -1,3 +1,5 @@
+package com.customermanagement.helpers;
+import com.customermanagement.main.Cust_Gui;
 
 public class Gui_States {
 

@@ -1,9 +1,25 @@
+package com.customermanagement.listeners;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
+
+import com.customermanagement.database.SQL_Statements;
+import com.customermanagement.entities.Obj_Customer;
+import com.customermanagement.entities.Obj_Order;
+import com.customermanagement.gui.All_Customers_View;
+import com.customermanagement.gui.Chart_fx;
+import com.customermanagement.gui.Table_fx;
+import com.customermanagement.helpers.Calculator;
+import com.customermanagement.helpers.Clear_Data;
+import com.customermanagement.helpers.Gui_States;
+import com.customermanagement.helpers.Save_Database_Information;
+import com.customermanagement.inputchecks.InputChecks;
+import com.customermanagement.main.Cust_Gui;
+import com.customermanagement.reports.Excel_Export;
+import com.customermanagement.reports.PDF_Builder;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,12 +40,14 @@ public class Button_Listeners {
 	 private boolean dataBase_Result;										     // vorher DBKontakt
 	
 	 Obj_Customer obj_Customer =new Obj_Customer();						         // vorher objDaten
-	 Obj_Order obj_Order = new Obj_Order();	         					         // vorher objBestellung
+	 // Obj_Order obj_Order = new Obj_Order();	         					     // vorher objBestellung
+	 Obj_Order obj_Order = new Obj_Order("","","","",0,0.0,0.0,0.0,0.0);;	     // test 22.09.2016
 	 Calculator calculate = new Calculator();									 // vorher rechnen
 	 Clear_Data data_cleaner = new Clear_Data();							     // vorher datenleeren
 	 SQL_Statements dataBase_Request = new SQL_Statements();			         // vorher databasecon
 	 FileChooser select_Database = new FileChooser();						     // vorher chooseDB
 	 Excel_Export excel_Export;				     								 // vorher excelexp
+	 InputChecks checkInput = new InputChecks();
 	 
 	 private ArrayList<String> lst_month = new ArrayList<String>();			     // vorher monate
 	 private ArrayList<String> lst_monthly_Rate = new ArrayList<String>();       // vorher monatlicheRate
@@ -37,7 +55,7 @@ public class Button_Listeners {
 	 private ArrayList<String>lst_All_Customers = new ArrayList<String>();       // vorher liste_Kundenummern
 	 private ObservableList<Obj_Customer>lst_Obj_Customer = FXCollections.observableArrayList(); // vorher liste_Obj_Kunde
 	 
-	 Button_Listeners(Gui_States gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, Stage primaryStage) {
+	 public Button_Listeners(Gui_States gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, Stage primaryStage) {
 	
 		 // 1 ***************** Finished !!!!! ********************************************************************************************************
 		 Obj_Cust_Gui.btn_Cust_Search.setOnAction(new EventHandler<ActionEvent>() {                                     								    // Search one Customer with Customernumber
@@ -45,28 +63,30 @@ public class Button_Listeners {
 	            public void handle(ActionEvent e) {
 	            	  obj_Customer = data_cleaner.cleanObjCustomer(obj_Customer);
 	                  				 data_cleaner.cleanLists(lst_month,orderlist,lst_Obj_Customer,lst_All_Customers,lst_monthly_Rate);
-	                  				 //data_cleaner.cleanLists(lst_month,abrechnungsmonate,monatlicheRaten,orderlist,lst_Obj_Customer,lst_All_Customers,monatsliste,lst_monthly_Rate);
+	                  				
 	                  obj_Customer = dataBase_Request.getCustomer_AND_Orders(obj_Customer,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger);  	// Database request
-	            
+	                  logger.info("Database Request - Done");
+	                  
 	                  Obj_Cust_Gui.setCustLastName(obj_Customer.getLastname());                															    // Filling the values into the Gui Fields
-	                  Obj_Cust_Gui.setCustName(obj_Customer.getCustName());
-	                  Obj_Cust_Gui.setCustStreet(obj_Customer.getCustStreet());
-	                  Obj_Cust_Gui.setCustNr(Integer.toString(obj_Customer.getCustHnr()));
-	                  Obj_Cust_Gui.setCustPc(Integer.toString(obj_Customer.getCustPc()));
-	                  Obj_Cust_Gui.setCustRes(obj_Customer.getCustRes());
-	                  Obj_Cust_Gui.setBestellNummernListe(obj_Customer.getBestellNummern());
-	                  Obj_Cust_Gui.setOrderCount(obj_Customer.getOrderCount());
+	                  Obj_Cust_Gui.setCustName(obj_Customer.getFirstname());
+	                  Obj_Cust_Gui.setCustStreet(obj_Customer.getStreet());
+	                  Obj_Cust_Gui.setCustHNr(Integer.toString(obj_Customer.getHouseNo()));
+	                  Obj_Cust_Gui.setCustPc(Integer.toString(obj_Customer.getPostcode()));
+	                  Obj_Cust_Gui.setCustRes(obj_Customer.getResidenz());
+	                  Obj_Cust_Gui.setBestellNummernListe(obj_Customer.getOrderlist());
+	                  Obj_Cust_Gui.setOrderCount(obj_Customer.getOrderlist().size());
 	                  Obj_Cust_Gui.setTotal(Double.toString(obj_Customer.getCustTotal()));
 	                              
 	                  			  calculate.fill_month_lst(Obj_Cust_Gui,dataBase_Request);
 	                  lst_month = calculate.getLstMonth();
+	                  logger.info("Monthlist filled - Done");
 	                  
 	                  orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBase_Request);
 	                  			  calculate.setLstMonth(lst_month);
 	                  			  calculate.getAll_Rates();
 	                              
 	                  lst_monthly_Rate = calculate.getMonthlyRate();
-	                                           
+	                  logger.info("All Rates calculated - Done");                         
 	               
 	                  Chart_fx rate_Chart = new Chart_fx();																									// create chart for monthly Rates
 	                           rate_Chart.setMonthlyRate(lst_monthly_Rate);
@@ -74,13 +94,15 @@ public class Button_Listeners {
 	                           rate_Chart.createChartWithToolTips();
 	                  Obj_Cust_Gui.setLineData(rate_Chart.getChartData()); 
 	                  
-	                  
+	                  logger.info("ratechart created - Done"); 
 	                
 	                  TableView<Obj_Order> view_fx_Table = new TableView<Obj_Order>();																		//Table for Order Overview
 	                  Table_fx table = new Table_fx();
 	                           table.setOrderlist(orderlist);
 	                           view_fx_Table = table.erstelleFXTableView();
 	                           Obj_Cust_Gui.tb_Table.setContent(view_fx_Table);
+	                  
+	                  logger.info("order Table created - Done");          
 	            }
 	        });
 	
@@ -119,7 +141,7 @@ public class Button_Listeners {
 	                      if(result.get() == ButtonType.OK) {																							// if OK - Delete Customer
 	                           
 	                           for(int each_Order = 0; each_Order < Obj_Cust_Gui.getBestellNummernListe().size();each_Order++) {             			// First Delete all Orders from this Customer
-	                               String act_Order = orderlist.get(each_Order).getOrderNr();
+	                               String act_Order = orderlist.get(each_Order).getOrderNo();
 	                               dataBase_Result = dataBase_Request.delete_Order(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(), act_Order);
 	                           }
 	                           
@@ -140,20 +162,24 @@ public class Button_Listeners {
 	                                          
 	            	select_Database.setTitle("Bitte Datenbank auswählen !");
 	                                               
-	                               File datenbankAusw = select_Database.showOpenDialog(primaryStage);					
-	                                    if(datenbankAusw != null) {
+	                               File selected_database = select_Database.showOpenDialog(primaryStage);					
+	                                    if(selected_database != null) {
 	                                                                
-	                                                dataBase_Result = dataBase_Request.DatabaseConnection(datenbankAusw.getAbsolutePath());
+	                                                dataBase_Result = dataBase_Request.DatabaseConnection(selected_database.getAbsolutePath());
 	                                        
 	                                                if(dataBase_Result) {
-	                                                	Obj_Cust_Gui.setActiveDB(datenbankAusw.getAbsolutePath());
+	                                                	Obj_Cust_Gui.setActiveDB(selected_database.getAbsolutePath());
+	                                                	Save_Database_Information last_used_database = new Save_Database_Information();
+	                                                							  last_used_database.save_Database_Info(selected_database.getAbsolutePath(), logger);
 	                                                	Obj_Cust_Gui.setGoodResult();
+	                                                	logger.info("DB selection - Status : OK" + selected_database.getAbsolutePath());
 	                                                }  else {
 	                                                	Obj_Cust_Gui.setActiveDB("Verbindungsaufbau fehlgeschlagen");
+	                                                	logger.error("DB selection - Arrrrgg : something goes wrong with your File" + selected_database.getAbsolutePath());
 	                                                	Obj_Cust_Gui.setBadResult();
 	                                                }       
 	                                                         
-	                                        System.out.println(dataBase_Result + " ... " + datenbankAusw.getAbsolutePath());
+	                                        
 	                                                                               
 	                                    }
 	            }
@@ -182,13 +208,13 @@ public class Button_Listeners {
 	            
 	            @Override
 	            public void handle(ActionEvent e) {
-	               obj_Customer.setCustNr(Obj_Cust_Gui.getCustNr());
+	               obj_Customer.setCustNo(Obj_Cust_Gui.getCustNr());
 	               obj_Customer.setLastname(Obj_Cust_Gui.getCustLastName());
-	               obj_Customer.setCustName(Obj_Cust_Gui.getCustName());
-	               obj_Customer.setCustStreet(Obj_Cust_Gui.getCustStreet());
-	               obj_Customer.setCustHnr(Integer.parseInt(Obj_Cust_Gui.getCustHNr()));
-	               obj_Customer.setCustPc(Integer.parseInt(Obj_Cust_Gui.getCustPc()));
-	               obj_Customer.setCustRes(Obj_Cust_Gui.getCustRes());
+	               obj_Customer.setFirstname(Obj_Cust_Gui.getCustName());
+	               obj_Customer.setStreet(Obj_Cust_Gui.getCustStreet());
+	               obj_Customer.setHouseNo(Integer.parseInt(Obj_Cust_Gui.getCustHNr()));
+	               obj_Customer.setPostcode(Integer.parseInt(Obj_Cust_Gui.getCustPc()));
+	               obj_Customer.setResidenz(Obj_Cust_Gui.getCustRes());
 	               // doppelteKdnr = dataBaseCon.doppelteKundennr(objDaten, kdverw_Obj.getKdNr(), kdverw_Obj.getAktiveDB());
 	               // Fehler bei Kundennummer abfrage           
 	               
@@ -217,7 +243,7 @@ public class Button_Listeners {
 	            @Override
 	            public void handle(ActionEvent e) {
 	                                        
-	                    obj_Order.setOrderNr(Obj_Cust_Gui.getOrderNr());
+	                    obj_Order.setOrderNo(Obj_Cust_Gui.getOrderNr());
 	                    obj_Order.setOrderDate(Obj_Cust_Gui.getOrderDate());
 	                    obj_Order.setPayStart(Obj_Cust_Gui.getPayStart());
 	                    obj_Order.setPayEnd(Obj_Cust_Gui.getPayEnd());
@@ -226,14 +252,14 @@ public class Button_Listeners {
 	                    obj_Order.setRate(Double.parseDouble(Obj_Cust_Gui.getRate()));
 	                    obj_Order.setOrderSummary(Double.parseDouble(Obj_Cust_Gui.getOrderSummary()));
 	                    //objBestellung.setBestellsumme(summary);
-	                    obj_Order.setCustNr(Double.parseDouble(Obj_Cust_Gui.getOrderCustNr()));
+	                    obj_Order.setCustNo(Double.parseDouble(Obj_Cust_Gui.getOrderCustNr()));
 	                    
 	                    if(Obj_Cust_Gui.getOrderFlag() == 0) {
 	                                     
 	                        dataBase_Result = dataBase_Request.new_Order(obj_Order, Obj_Cust_Gui.getActiveDB());
 	               
-	                        Obj_Cust_Gui.setListBestellnummer(""+obj_Order.getOrderNr());
-	                        System.out.println("%f"+obj_Order.getOrderNr());    
+	                        Obj_Cust_Gui.setListBestellnummer(""+obj_Order.getOrderNo());
+	                        System.out.println("%f"+obj_Order.getOrderNo());    
 	               
 	                            if(dataBase_Result) {
 	                            	Obj_Cust_Gui.setBtnOrderNoSave(false);
@@ -278,8 +304,8 @@ public class Button_Listeners {
 	                  
 	                  obj_Order = dataBase_Request.getOne_Order(obj_Order,aktuelleBestNr,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB());   // Database Request - returns Order Object
 	            
-	                  Obj_Cust_Gui.setOrderCustNr(new Double(obj_Order.getCustNr()).toString());     					// Set Values in GUI
-	                  Obj_Cust_Gui.setOrderNr(obj_Order.getOrderNr());
+	                  Obj_Cust_Gui.setOrderCustNr(new Double(obj_Order.getCustNo()).toString());     					// Set Values in GUI
+	                  Obj_Cust_Gui.setOrderNr(obj_Order.getOrderNo());
 	                  Obj_Cust_Gui.setOrderDate(obj_Order.getOrderDate());
 	                  Obj_Cust_Gui.setOrderSummary(obj_Order.getOrderSummary());
 	                  Obj_Cust_Gui.setFirstRate(obj_Order.getFirstRate());

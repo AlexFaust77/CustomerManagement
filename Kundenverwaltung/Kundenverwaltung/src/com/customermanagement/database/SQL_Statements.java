@@ -1,9 +1,16 @@
+package com.customermanagement.database;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
+
+import com.customermanagement.entities.Obj_Customer;
+import com.customermanagement.entities.Obj_Order;
+import com.customermanagement.helpers.Logger_Init;
+import com.customermanagement.helpers.Save_Database_Information;
+
 import java.sql.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -99,13 +106,13 @@ public class SQL_Statements {
             sql = "INSERT INTO KUNDE(Kundennummer,Name,Vorname,Strasse,Hausnummer,Postleitzahl,Ort)" +
                   "VALUES (?,?,?,?,?,?,?)"; 
             PreparedStatement statement = con.prepareStatement(sql);
-                              statement.setString(1, obj_Customer.getCustNr());
+                              statement.setString(1, obj_Customer.getCustNo());
                               statement.setString(2, obj_Customer.getLastname());
-                              statement.setString(3, obj_Customer.getCustName());
-                              statement.setString(4, obj_Customer.getCustStreet());
-                              statement.setInt(5, obj_Customer.getCustHnr());
-                              statement.setInt(6, obj_Customer.getCustPc());
-                              statement.setString(7, obj_Customer.getCustRes());
+                              statement.setString(3, obj_Customer.getFirstname());
+                              statement.setString(4, obj_Customer.getStreet());
+                              statement.setInt(5, obj_Customer.getHouseNo());
+                              statement.setInt(6, obj_Customer.getPostcode());
+                              statement.setString(7, obj_Customer.getResidenz());
                               
           logger.info("Customer created");
             
@@ -139,7 +146,7 @@ public class SQL_Statements {
             sql = "INSERT INTO BESTELLUNGEN(Bestellnummer,Bestelldatum,Zahlungsstart,Zahlungsende,Ratenanzahl,Ersterate,Folgerate,Bestellsumme,Kundennummer)" +
                   "VALUES (?,?,?,?,?,?,?,?,?)"; // Insert Befehl fuer neue Bestellung
             PreparedStatement statement = con.prepareStatement(sql);
-                              statement.setString(1, obj_Order.getOrderNr());
+                              statement.setString(1, obj_Order.getOrderNo());
                               statement.setDate(2, bestellDate);
                               statement.setDate(3, zahlStartDate);
                               statement.setDate(4, zahlEndeDate);
@@ -147,7 +154,7 @@ public class SQL_Statements {
                               statement.setDouble(6, obj_Order.getFirstRate());
                               statement.setDouble(7, obj_Order.getRate());
                               statement.setDouble(8, obj_Order.getOrderSummary());
-                              statement.setDouble(9, obj_Order.getCustNr());
+                              statement.setDouble(9, obj_Order.getCustNo());
             
           statement.executeUpdate();
           statement.close();
@@ -168,7 +175,7 @@ public boolean doubled_Customer_Check(Obj_Customer obj_Customer, String str_cust
          Obj_Customer obj_doub_Cust = new Obj_Customer();
          obj_doub_Cust = this.getCustomer_AND_Orders(obj_Customer, str_cust_Nr, str_DBname,logger);
     
-     if( obj_doub_Cust.getCustNr() != null) {
+     if( obj_doub_Cust.getCustNo() != null) {
     	    customer_Doubled = true;
         } else {
         	customer_Doubled = false;
@@ -188,13 +195,13 @@ public boolean doubled_Customer_Check(Obj_Customer obj_Customer, String str_cust
        
             ResultSet result = sql_Statement.executeQuery("Select * FROM KUNDE WHERE Kundennummer =" + str_cust_Nr);
                   
-            obj_Customer.setCustNr(result.getString("Kundennummer")); 
+            obj_Customer.setCustNo(result.getString("Kundennummer")); 
             obj_Customer.setLastname(result.getString("Name"));
-            obj_Customer.setCustName(result.getString("Vorname"));
-            obj_Customer.setCustStreet(result.getString("Strasse"));
-            obj_Customer.setCustHnr(result.getInt("Hausnummer"));
-            obj_Customer.setCustPc(result.getInt("Postleitzahl"));
-            obj_Customer.setCustRes(result.getString("Ort"));
+            obj_Customer.setFirstname(result.getString("Vorname"));
+            obj_Customer.setStreet(result.getString("Strasse"));
+            obj_Customer.setHouseNo(result.getInt("Hausnummer"));
+            obj_Customer.setPostcode(result.getInt("Postleitzahl"));
+            obj_Customer.setResidenz(result.getString("Ort"));
             
             result = sql_Statement.executeQuery("Select Bestellnummer FROM Bestellungen WHERE Kundennummer =" + str_cust_Nr);
             
@@ -202,7 +209,7 @@ public boolean doubled_Customer_Check(Obj_Customer obj_Customer, String str_cust
             	lst_Orders.add(result.getString("Bestellnummer"));
             }
             
-            obj_Customer.setBestellNummern(lst_Orders);
+            obj_Customer.setOrderlist(lst_Orders);
             close_DB_con("Orders_From_Customer"); 
             getRestSumme(str_cust_Nr,str_DBname);   
             cust_Total = getTotal_Sales(str_cust_Nr,str_DBname);
@@ -278,15 +285,15 @@ public boolean delete_Customer(String str_DBname,String str_cust_Nr){				// Dele
         	open_DB_con("getOne_Order");
             sql_Statement = con.createStatement();
             ResultSet bd_result = sql_Statement.executeQuery("Select * FROM Bestellungen WHERE Bestellnummer =" + str_Order_Nr );       //+ "AND Kundennummer=" + kdNr);
-            		  obj_Order.setOrderNr(bd_result.getString("Bestellnummer"));
+            		  obj_Order.setOrderNo(bd_result.getString("Bestellnummer"));
             		  obj_Order.setOrderDate(date_Formatter.format(bd_result.getDate("Bestelldatum")));
-            		 obj_Order.setOrderSummary(bd_result.getDouble("Bestellsumme"));
-            		 obj_Order.setFirstRate(bd_result.getDouble("Ersterate"));
-            		 obj_Order.setRate(bd_result.getDouble("Folgerate"));
-            		 obj_Order.setCustNr(bd_result.getDouble("Kundennummer"));
-            		 obj_Order.setRateCount(bd_result.getInt("Ratenanzahl"));
-            		 obj_Order.setPayEnd(date_Formatter.format(bd_result.getDate("Zahlungsende")));
-            		 obj_Order.setPayStart(date_Formatter.format(bd_result.getDate("Zahlungsstart")));
+            		  obj_Order.setOrderSummary(bd_result.getDouble("Bestellsumme"));
+            		  obj_Order.setFirstRate(bd_result.getDouble("Ersterate"));
+            		  obj_Order.setRate(bd_result.getDouble("Folgerate"));
+            		  obj_Order.setCustNo(bd_result.getDouble("Kundennummer"));
+            		  obj_Order.setRateCount(bd_result.getInt("Ratenanzahl"));
+            		  obj_Order.setPayEnd(date_Formatter.format(bd_result.getDate("Zahlungsende")));
+            		  obj_Order.setPayStart(date_Formatter.format(bd_result.getDate("Zahlungsstart")));
            close_DB_con("getOneOrder");
         } catch (SQLException ex) {
            logger.error("get One order _ SQL FEHLER : " + ex.getLocalizedMessage());
@@ -294,13 +301,13 @@ public boolean delete_Customer(String str_DBname,String str_cust_Nr){				// Dele
  return obj_Order;    
  } 
  
-  public ArrayList<String> getAll_Cust_Nr(String str_DBname)  { 										 // List all Customernumbers from Database
+  public ArrayList<String> getAll_Cust_Nr(String str_DBname)  { 										      // List all Customernumbers from Database
             
             this.url = "jdbc:sqlite:" + str_DBname;
         try {
         	open_DB_con("all Cust Numbers");
             sql_Statement = con.createStatement();
-            ResultSet bd_result = sql_Statement.executeQuery("Select Kundennummer FROM Kunde");               //+ "AND Kundennummer=" + kdNr);
+            ResultSet bd_result = sql_Statement.executeQuery("Select Kundennummer FROM Kunde");               // + "AND Kundennummer=" + kdNr);
             
                 while(bd_result.next()) {   
                 	  lst_Cust_Nr.add(bd_result.getString("Kundennummer"));
@@ -348,7 +355,7 @@ public boolean delete_Customer(String str_DBname,String str_cust_Nr){				// Dele
 
             sql = "UPDATE Bestellungen SET Ratenanzahl = ?,Bestelldatum = ?,"  + 
                   " Zahlungsstart = ?, Zahlungsende = ?, Ersterate = ?, Folgerate = ?,Bestellsumme = ?" + 
-                  " WHERE Bestellnummer = " + obj_Order.getOrderNr() + " AND Kundennummer = " + obj_Order.getCustNr();
+                  " WHERE Bestellnummer = " + obj_Order.getOrderNo() + " AND Kundennummer = " + obj_Order.getCustNo();
             PreparedStatement statement = con.prepareStatement(sql);
                               statement.setInt(1, obj_Order.getRateCount());
                               statement.setDate(2, bestellDate);

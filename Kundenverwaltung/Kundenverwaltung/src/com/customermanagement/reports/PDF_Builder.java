@@ -1,9 +1,11 @@
+package com.customermanagement.reports;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.customermanagement.entities.Obj_Customer;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
@@ -45,8 +47,8 @@ public class PDF_Builder {
 	    private void getContent(Document pdf_Document, Logger logger) {
 	      try {
 	        Anchor anker = new Anchor("Ratenplan fuer :\n" + 
-	                                  "Kundennummer : " + obj_Customer.getCustNr().toString() + "\n" 
-	                                  + obj_Customer.getLastname() + ", " + obj_Customer.getCustName() + "\n\n\n",catFont);
+	                                  "Kundennummer : " + obj_Customer.getCustNo().toString() + "\n" 
+	                                  + obj_Customer.getLastname() + ", " + obj_Customer.getFirstname() + "\n\n\n",catFont);
 	               anker.setName("Ratenplan");
 	               
 	        Chapter chapter = new Chapter(new Paragraph(anker),1); 				// Anchor and Number of Chapters

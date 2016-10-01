@@ -1,3 +1,6 @@
+package com.customermanagement.gui;
+import com.customermanagement.entities.Obj_Customer;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -18,41 +21,57 @@ public class All_Customers_View {
 
     public TableView<Obj_Customer>create_All_Customers_Table() {
        
+    	/*
+    	 *   private String custNo;
+	    private String lastname;
+	    private String firstname;
+	    private String street;
+	    private int houseNo;
+	    private int postcode;
+	    private String residenz;
+	    private int orderCount;
+	    private double custTotal;
+	    private double custBalance;
+	    private ObservableList<String> bestellItems = FXCollections.observableArrayList();
+    	 * 
+    	 */
+    	
+    	
         TableColumn col_Cust_Nr   = new TableColumn("Kundennummer");									            	// create all Columns for Table
         			col_Cust_Nr.setMinWidth(100);																
-        			col_Cust_Nr.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("Kundennummer"));		// Set value to TableField from Object
+        			col_Cust_Nr.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("custNo"));		// Set value to TableField from Object
         			
         TableColumn col_Cust_Lastname  = new TableColumn("Nachname");
         			col_Cust_Lastname.setMinWidth(100);
-        			col_Cust_Lastname.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("name"));
+        			col_Cust_Lastname.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("lastname"));
         			
         TableColumn col_Cust_Name  = new TableColumn("Vorname");
         			col_Cust_Name.setMinWidth(100);
-        			col_Cust_Name.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("vorname"));
+        			col_Cust_Name.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("firstname"));
         			
         TableColumn col_Cust_Street  = new TableColumn("Strasse");
         			col_Cust_Street.setMinWidth(100);
-        			col_Cust_Street.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("strasse"));
+        			col_Cust_Street.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("street"));
         			
         TableColumn col_Cust_HNr = new TableColumn("Haus-Nr.");
         			col_Cust_HNr.setMinWidth(100);
-        			col_Cust_HNr.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("hausnr"));
+        			col_Cust_HNr.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("houseNo"));
         			
         TableColumn col_Cust_Pc = new TableColumn("Postleitzahl");    
         			col_Cust_Pc.setMinWidth(100);
-        			col_Cust_Pc.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("plz"));
+        			col_Cust_Pc.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("postcode"));
         			
         TableColumn col_Cust_Res = new TableColumn("Ort");
         			col_Cust_Res.setMinWidth(100);
-        			col_Cust_Res.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("ort"));
+        			col_Cust_Res.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("residenz"));
         			
         TableColumn col_Cust_Total = new TableColumn("Gesamtumsatz");
         			col_Cust_Total.setMinWidth(100);
-        			col_Cust_Total.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("gesamtumsatz"));
+        			col_Cust_Total.setCellValueFactory(new PropertyValueFactory<Obj_Customer,String>("custTotal"));
                     
         TableColumn col_Cust_OrderCount = new TableColumn("Anzahl Bestellungen");
         			col_Cust_OrderCount.setMinWidth(50);
-        			col_Cust_OrderCount.setCellValueFactory(new PropertyValueFactory<Obj_Customer,Integer>("anzBestell"));
+        			col_Cust_OrderCount.setCellValueFactory(new PropertyValueFactory<Obj_Customer,Integer>("orderCount"));
 
         // add Columns to Table      
         tbl_Customer.getColumns().addAll(col_Cust_Nr,col_Cust_Lastname,col_Cust_Name,col_Cust_Street,col_Cust_HNr,col_Cust_Pc,col_Cust_Res,col_Cust_Total,col_Cust_OrderCount);
