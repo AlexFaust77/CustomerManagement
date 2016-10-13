@@ -33,8 +33,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Cust_Gui extends Application {
-
-	    public Button btn_Cust_Save = new Button("Datensatz speichern");   				// Gui Buttons
+	    // Gui Buttons
+	    public Button btn_Cust_Save = new Button("Datensatz speichern");   				
 	    public Button btn_Cust_NoSave = new Button("Abbruch");
 	    public Button btn_Order_Save = new Button("Bestellung speichern");
 	    public Button btn_Order_NoSave = new Button("Abbruch");
@@ -49,12 +49,14 @@ public class Cust_Gui extends Application {
 	    public Button btn_Order_Del = new Button("Bestellung Löschen");
 	    public Button btn_Order_Change = new Button("Bestellung ändern");
 	    public Button btn_Plan_Excel = new Button("Excel Export");
-	
-	    TextField txt_Selected_Db = new TextField();               					// Textfield for stats and Extras
+	    
+	    // Textfield for stats and Extras
+	    TextField txt_Selected_Db = new TextField();               					
 	    TextField txt_Order_Count = new TextField();
 	    TextField txt_Total = new TextField();
 	    
-	    TextField txt_Cust_Nr = new TextField();			     					// Textfields for Customer
+	    // Textfields for Customer
+	    TextField txt_Cust_Nr = new TextField();			     					
 	    TextField txt_Cust_LastName = new TextField();
 	    TextField txt_Cust_Name = new TextField();
 	    TextField txt_Cust_Street = new TextField();
@@ -62,7 +64,8 @@ public class Cust_Gui extends Application {
 	    TextField txt_Cust_Pc = new TextField();
 	    TextField txt_Cust_Res = new TextField();
 	    
-	    TextField txt_Order_Cust_Nr = new TextField();	          				      // Textfields for Orders
+	    // Textfields for Orders
+	    TextField txt_Order_Cust_Nr = new TextField();	          				      
 	    TextField txt_Order_Nr = new TextField();
 	    TextField txt_Order_Date = new TextField();
 	    TextField txt_Pay_Start = new TextField();
@@ -71,8 +74,9 @@ public class Cust_Gui extends Application {
 	    TextField txt_First_Rate = new TextField();
 	    TextField txt_Rate = new TextField();
 	    TextField txt_Order_Summary = new TextField();
-	   
-	    private static final Logger logger = Logger_Init.getInstance();			                     // Logger   ==> Log4j - Framework
+	    
+	    // Logger   ==> Log4j - Framework
+	    private static final Logger logger = Logger_Init.getInstance();			                     
 	    
 	    TableView<Obj_Order> fx_Table_View = new TableView<Obj_Order>();
 	    ObservableList<Obj_Order> tbl_Data_Records = FXCollections.observableArrayList();
@@ -128,9 +132,11 @@ public class Cust_Gui extends Application {
 	        menuInfo.getItems().addAll(menuProgInfo,m_Exit);
 	        
 	        mbar_Cust.getMenus().addAll(m_File,menuBearbeiten,menuInfo);
-	        mbar_Cust.prefWidthProperty().bind(primaryStage.widthProperty());          // Menuebarsize scale to windowsize
-	              
-	        Label lbl_Cust_Nr = new Label("Kundennr :");						       // Labels for Customer 
+	        // Menuebarsize scale to windowsize
+	        mbar_Cust.prefWidthProperty().bind(primaryStage.widthProperty());          
+	        
+	        // Labels for Customer 
+	        Label lbl_Cust_Nr = new Label("Kundennr :");						       
 	        Label lbl_Cust_Lastname = new Label("Name :");
 	        Label lbl_Cust_Name = new Label("Vorname :");
 	        Label lbl_Cust_Street = new Label("Strasse :");
@@ -143,8 +149,8 @@ public class Cust_Gui extends Application {
 	        Label lbl_Order_List = new Label("Bestellungen :");
 	        Label lbl_Active_DB = new Label("Aktive Datenbank :");
 	        
-	        
-	        Label lbl_Order_Cust_Nr = new Label("Für Kundennummer :");		          // Labels for Orders
+	        // Labels for Orders
+	        Label lbl_Order_Cust_Nr = new Label("Für Kundennummer :");		          
 	        Label lbl_Order_Nr = new Label("Bestellnr :");
 	        Label lbl_Order_Date = new Label("Bestelldatum :");
 	        Label lbl_Pay_Start = new Label("Zahlungsstart :");
@@ -155,20 +161,24 @@ public class Cust_Gui extends Application {
 	        Label lbl_Order_Summary = new Label("Bestellsumme :");
 	     	                    
 	        TextField txt_Restsumme = new TextField();
-	              
-	        txt_Selected_Db.setEditable(false);  								     // Textfields not writeable  
+	        
+	        // Textfields not writeable 
+	        txt_Selected_Db.setEditable(false);  								      
 	        txt_Order_Count.setEditable(false);
 	        txt_Total.setEditable(false);
 	        txt_Pay_End.setEditable(false);
 	        txt_Order_Summary.setEditable(false);
 	        
-	        txt_Pay_End.setFocusTraversable(false);      					         // No Tab selection needed for this textfields
+	        // No Tab selection needed for this textfields
+	        txt_Pay_End.setFocusTraversable(false);      					         
 	        txt_Order_Summary.setFocusTraversable(false);
 	        
-	        lstv_Order_List.setItems(lst_Orderlist_Items);      					 // Set Items in listview
+	        // Set Items in listview
+	        lstv_Order_List.setItems(lst_Orderlist_Items);      					 
 	        lstv_Order_List.setMaxHeight(260.00);
 
-	        VBox lbl_Customer = new VBox(13);        							     // Customer Labels
+	        // Customer Labels
+	        VBox lbl_Customer = new VBox(13);        							    
 	        	 lbl_Cust_Nr.setMaxWidth(Double.MAX_VALUE);
 	        	 lbl_Cust_Lastname.setMaxWidth(Double.MAX_VALUE);
 	        	 lbl_Cust_Name.setMaxWidth(Double.MAX_VALUE);
@@ -184,7 +194,8 @@ public class Cust_Gui extends Application {
 	            		 						   lbl_Cust_Res,lbl_Order_Count,lbl_Cust_Total,lbl_Restsumme,lbl_Active_DB);
 	        mGui_grid.add(lbl_Customer,col_1,row_4,1,11);         			         //add ( Label Name, column,row, from Element, to Element )
 	  
-	        VBox vb_Cust_Fields= new VBox(5);                            		     // VBox for Customer and Customer Stat Fields
+	        // VBox for Customer and Customer Stat Fields
+	        VBox vb_Cust_Fields= new VBox(5);                            		     
 	        	 txt_Cust_Nr.setMaxWidth(Double.MAX_VALUE);
 	        	 txt_Cust_LastName.setMaxWidth(Double.MAX_VALUE);
 	             txt_Cust_Name.setMaxWidth(Double.MAX_VALUE);
@@ -200,51 +211,55 @@ public class Cust_Gui extends Application {
 	            		 						    txt_Cust_HNr,txt_Cust_Pc,txt_Cust_Res,txt_Order_Count,
 	            		 						    txt_Total,txt_Restsumme,txt_Selected_Db);
 	       mGui_grid.add(vb_Cust_Fields,col_2,row_4,1,11);                           //add ( Label Name, column,row, from Element, to Element )
-             
-           HBox hb_Db_Btn = new HBox(10);                                            // Database Buttons
+           
+	       // Database Buttons
+           HBox hb_Db_Btn = new HBox(10);                                            
 	         	HBox.setHgrow(btn_Select_Db, Priority.ALWAYS);
 	            HBox.setHgrow(btn_New_Db, Priority.ALWAYS);
 	            btn_Select_Db.setMaxWidth(Double.MAX_VALUE);
 	            btn_New_Db.setMaxWidth(Double.MAX_VALUE);
 	            hb_Db_Btn.getChildren().addAll(btn_Select_Db,btn_New_Db);
 	       mGui_grid.add(hb_Db_Btn, col_2,16);
-	                   
-	        VBox vb_Cust_Btn = new VBox(5);                                         // vbox customer Buttons
-	        	 btn_Cust_Search.setMaxWidth(Double.MAX_VALUE);
-	        	 btn_Cust_New.setMaxWidth(Double.MAX_VALUE);
-	        	 btn_Cust_Save.setMaxWidth(Double.MAX_VALUE);
-	        	 btn_Cust_NoSave.setMaxWidth(Double.MAX_VALUE);
-	        	 btn_Plan_Pdf.setMaxWidth(Double.MAX_VALUE);
-	        	 btn_Plan_Print.setMaxWidth(Double.MAX_VALUE);
-	             btn_Cust_Del.setMaxWidth(Double.MAX_VALUE);
-	             btn_Plan_Excel.setMaxWidth(Double.MAX_VALUE);
-	             vb_Cust_Btn.getChildren().addAll(btn_Cust_Search,btn_Cust_New,btn_Cust_Save,btn_Cust_NoSave,btn_Cust_Del,
-	            		 						  btn_Plan_Pdf,btn_Plan_Print,btn_Plan_Excel);
-	        mGui_grid.add(vb_Cust_Btn,col_4,row_4,1,7); 
+	       
+	       // vbox customer Buttons            
+	       VBox vb_Cust_Btn = new VBox(5);                                         
+	            btn_Cust_Search.setMaxWidth(Double.MAX_VALUE);
+	        	btn_Cust_New.setMaxWidth(Double.MAX_VALUE);
+	        	btn_Cust_Save.setMaxWidth(Double.MAX_VALUE);
+	        	btn_Cust_NoSave.setMaxWidth(Double.MAX_VALUE);
+	        	btn_Plan_Pdf.setMaxWidth(Double.MAX_VALUE);
+	        	btn_Plan_Print.setMaxWidth(Double.MAX_VALUE);
+	            btn_Cust_Del.setMaxWidth(Double.MAX_VALUE);
+	            btn_Plan_Excel.setMaxWidth(Double.MAX_VALUE);
+	            vb_Cust_Btn.getChildren().addAll(btn_Cust_Search,btn_Cust_New,btn_Cust_Save,btn_Cust_NoSave,btn_Cust_Del,
+	                 	 						 btn_Plan_Pdf,btn_Plan_Print,btn_Plan_Excel);
+	       mGui_grid.add(vb_Cust_Btn,col_4,row_4,1,7); 
    
+	      // Vbox Label Orderlist
+	      VBox vb_lbl_Orderlist = new VBox(5);      					            
+	           lbl_Order_List.setMaxWidth(Double.MAX_VALUE);
+	           vb_lbl_Orderlist.getChildren().addAll(lbl_Order_List);
+	      mGui_grid.add(vb_lbl_Orderlist,col_5,row_4);  
+	      
+	      // VBox Orderlist
+	      VBox vb_Order_lst = new VBox(0);               					       
+	           lstv_Order_List.setMaxWidth(Double.MAX_VALUE);
+	           vb_Order_lst.getChildren().addAll(lstv_Order_List);
+	      mGui_grid.add(vb_Order_lst,col_6,row_4); 
 
-	        VBox vb_lbl_Orderlist = new VBox(5);      					            // Vbox Label Orderlist
-	        	 lbl_Order_List.setMaxWidth(Double.MAX_VALUE);
-	        	 vb_lbl_Orderlist.getChildren().addAll(lbl_Order_List);
-	        mGui_grid.add(vb_lbl_Orderlist,col_5,row_4);  
-	               
-	        VBox vb_Order_lst = new VBox(0);               					        // VBox Orderlist
-	        	 lstv_Order_List.setMaxWidth(Double.MAX_VALUE);
-	        	 vb_Order_lst.getChildren().addAll(lstv_Order_List);
-	        mGui_grid.add(vb_Order_lst,col_6,row_4); 
-
-	        VBox vb_Order_lbls = new VBox(13);              					   // VBox Order Labels
-	       		 lbl_Order_Cust_Nr.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Order_Nr.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Order_Date.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Pay_Start.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Pay_End.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Rate_Count.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_First_Rate.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Rate.setMaxWidth(Double.MAX_VALUE);
-	       		 lbl_Order_Summary.setMaxWidth(Double.MAX_VALUE);
-	       		 vb_Order_lbls.getChildren().addAll(lbl_Order_Cust_Nr,lbl_Order_Nr,lbl_Order_Date,lbl_Pay_Start,
-	       				                            lbl_Pay_End,lbl_Rate_Count,lbl_First_Rate,lbl_Rate,lbl_Order_Summary);
+	      // VBox Order Labels
+	      VBox vb_Order_lbls = new VBox(13);              					   
+	       	   lbl_Order_Cust_Nr.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Order_Nr.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Order_Date.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Pay_Start.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Pay_End.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Rate_Count.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_First_Rate.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Rate.setMaxWidth(Double.MAX_VALUE);
+	       	   lbl_Order_Summary.setMaxWidth(Double.MAX_VALUE);
+	       	   vb_Order_lbls.getChildren().addAll(lbl_Order_Cust_Nr,lbl_Order_Nr,lbl_Order_Date,lbl_Pay_Start,
+	       				                          lbl_Pay_End,lbl_Rate_Count,lbl_First_Rate,lbl_Rate,lbl_Order_Summary);
 	       mGui_grid.add(vb_Order_lbls,col_7,row_4,1,9);  
 	        
 	       VBox txt_Order_Fields = new VBox(4);              			          // VBox Order Textfields
@@ -300,7 +315,7 @@ public class Cust_Gui extends Application {
 	                   gui_States.gui_State_Start(this);
 	                      
 	        Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger,primaryStage);
-	        // FieldListener listenToFields = new FieldListener(gui_States,this,primaryStage);
+	       
 	        
 	        // Feldueberwachung absichern = new Feldueberwachung(gui_States,this,primaryStage);
 	        
@@ -421,7 +436,7 @@ public void setEditRate(boolean on_off,String color) { this.txt_Rate.setEditable
 	    
 	   
 	         
-	    public void setListBestellnummer(String ordernumbers)   { lst_Orderlist_Items.add(ordernumbers);}
+	    public void setListOrderNumbers(String ordernumbers)   { lst_Orderlist_Items.add(ordernumbers);}
 	    
 	    
 

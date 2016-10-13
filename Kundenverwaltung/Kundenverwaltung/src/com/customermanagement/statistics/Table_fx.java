@@ -1,4 +1,4 @@
-package com.customermanagement.gui;
+package com.customermanagement.statistics;
 import java.util.ArrayList;
 
 import com.customermanagement.entities.Obj_Order;

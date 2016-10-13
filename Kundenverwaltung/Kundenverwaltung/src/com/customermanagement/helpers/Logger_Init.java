@@ -21,7 +21,9 @@ public class Logger_Init {
     }
     
     private static void initLogger() {
+      // DOMConfigurator.configureAndWatch("log4j-4.xml", 60*1000);
        DOMConfigurator.configureAndWatch("log4j-4.xml", 60*1000); 
+       
        logger = Logger.getLogger(Logger_Init.class);
     }	
 }

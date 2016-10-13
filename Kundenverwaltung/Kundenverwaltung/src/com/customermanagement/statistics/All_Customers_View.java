@@ -1,4 +1,4 @@
-package com.customermanagement.gui;
+package com.customermanagement.statistics;
 import com.customermanagement.entities.Obj_Customer;
 
 import javafx.collections.FXCollections;
