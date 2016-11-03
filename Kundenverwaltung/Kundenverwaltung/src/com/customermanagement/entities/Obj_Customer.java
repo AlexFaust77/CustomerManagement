@@ -1,25 +1,57 @@
 package com.customermanagement.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TextField;
 
+@Entity															// Hibernate Annotations for transfer in Database with Hibernate
+@Table(name = "Customer")
 public class Obj_Customer {          							// Customer Object Stores Customer Information - Getter and Setter
 
+	    @Id @GeneratedValue
+	    @Column(name="id")
+		private int id;
+	    
+	    @Column(name="customerNo")
 	    private String custNo;
+	    
+	    @Column(name="lastname")
 	    private String lastname;
+	    
+	    @Column(name="name")
 	    private String firstname;
+	    
+	    @Column(name="street")
 	    private String street;
+	    
+	    @Column(name="houseNo")
 	    private int houseNo;
+	    
+	    @Column(name="postcode")
 	    private int postcode;
+	    
+	    @Column(name="residenz")
 	    private String residenz;
+	    
+	    @Transient
 	    private int orderCount;
+	    
+	    @Transient
 	    private double custTotal;
+	    
+	    @Transient
 	    private double custBalance;
+	    
+	    @Transient
 	    private ObservableList<String> orderlist = FXCollections.observableArrayList();
 	    
-	    
-		public String getCustNo() {
+	    public String getCustNo() {
 			return custNo;
 		}
 		

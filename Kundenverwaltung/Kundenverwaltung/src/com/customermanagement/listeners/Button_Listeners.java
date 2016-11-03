@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
+import com.customermanagement.database.HibernateStatements;
 import com.customermanagement.database.SQL_Statements;
 import com.customermanagement.entities.Obj_Customer;
 import com.customermanagement.entities.Obj_Order;
@@ -47,6 +48,7 @@ public class Button_Listeners {
 	 FileChooser select_Database = new FileChooser();						     // Filechooser for Database
 	 Excel_Export excel_Export;				     								 // Excel Export class
 	 InputChecks checkInput = new InputChecks();
+	 private HibernateStatements statementsHibernate = new HibernateStatements();// for Hibernate Database Access
 	 
 	 private ArrayList<String> lst_month = new ArrayList<String>();			     // list for Months
 	 private ArrayList<String> lst_monthly_Rate = new ArrayList<String>();       // list all monthly Rates
@@ -209,33 +211,49 @@ public class Button_Listeners {
 		    Obj_Cust_Gui.btn_Cust_Save.setOnAction(new EventHandler<ActionEvent>() {
 	            boolean doubled_Customer = false;
 	            
+	            
+	            
+	           
+	            
 	            @Override
-	            public void handle(ActionEvent e) {
-	               // Fill the customer Object with values from Gui	
-	               obj_Customer.setCustNo(Obj_Cust_Gui.getCustNr());
-	               obj_Customer.setLastname(Obj_Cust_Gui.getCustLastName());
-	               obj_Customer.setFirstname(Obj_Cust_Gui.getCustName());
-	               obj_Customer.setStreet(Obj_Cust_Gui.getCustStreet());
-	               obj_Customer.setHouseNo(Integer.parseInt(Obj_Cust_Gui.getCustHNr()));
-	               obj_Customer.setPostcode(Integer.parseInt(Obj_Cust_Gui.getCustPc()));
-	               obj_Customer.setResidenz(Obj_Cust_Gui.getCustRes());
-	               logger.info("Customer Object is filled with values");
-	               // doppelteKdnr = dataBaseCon.doppelteKundennr(objDaten, kdverw_Obj.getKdNr(), kdverw_Obj.getAktiveDB());
-	               // Failed doubled Customer has to be checked          
-	               
-	               //if(!doppelteKdnr) {
-	                   dataBase_Result = dataBase_Request.new_Customer(obj_Customer, Obj_Cust_Gui.getActiveDB(),logger);
-	                   logger.info("Object is saved to selected Database");
-	                   Obj_Cust_Gui.setBtnCustCancel(false);
-	                   Obj_Cust_Gui.setBtnCustSave(false);
-	                   gui_State.gui_State_Start(Obj_Cust_Gui);
-	               //} else {
-	               //    JOptionPane.showMessageDialog(null, "Datensatz konnte nicht gespeichert werden !!!\n"
-	               //                                      + "Kundennummer bereits vorhanden !!!", "Fehler beim anlegen des Kunden", JOptionPane.CANCEL_OPTION);
-	               //}
-	            }
-	                   
-	        });
+	 public void handle(ActionEvent e) {
+	            	
+	   	System.out.println( "Checkbox property : " + Obj_Cust_Gui.getChkHibernateValue() );
+	            	
+	            	
+	            	
+	 	// Fill the customer Object with values from Gui	
+	 	obj_Customer.setCustNo(Obj_Cust_Gui.getCustNr());
+	 	obj_Customer.setLastname(Obj_Cust_Gui.getCustLastName());
+	 	obj_Customer.setFirstname(Obj_Cust_Gui.getCustName());
+	 	obj_Customer.setStreet(Obj_Cust_Gui.getCustStreet());
+	 	obj_Customer.setHouseNo(Integer.parseInt(Obj_Cust_Gui.getCustHNr()));
+	 	obj_Customer.setPostcode(Integer.parseInt(Obj_Cust_Gui.getCustPc()));
+	 	obj_Customer.setResidenz(Obj_Cust_Gui.getCustRes());
+	 	logger.info("Customer Object is filled with values");
+	 	// doppelteKdnr = dataBaseCon.doppelteKundennr(objDaten, kdverw_Obj.getKdNr(), kdverw_Obj.getAktiveDB());
+	 	// Failed doubled Customer has to be checked          
+	           	
+	       	if(!Obj_Cust_Gui.getChkHibernateValue()) {
+	    		//if(!doppelteKdnr) {
+	       		logger.debug("Save to JDBC Local Database : " + Obj_Cust_Gui.getChkHibernateValue());
+	    		dataBase_Result = dataBase_Request.new_Customer(obj_Customer, Obj_Cust_Gui.getActiveDB(),logger);
+	    		logger.info("Object is saved to selected Database");
+	    		Obj_Cust_Gui.setBtnCustCancel(false);
+	    		Obj_Cust_Gui.setBtnCustSave(false);
+	    		gui_State.gui_State_Start(Obj_Cust_Gui);
+	    	//} else {
+	        // 	JOptionPane.showMessageDialog(null, "Datensatz konnte nicht gespeichert werden !!!\n"
+	        //  + "Kundennummer bereits vorhanden !!!", "Fehler beim anlegen des Kunden", JOptionPane.CANCEL_OPTION);
+	        //}
+	                              	            		
+	        } else {
+	            		
+	            statementsHibernate.writeCustomer(obj_Customer);  // added for Hibernate Test
+	            
+	        }
+	     }
+	});
 	        // Cancel - Not Saving Customer Data  
 		    Obj_Cust_Gui.btn_Cust_NoSave.setOnAction(new EventHandler<ActionEvent>() {   
 	            @Override

@@ -6,6 +6,7 @@ import com.customermanagement.helpers.*;
 import com.customermanagement.listeners.Button_Listeners;
 
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -17,6 +18,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -50,6 +52,7 @@ public class Cust_Gui extends Application {
 	    public Button btn_Order_Change = new Button("Bestellung ändern");
 	    public Button btn_Plan_Excel = new Button("Excel Export");
 	    
+	    private CheckBox chkHibernate = new CheckBox("Hibernate Datenbank nutzen !");
 	    // Textfield for stats and Extras
 	    TextField txt_Selected_Db = new TextField();               					
 	    TextField txt_Order_Count = new TextField();
@@ -216,9 +219,10 @@ public class Cust_Gui extends Application {
            HBox hb_Db_Btn = new HBox(10);                                            
 	         	HBox.setHgrow(btn_Select_Db, Priority.ALWAYS);
 	            HBox.setHgrow(btn_New_Db, Priority.ALWAYS);
+	            HBox.setHgrow(chkHibernate, Priority.ALWAYS);
 	            btn_Select_Db.setMaxWidth(Double.MAX_VALUE);
 	            btn_New_Db.setMaxWidth(Double.MAX_VALUE);
-	            hb_Db_Btn.getChildren().addAll(btn_Select_Db,btn_New_Db);
+	            hb_Db_Btn.getChildren().addAll(btn_Select_Db,btn_New_Db,chkHibernate);
 	       mGui_grid.add(hb_Db_Btn, col_2,16);
 	       
 	       // vbox customer Buttons            
@@ -378,6 +382,8 @@ public class Cust_Gui extends Application {
 	 public void setRate(String rate){ this.txt_Rate.setText(rate);}
 	 public void setOrderSummary(String orderSummary){ this. txt_Order_Summary.setText(orderSummary); }
 	 public String getOrderSummary() { return  txt_Order_Summary.getText(); }
+	 
+	 public Boolean getChkHibernateValue() { return chkHibernate.selectedProperty().getValue(); }
 	 
 	 public void setFirstRate(Double f_rate)   { this.txt_First_Rate.setText(f_rate.toString()); }                  // Overloaded Methods  - for set Double or String or Int for this Fields
 	 public void setRate(Double f_rate) { this.txt_Rate.setText(f_rate.toString());}
