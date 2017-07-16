@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.customermanagement.database.HibernateStatements;
 import com.customermanagement.database.SQL_Statements;
+
 import com.customermanagement.entities.Obj_Customer;
 import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.helpers.Calculator;
@@ -41,10 +42,9 @@ public class Button_Listeners {
 	 private boolean dataBase_Result;										     // DB Contact Result
 	
 	 Obj_Customer obj_Customer =new Obj_Customer();						         // Object Customer
-	 Obj_Order obj_Order = new Obj_Order("","","","",0,0.0,0.0,0.0,0.0);;	     // Object Order
-	 Calculator calculate = new Calculator();									 // Calculate the Rates
+	 Obj_Order obj_Order = new Obj_Order("",null,null,null,0,0.0,0.0,0.0,"");    // Object Order
 	 Clear_Data data_cleaner = new Clear_Data();							     // for clearing all Lists
-	 SQL_Statements dataBase_Request = new SQL_Statements();			         // all SQL - Lite statements
+	
 	 FileChooser select_Database = new FileChooser();						     // Filechooser for Database
 	 Excel_Export excel_Export;				     								 // Excel Export class
 	 InputChecks checkInput = new InputChecks();
@@ -52,11 +52,17 @@ public class Button_Listeners {
 	 
 	 private ArrayList<String> lst_month = new ArrayList<String>();			     // list for Months
 	 private ArrayList<String> lst_monthly_Rate = new ArrayList<String>();       // list all monthly Rates
-	 private ArrayList<Obj_Order> orderlist = new ArrayList<Obj_Order>();        // list for all Orders
+	 
+	 
+	 private ArrayList<Obj_Order> orderlist = new ArrayList<Obj_Order>();        // list for all Orders No - will be removed use Objectlist instead
+	 private ObservableList<Obj_Order>lstAllOrders = FXCollections.observableArrayList();  // NEUE LISTE änderung der GUI
+	 
 	 private ArrayList<String>lst_All_Customers = new ArrayList<String>();       // list of Customer No
 	 private ObservableList<Obj_Customer>lst_Obj_Customer = FXCollections.observableArrayList(); // list for all Customer Objects
 	 
-	 public Button_Listeners(Gui_States gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, Stage primaryStage) {
+	 // Stage primaryStage will be removed  look line 222 if its neccesary
+	 public Button_Listeners(Gui_States gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, 
+			 				 Stage primaryStage, Calculator calculate, SQL_Statements dataBaseRequest, TableView<Obj_Order> fx_Table_View) {
 	
 		 // Search one Customer with Customernumber
 		 Obj_Cust_Gui.btn_Cust_Search.setOnAction(new EventHandler<ActionEvent>() {                                     								  
@@ -65,47 +71,80 @@ public class Button_Listeners {
 	            	  obj_Customer = data_cleaner.cleanObjCustomer(obj_Customer);
 	                  				 data_cleaner.cleanLists(lst_month,orderlist,lst_Obj_Customer,lst_All_Customers,lst_monthly_Rate);
 	                  // Database request				
-	                  obj_Customer = dataBase_Request.getCustomer_AND_Orders(obj_Customer,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger);  	
+	                  obj_Customer = dataBaseRequest.getCustomer(obj_Customer,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger);  	
 	                  logger.info("Database Request - Done");
 	                  // Filling the values into the Gui Fields
+	                  Obj_Cust_Gui.setCustId(obj_Customer.getId());
 	                  Obj_Cust_Gui.setCustLastName(obj_Customer.getLastname());                															    
 	                  Obj_Cust_Gui.setCustName(obj_Customer.getFirstname());
 	                  Obj_Cust_Gui.setCustStreet(obj_Customer.getStreet());
 	                  Obj_Cust_Gui.setCustHNr(Integer.toString(obj_Customer.getHouseNo()));
 	                  Obj_Cust_Gui.setCustPc(Integer.toString(obj_Customer.getPostcode()));
 	                  Obj_Cust_Gui.setCustRes(obj_Customer.getResidenz());
-	                  Obj_Cust_Gui.setBestellNummernListe(obj_Customer.getOrderlist());
+	                  // Obj_Cust_Gui.setBestellNummernListe(obj_Customer.getOrderlist());
 	                  Obj_Cust_Gui.setOrderCount(obj_Customer.getOrderlist().size());
 	                  Obj_Cust_Gui.setTotal(Double.toString(obj_Customer.getCustTotal()));
 	                              
-	                  			  calculate.fill_month_lst(Obj_Cust_Gui,dataBase_Request,logger);
+	                  			  calculate.fill_month_lst(Obj_Cust_Gui,dataBaseRequest,logger);
 	                  lst_month = calculate.getLstMonth();
 	                  logger.info("Monthlist filled - Done");
 	                  
-	                  orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBase_Request,logger);
-	                  			  calculate.setLstMonth(lst_month);
-	                  			  calculate.getAll_Rates(logger);
-	                              
-	                  lst_monthly_Rate = calculate.getMonthlyRate();
-	                  logger.info("All Rates calculated - Done");
 	                  
-	                  // create chart for monthly Rates
-	                  Chart_fx rate_Chart = new Chart_fx();																									
-	                           rate_Chart.setMonthlyRate(lst_monthly_Rate);
-	                           rate_Chart.setMonthslist(lst_month);
-	                           rate_Chart.createChartWithToolTips();
-	                  Obj_Cust_Gui.setLineData(rate_Chart.getChartData());
 	                  
-	                  logger.info("ratechart created - Done"); 
+	                  
+	                  lstAllOrders = dataBaseRequest.getAllOrderObjects(obj_Customer,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger); 
+	                  
+	                  fillOrderNumberList(lstAllOrders,Obj_Cust_Gui,logger);
+	                  
+	                  System.out.println("Grösse der Order Liste " + lstAllOrders.size());
+	                  
+	                  //hier der weiter damit ich weis wo ich war
+	                  
+                      //orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBase_Request,logger);
+	                  			    calculate.setLstMonth(lst_month);
+	                  			    calculate.getAll_Rates(logger,lstAllOrders); // <= hier läuft was schief -- Hier weiter
+	                  
+	                  
+	                  System.out.println("Vorhandene Bestellungen : " + lstAllOrders.size()+ "\n");
+	                  
+	                  if(lstAllOrders.size() > 0 ) {
+	                	  	   obj_Customer.setLstAllOrders(lstAllOrders);	 // Bestellobjekte werden Kunden zugewiesen
+	                	  	   System.out.println("Anzahl Bestellobjekte Customer : " + obj_Customer.getLstAllOrders().size() + "\n");
+	                  
+	                	  	   lst_monthly_Rate = calculate.getMonthlyRate();
+	                	  	   logger.info("All Rates calculated - Done");
+	                  
+	                	  	   for(int i = 0; i < lst_monthly_Rate.size(); i++) {
+	                	  		   	System.out.println("Liste der Monatesraten Rate => " + (i + 1) + " Aktueller Wert : " + lst_monthly_Rate.get(i)  +"\n" );
+	                	  	   }
+	                  
+	                	  	   // create chart for monthly Rates
+	                	  	   Chart_fx rate_Chart = new Chart_fx();																									
+	                	  	   		    rate_Chart.setMonthlyRate(lst_monthly_Rate);
+	                	  	   		    rate_Chart.setMonthslist(lst_month);
+	                	  	   		    rate_Chart.createChartWithToolTips();
+	                	  	   		    Obj_Cust_Gui.setLineData(rate_Chart.getChartData());
+	                  
+	                	  	   logger.info("ratechart created - Done"); 
 	                
-	                  //Table for Order Overview
-	                  TableView<Obj_Order> view_fx_Table = new TableView<Obj_Order>();																		
-	                  Table_fx table = new Table_fx();
-	                           table.setOrderlist(orderlist);
-	                           view_fx_Table = table.erstelleFXTableView();
-	                           Obj_Cust_Gui.tb_Table.setContent(view_fx_Table);
-	                  
-	                  logger.info("order Table created - Done");          
+	                	  	   //Table for Order Overview - getestet funktioniert
+	                	  	  
+	                	  	   
+	                	  	   
+	                	  	   
+	                	  	   
+	                	  	   TableView<Obj_Order> view_fx_Table = new TableView<Obj_Order>();
+	                	  	                        view_fx_Table.setId("CurrentOrders");
+	                	  	   Table_fx table = new Table_fx();
+	                	  	   			table.setOrderlist(lstAllOrders);
+	                	  	   			view_fx_Table = table.createTable();
+	                	  	   			
+	                	  	   			Obj_Cust_Gui.tabCurrentOrders.setContent(view_fx_Table);
+	                	  	   			
+	                	  	   logger.info("order Table created - Done");
+	                  } else {
+	                	  
+	                  }
 	            }
 	        });
 	
@@ -117,21 +156,7 @@ public class Button_Listeners {
 	                   logger.info("Gui State set - Done"); 
 	            }
 	        });
-	        
-	     // New Order Actions
-		 Obj_Cust_Gui.btn_Order_New.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-	            	// Check CustomerNumber is available
-	                if(Obj_Cust_Gui.getCustNr().length() > 0) {																						   
-	                    gui_State.create_Order(Obj_Cust_Gui);
-	                    Obj_Cust_Gui.setOrderCustNr(Obj_Cust_Gui.getCustNr());
-	                } else {
-	                    
-	                    // add MSG = No Customer No
-	                }
-	            }
-	        });    
+
 	     // Delete all Orders from one Customer - and Delete the Selected Customer
 		 Obj_Cust_Gui.btn_Cust_Del.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
@@ -145,13 +170,13 @@ public class Button_Listeners {
 	                      if(result.get() == ButtonType.OK) {
 	                    	   logger.info("OK - Start to Delete Datarecord");
 	                    	   // First Delete all Orders from this Customer
-	                           for(int each_Order = 0; each_Order < Obj_Cust_Gui.getBestellNummernListe().size();each_Order++) {             			
-	                               String act_Order = orderlist.get(each_Order).getOrderNo();
-	                               dataBase_Result = dataBase_Request.delete_Order(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(), act_Order,logger);
-	                           }
+	                     //      for(int each_Order = 0; each_Order < Obj_Cust_Gui.getBestellNummernListe().size();each_Order++) {             			
+	                     //          String act_Order = orderlist.get(each_Order).getOrderNo();
+	                     //          dataBase_Result = dataBase_Request.delete_Order(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(), act_Order,logger);
+	                      //     }
 	                           logger.info("Orders Deleted - Done");
 	                           // Then Delete Customer
-	                           dataBase_Result = dataBase_Request.delete_Customer(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(),logger);				
+	                           dataBase_Result = dataBaseRequest.delete_Customer(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(),logger);				
 	                           logger.info("Customer Deleted - Done");
 	                          
 	                           gui_State.gui_State_Start(Obj_Cust_Gui);
@@ -173,7 +198,7 @@ public class Button_Listeners {
 	                                    if(selected_database != null) {
 	                                                
 	                                    	        // connect to selected Database
-	                                                dataBase_Result = dataBase_Request.DatabaseConnection(selected_database.getAbsolutePath(),logger);
+	                                                dataBase_Result = dataBaseRequest.DatabaseConnection(selected_database.getAbsolutePath(),logger);
 	                                                
 	                                                if(dataBase_Result) {  // Connection OK
 	                                                	Obj_Cust_Gui.setActiveDB(selected_database.getAbsolutePath());
@@ -198,7 +223,8 @@ public class Button_Listeners {
 	            	
 	                File dataBase_Name = select_Database.showSaveDialog(primaryStage);
 	                     if(dataBase_Name != null) {
-	                    	 dataBase_Request.build_Database(dataBase_Name.getName() + ".db",logger);
+	                                        	 				   
+	                    	 dataBaseRequest.build_Database(dataBase_Name.getName() + ".db",logger);
 	                    	 Obj_Cust_Gui.setActiveDB(dataBase_Name.getAbsolutePath() + ".db");
 	                         logger.info("Database builded - Information Field set");
 	                         
@@ -237,7 +263,7 @@ public class Button_Listeners {
 	       	if(!Obj_Cust_Gui.getChkHibernateValue()) {
 	    		//if(!doppelteKdnr) {
 	       		logger.debug("Save to JDBC Local Database : " + Obj_Cust_Gui.getChkHibernateValue());
-	    		dataBase_Result = dataBase_Request.new_Customer(obj_Customer, Obj_Cust_Gui.getActiveDB(),logger);
+	    		dataBase_Result = dataBaseRequest.new_Customer(obj_Customer, Obj_Cust_Gui.getActiveDB(),logger);
 	    		logger.info("Object is saved to selected Database");
 	    		Obj_Cust_Gui.setBtnCustCancel(false);
 	    		Obj_Cust_Gui.setBtnCustSave(false);
@@ -249,7 +275,7 @@ public class Button_Listeners {
 	                              	            		
 	        } else {
 	            		
-	            statementsHibernate.writeCustomer(obj_Customer);  // added for Hibernate Test
+	            statementsHibernate.writeCustomer(obj_Customer,logger);  // added for Hibernate Test
 	            
 	        }
 	     }
@@ -263,104 +289,15 @@ public class Button_Listeners {
 	                   logger.info("GUI State is resetet");
 	            }
 	        });
-	        // Save Order Data 
-		    Obj_Cust_Gui.btn_Order_Save.setOnAction(new EventHandler<ActionEvent>() {					 					
-	            
-	            @Override
-	            public void handle(ActionEvent e) {
-	            	
-	            	InputChecks inputCheck = new InputChecks();
-    							inputCheck.checkAllDates(Obj_Cust_Gui, logger,obj_Order);
-    							inputCheck.checkAllIntegers(Obj_Cust_Gui, logger, obj_Order,calculate);
-    							inputCheck.checkAllDouble(Obj_Cust_Gui, logger,obj_Order);
-    							
-	            	  //System.exit(0);
-	                  // Fill Order values into Order Object                    
-	                    obj_Order.setOrderNo(Obj_Cust_Gui.getOrderNr());
-	                  //  obj_Order.setOrderDate(Obj_Cust_Gui.getOrderDate());  							// set in Input check Method
-	                  //  obj_Order.setPayStart(Obj_Cust_Gui.getPayStart());    							// set in Input check Method
-	                  //  obj_Order.setPayEnd(Obj_Cust_Gui.getPayEnd());        							// calculated no need for Check
-	                  //  obj_Order.setRateCount(Integer.parseInt(Obj_Cust_Gui.getRateCount()));
-	                  //  obj_Order.setFirstRate(Double.parseDouble(Obj_Cust_Gui.getFirstRate())); 			// set in Input check Method
-	                  //  obj_Order.setRate(Double.parseDouble(Obj_Cust_Gui.getRate())); 			 		// set in Input check Method
-	                  //  obj_Order.setOrderSummary(Double.parseDouble(Obj_Cust_Gui.getOrderSummary()));  	// set in Input check Method
-	                    obj_Order.setCustNo(Double.parseDouble(Obj_Cust_Gui.getOrderCustNr())); 			// transfered from Customer Object no need to Check
-	                    
-	                    
-	                 if(inputCheck.getCheck_ok()) {    
-	                    System.out.println("Try to safe Order");
-	                    
-	                    if(Obj_Cust_Gui.getOrderFlag() == 0) {
-	                        // Save Order to Database Flag = 0 is New Order Flag 1 = Update Order Data             
-	                        dataBase_Result = dataBase_Request.new_Order(obj_Order, Obj_Cust_Gui.getActiveDB(),logger);
-	                        logger.info("Order Saved to Database");
-	                        System.out.println("saved");
-	                        // Set Ordernumber to Orderlist GUI
-	                        Obj_Cust_Gui.setListOrderNumbers(""+obj_Order.getOrderNo());
-	                                                
-	                            if(dataBase_Result) {
-	                            	Obj_Cust_Gui.setBtnOrderNoSave(false);
-	                            	Obj_Cust_Gui.setBtnOrderSave(false);
-	                            	gui_State.cancel_Order(Obj_Cust_Gui);
-	                            } else {
-	                                // Buttons visible and Error Message
-	                            }
-	                        
-	                    } else {
-	                    	// Update Order data
-	                       	dataBase_Result = dataBase_Request.change_Order(obj_Order, Obj_Cust_Gui.getActiveDB(),logger);
-	                                                
-	                        if(dataBase_Result) {
-	                        	Obj_Cust_Gui.setBtnOrderNoSave(false);
-                            	Obj_Cust_Gui.setBtnOrderSave(false);
-	                        	Obj_Cust_Gui.setOrderFlag(0);
-	                        } else {
-	                            // 
-	                        }
-	                        
-	                      
-	                    }        
-	                 } else {
-	                	System.out.println("Not saved : " + inputCheck.getCheck_ok()); 
-	                 }
-	            }
-	                   
-	        });            
-	        // Cancel - Not Saving Order    
-		    Obj_Cust_Gui.btn_Order_NoSave.setOnAction(new EventHandler<ActionEvent>() {            
-	            @Override
-	            public void handle(ActionEvent e) {
-	                gui_State.change_Order(Obj_Cust_Gui);
-	                logger.info("Canceled - Order is not Saved - GUI was reset");
-	            }
-	        });
-	        // Select Order on List
-		    Obj_Cust_Gui.lstv_Order_List.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-	           
-	            @Override
-	            public void changed(ObservableValue<? extends String> observable, String oldValue, String aktuelleBestNr) {
-	            	  // Database Request - returns Order Object
-	                  obj_Order = dataBase_Request.getOne_Order(obj_Order,aktuelleBestNr,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger);   
-	                  // Set Values in GUI
-	                  Obj_Cust_Gui.setOrderCustNr(new Double(obj_Order.getCustNo()).toString());     					
-	                  Obj_Cust_Gui.setOrderNr(obj_Order.getOrderNo());
-	                  Obj_Cust_Gui.setOrderDate(obj_Order.getOrderDate());
-	                  Obj_Cust_Gui.setOrderSummary(obj_Order.getOrderSummary());
-	                  Obj_Cust_Gui.setFirstRate(obj_Order.getFirstRate());
-	                  Obj_Cust_Gui.setRate(obj_Order.getRate());
-	                  Obj_Cust_Gui.setPayStart(obj_Order.getPayStart());
-	                  Obj_Cust_Gui.setPayEnd(obj_Order.getPayEnd());
-	                  Obj_Cust_Gui.setRateCount(obj_Order.getRateCount());
-	                  logger.info("Current Order - Values set into GUI Fields");         
-	            }
-	        });
+
+
 	        // Export as PDF File
 		    Obj_Cust_Gui.btn_Plan_Pdf.setOnAction(new EventHandler<ActionEvent>() {
 	            
 	            @Override
 	            public void handle(ActionEvent e) {
 	                // calculations for PDF Export
-	            	orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBase_Request,logger);
+	            	//orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBaseRequest,logger);
 	            				calculate.setLstMonth(lst_month);
 	                logger.info("Calculations Done for PDF Export");               
 	            	// Create PDF Export
@@ -372,7 +309,7 @@ public class Button_Listeners {
 	            	logger.info("PDF Export Done");
 	            }
 	        });
-	        
+	       /* 
 	       // Delete Order  
 	       Obj_Cust_Gui.btn_Order_Del.setOnAction(new EventHandler<ActionEvent>() {
 	             @Override
@@ -394,7 +331,8 @@ public class Button_Listeners {
 	                       }
 	            }
 	        });
-	        
+	       */
+		   /*
 	       // Change Order  
 	       Obj_Cust_Gui.btn_Order_Change.setOnAction(new EventHandler<ActionEvent>() {
 	             @Override
@@ -406,16 +344,17 @@ public class Button_Listeners {
 	                logger.info("Order Change - Flag for Update Order is set");
 	            }
 	        });
+	        */
 	       //  View All Customer as Table
 	       Obj_Cust_Gui.m_Cust_View.setOnAction(new EventHandler<ActionEvent>() {
 	             @Override
 	             public void handle(ActionEvent e) {
 	            	// Database Request returns all Customernumbers in Database 
-	            	lst_All_Customers = dataBase_Request.getAll_Cust_Nr(Obj_Cust_Gui.getActiveDB(),logger);
+	            	lst_All_Customers = dataBaseRequest.getAll_Cust_Nr(Obj_Cust_Gui.getActiveDB(),logger);
 	            	logger.info("All Customernumbers returned");
 	            	// Returns customer object added to object List         
 	                for(int current_Cust_Nr = 0; current_Cust_Nr < lst_All_Customers.size();current_Cust_Nr++) {
-	                	lst_Obj_Customer.add(dataBase_Request.getCustomer_AND_Orders(new Obj_Customer(),lst_All_Customers.get(current_Cust_Nr),Obj_Cust_Gui.getActiveDB(),logger)); 
+	                	lst_Obj_Customer.add(dataBaseRequest.getCustomer(new Obj_Customer(),lst_All_Customers.get(current_Cust_Nr),Obj_Cust_Gui.getActiveDB(),logger)); 
 	                }
 	                logger.info("All Customer Objects added to Object list");
 	                All_Customers_View customers_View = new All_Customers_View(); 			// create  Object for Customer View
@@ -469,6 +408,17 @@ public class Button_Listeners {
 	    // returns filename and FilePath        
 	    return str_fileName; 														
 	}   
+	
+	private void fillOrderNumberList(ObservableList<Obj_Order> listOrderObjects, Cust_Gui mainGui, Logger logger) {
+				
+		for(Obj_Order orderObject: listOrderObjects) {
+			mainGui.getOrderListItems().add(orderObject.getOrderNo());
+		}
+		
+		logger.debug("Current Orderlistitems " + mainGui.getOrderListItems().size());
+		mainGui.setOrderCount(mainGui.getOrderListItems().size());
+	
+	}
 
 	 public void setLstMonth(ArrayList<String> lst_month ) { this.lst_month = lst_month; }
 	

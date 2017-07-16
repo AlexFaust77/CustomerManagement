@@ -1,20 +1,23 @@
 package com.customermanagement.entities;
 
+import java.util.Date;
 
 public class Obj_Order {				// Order Object one - Object for each Order
 
-    private String orderNo;
-    private String orderDate;
-    private String payStart;
-    private String payEnd;
-    private int rateCount;
-    private double firstRate;
-    private double rate;
-    private double orderSummary;
-    private double custNo;
+    private String orderNo;				// order Number
+    private Date orderDate;				// order Date
+    private Date payStart;				// Date which the Customer starts to pay the order
+    private Date payEnd;				// Date which the payment ends
+    private int rateCount;				// Number of Rates to pay
+    private double firstRate;			// first Rate - is most not the same as the other rates
+    private double rate;				// other rates
+    private double orderSummary;		// Total Payment for the Order
+    private String custNo;				// Customer Number - used as foreign Key
+    private double alreadyPaid;			// Summary of all payed Rates
+    private double stillToPay;			// Summary of all Rates which the Customer have to pay
     
-     public Obj_Order(String orderNo, String orderDate, String payStart, String payEnd, int rateCount, double firstRate,
-			double rate, double orderSummary, double custNo) {
+     public Obj_Order(String orderNo, Date orderDate, Date payStart, Date payEnd, int rateCount, double firstRate,
+			double rate, double orderSummary, String custNo) {
 		super();
 		this.orderNo = orderNo;
 		this.orderDate = orderDate;
@@ -35,27 +38,27 @@ public class Obj_Order {				// Order Object one - Object for each Order
 		this.orderNo = orderNo;
 	}
 	
-	public String getOrderDate() {
+	public Date getOrderDate() {
 		return orderDate;
 	}
 	
-	public void setOrderDate(String orderDate) {
+	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
 	
-	public String getPayStart() {
+	public Date getPayStart() {
 		return payStart;
 	}
 	
-	public void setPayStart(String payStart) {
+	public void setPayStart(Date payStart) {
 		this.payStart = payStart;
 	}
 	
-	public String getPayEnd() {
+	public Date getPayEnd() {
 		return payEnd;
 	}
 	
-	public void setPayEnd(String payEnd) {
+	public void setPayEnd(Date payEnd) {
 		this.payEnd = payEnd;
 	}
 	
@@ -91,12 +94,32 @@ public class Obj_Order {				// Order Object one - Object for each Order
 		this.orderSummary = orderSummary;
 	}
 	
-	public double getCustNo() {
+	public String getCustNo() {
 		return custNo;
 	}
 	
-	public void setCustNo(double custNo) {
+	public void setCustNo(String custNo) {
 		this.custNo = custNo;
 	}
+
+	public double getAlreadyPaid() {
+		return alreadyPaid;
+	}
+
+	public void setAlreadyPaid(double alreadyPaid) {
+		this.alreadyPaid = alreadyPaid;
+	}
+
+	public double getStillToPay() {
+		return stillToPay;
+	}
+
+	public void setStillToPay(double stillToPay) {
+		this.stillToPay = stillToPay;
+	}
+	
+	
+	
+	
 	
 }

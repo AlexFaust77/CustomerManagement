@@ -1,6 +1,4 @@
 package com.customermanagement.statistics;
-import java.util.ArrayList;
-
 import com.customermanagement.entities.Obj_Order;
 
 import javafx.collections.FXCollections;
@@ -11,18 +9,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class Table_fx {																															// Tableview for Order View for one Customer
 
-	    private ArrayList<Obj_Order> orderlist = new ArrayList<Obj_Order>();
+	   
 	    private TableView<Obj_Order> fxTableView = new TableView<Obj_Order>();
 	    private ObservableList<Obj_Order> orders = FXCollections.observableArrayList();
 	    
 	    @SuppressWarnings({ "unchecked", "rawtypes" })
-		public TableView<Obj_Order> erstelleFXTableView() {
+		public TableView<Obj_Order> createTable() {
 	        
-			System.out.println("Orderlist grösse : " + orderlist.size());
-	        if (orderlist.size() > 0 ) {
-	         
-	           fillorderlist();																												// parse Arraylist to Observablelist
-           
+			System.out.println("Orderlist grösse : " + orders.size());
+	        if (orders.size() > 0 ) {
 	           
 	           TableColumn colOrderNo   = new TableColumn("Bestellnummer");																	// create all Columns for Table
 	           			   colOrderNo.setMinWidth(100);
@@ -47,22 +42,35 @@ public class Table_fx {																															// Tableview for Order Vie
 	           TableColumn colPayEnd = new TableColumn("Zahlungsende");    
 	                       colPayEnd.setMinWidth(100);
 	                       colPayEnd.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("payEnd"));
-	       
-	           fxTableView.getColumns().addAll(colOrderNo,colOrderDate,colOrderSummary,colOrderCount,colPayStart,colPayEnd);		             // Add all Columns
+	                       
+	           TableColumn colFirstRate = new TableColumn("Erste Rate");    
+	                       colFirstRate.setMinWidth(100);
+	                       colFirstRate.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("firstRate"));       
+	                       
+	           TableColumn colRates = new TableColumn("Folgende Raten");    
+	                       colRates.setMinWidth(100);
+	                       colRates.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("rate"));
+	                       
+	           TableColumn colToPay = new TableColumn("Noch Offen");    
+	                       colToPay.setMinWidth(100);
+	                       colToPay.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("stillToPay"));            
+
+	           TableColumn colPayed = new TableColumn("Bereits gezahlt");    
+	                       colPayed.setMinWidth(100);
+	                       colPayed.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("alreadyPaid"));              
+       
+	           fxTableView.getColumns().addAll(colOrderNo,colOrderDate,colOrderSummary,colOrderCount,						// Add all visible Columns
+	        		   						   colPayStart,colPayEnd,colFirstRate,colRates,colToPay,colPayed);		             
 	           fxTableView.setItems(orders);
+	           
 	          
 	       }
 	    
      
-	    return fxTableView; 																													 // return finished Tableview
+	    return fxTableView; 																								 // return finished Tableview
 	    }
 	   
-	    public void fillorderlist() {
-	           for(int i = 0;i < orderlist.size();i++) {
-	              	   orders.add(orderlist.get(i));
-	   	       } 
-	    }
-	    
-	    public void setOrderlist(ArrayList<Obj_Order> orderlist) { this.orderlist = orderlist; }												// Setter for order Objects
+    
+	    public void setOrderlist(ObservableList<Obj_Order> orders) { this.orders = orders; }												    // Setter for order Objects
 	
 }

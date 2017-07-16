@@ -48,10 +48,21 @@ public class Obj_Customer {          							// Customer Object Stores Customer I
 	    @Transient
 	    private double custBalance;
 	    
-	    @Transient
+	    @Transient // will be removed - use Object Order List instead
 	    private ObservableList<String> orderlist = FXCollections.observableArrayList();
-	    
-	    public String getCustNo() {
+	   
+	    @Transient
+	    private ObservableList<Obj_Order> lstAllOrders = FXCollections.observableArrayList();
+	    	    
+	    public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public String getCustNo() {
 			return custNo;
 		}
 		
@@ -136,6 +147,14 @@ public class Obj_Customer {          							// Customer Object Stores Customer I
 		
 		public void setOrderlist(ObservableList<String> bestellItems) {
 			this.orderlist = bestellItems;
+		}
+		
+		public ObservableList<Obj_Order> getLstAllOrders() {
+			return lstAllOrders;
+		}
+		
+		public void setLstAllOrders(ObservableList<Obj_Order> lstAllOrders) {
+			this.lstAllOrders = lstAllOrders;
 		}
 	    
 }

@@ -1,8 +1,12 @@
 package com.customermanagement.helpers;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +14,9 @@ import org.apache.log4j.Logger;
 import com.customermanagement.database.SQL_Statements;
 import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.main.Cust_Gui;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Calculator {
 
@@ -19,16 +26,13 @@ public class Calculator {
 	    private Double[] ar_monthly_rates  = new Double[200];						 // monthlyRate
 	    private Double[] ar_still_payed = new Double[200];							 // stillPayed
 	    private ArrayList<String> str_monthly_rate = new ArrayList<String>();
-	    
+	   	    
 	    private ArrayList<String> monate = new ArrayList<String>();
 	    private ArrayList<String> monatsliste = new ArrayList<String>();
 	    private ArrayList<String> monatlicheRate = new ArrayList<String>();
 	    
-	    
-	  //  private ArrayList<String> rateHashMap = new ArrayList<String>();           // removed 01.10.2016
-	  //  private ArrayList<String> monateHashMap = new ArrayList<String>();
-	  //  private ArrayList<Integer> monatHashMap = new ArrayList<Integer>();
-	  //  private ArrayList<Integer> jahrHashMap = new ArrayList<Integer>();
+	    double completeToPay = 0.0;
+	    double allPaid = 0.0;
  
 	    int aktTag;
 	    int aktMonat;
@@ -56,9 +60,7 @@ public class Calculator {
 	             
 	    	   	lst_month.add(current_month + "/" + current_year);
 	    	   	logger.debug("Current Month : " + current_month + "\nCurrent Year : " + current_year);  
-	            //  monatHashMap.add(current_month);  
-	            //  jahrHashMap.add(current_year);
-	           
+	         	           
 	    	   // year +1 if 12 month reached	  
 	           if(current_month == 12) {
 	        	  current_month = 0;
@@ -70,18 +72,19 @@ public class Calculator {
 	       
 	    }
 	    // Calculate the Payment Enddate Automaticly
-	    public String paymentEndDate(String paymentStart,int rateCount, Logger logger) {
-	        String paymentEnds="";
+	    public Date paymentEndDate(Date paymentStart,int rateCount, Logger logger) {
+	        Date paymentEnds = null;
+	                
+	        LocalDate payStart = LocalDate.from(Instant.ofEpochMilli(paymentStart.getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
 	        
-	        // Split Date in 3 parts
-	        String arr_Date[] = paymentStart.split("-"); 
-	        
-	        int day = Integer.parseInt(arr_Date[0]);     // Days
-	        int month = Integer.parseInt(arr_Date[1]);   // Month
-	        int year = Integer.parseInt(arr_Date[2]);    // Years
-	        
-	        String month_formatter ="0";
-	        String day_formatter ="0";
+	        int month = payStart.getMonthValue();
+	        int year = payStart.getYear();
+	        int day = payStart.getDayOfMonth();
+	      	       
+	        logger.debug("Date Values - Year : " + year + " Month : " + month + " Day : " + day + "\n");
+	                   
+	        String monthformatter ="0";
+	        String dayformatter ="0";
 	        
 	        // if month 12 reached add one to Year and start month by one
 	        for(int x = 0; x < rateCount;x++) {
@@ -93,63 +96,73 @@ public class Calculator {
 	            }
 	        }
 	        if(month < 10) { 
-	           month_formatter = month_formatter + month; 
+	           monthformatter = monthformatter + month; 
 	        } else {
-	           month_formatter = ""+ month;
+	           monthformatter = ""+ month;
 	        }
 	        
 	        if(day < 10) {
-	           day_formatter = day_formatter + day; 
+	           dayformatter = dayformatter + day; 
 	        } else {
-	            day_formatter = "" + day;
+	            dayformatter = "" + day;
 	        }
-	        // Build the paymentEnd String
-	        paymentEnds = day_formatter + "-" + month_formatter + "-" + year; 
-	        logger.debug("PaymentEndDate Calculator\nDay : " + day_formatter + "\nmonth : " + month_formatter + "\nYear : " + year );
-	    return paymentEnds;   
+	        // Convert the paymentEnd String into Date
+	        
+	        try {
+	        	SimpleDateFormat dateformatter = new SimpleDateFormat("dd-MM-yyyy");
+	           	String stringInDate = dayformatter + "-" + monthformatter + "-" + year;
+	           	logger.debug("Date String created :" + stringInDate + "\n");
+	            paymentEnds = dateformatter.parse(stringInDate);
+			} catch (ParseException e) {
+				logger.debug("Date parse Error : " + paymentEnds.getTime() + "\n" + e);
+				
+			}
+	       
+	        logger.debug("paymentEnds parsed : " + paymentEnds.getTime() + "\n" );
+	   	     	      	              
+	    return paymentEnds;
+	      
 	    }
-	    
-	    // Convert from Ordernumberlist to Order Objectlist
-	    public ArrayList<Obj_Order> getOrder_Objects(Cust_Gui obj_Cust_Gui,Obj_Order obj_Order, SQL_Statements dataBase_Request,Logger logger) {			
-	    	// get Ordernumbers from Gui
-	        List orderlist = obj_Cust_Gui.getBestellNummernListe();
-	        logger.debug("Result Orderlist : " + orderlist);
-	            // convert into fully Order Object List with all ordervalues             
-	            for(int objektzaehler = 0; objektzaehler < orderlist.size();objektzaehler++){	
-	            	
-	            	Obj_Order temp_order = new Obj_Order("","","","",0,0.0,0.0,0.0,0.0); 
-	            	obj_Order = dataBase_Request.getOne_Order(temp_order,orderlist.get(objektzaehler).toString(), 
-	            											  obj_Cust_Gui.getCustNr(), obj_Cust_Gui.getActiveDB(),logger);
-	                // add order Object
-	            	obj_orderlist .add(obj_Order);
-	            	logger.debug("\nAdded Order Object" + obj_Order.getCustNo() );
-	            }
-	    return obj_orderlist ;       
-	    }
-	    
+
 	    public void fillMonthlyList() {
 	         for(int monats_zaehler = 0; monats_zaehler < monate.size();monats_zaehler++) {  
 	             monatsliste.add(monate.get(monats_zaehler));
 	         }
 	    }
 	 
-	 public void getAll_Rates(Logger logger) {     
-	   
+	    
+	    
+	 public void getAll_Rates(Logger logger, ObservableList<Obj_Order> orders) {     
+	    double allreadyPaid = 0;
+	    double stillToPay = 0;
+	    
 	    LocalDate currentDate = LocalDate.now();
-	    // fill Array with values 0
-	    for(int y = 0; y < ar_monthly_rates.length; y++) {                   							
-	    	ar_monthly_rates[y] = 0.0;
-	    	ar_still_payed[y] = 0.0;
-	    }
+       
+        for(int y = 0; y < ar_monthly_rates.length; y++) {                  							
+   	        ar_monthly_rates[y] = 0.0;
+   	    }
+        
+        logger.debug("Monthly Rate List " + ar_monthly_rates.length + "\nOrder Object List " + orders.size());
+        
 	    // calculate each order
-	    for(int current_order = 0; current_order < obj_orderlist.size(); current_order++) {				
-	
-	        int int_month_to_Pay = 0 ;
-	        int int_rate_count = obj_orderlist.get(current_order).getRateCount();						// number of rates
-	        double first_rate = obj_orderlist.get(current_order).getFirstRate();						// first rate
-	        double follow_rate = obj_orderlist.get(current_order).getRate();							// all other rates
-	        // split the Date for Pay End
-	        String[] split_end_date = obj_orderlist.get(current_order).getPayEnd().split("-");			
+	    for(int currentOrder = 0; currentOrder < orders.size() ; currentOrder++) {		//orders.size()
+	    	// fill Array with values 0
+	    	for(int y = 0; y < ar_monthly_rates.length; y++) {      // added 15.01.2017             							
+	   	      
+	   	    	ar_still_payed[y] = 0.0;
+	   	    }
+	    	
+	    	logger.debug("Current order : " + orders.get(currentOrder).getOrderNo()
+	    				 + "\nStartdate : " + orders.get(currentOrder).getPayStart() 
+	    				 + "\nEnddate : " + orders.get(currentOrder).getPayEnd() + "\n");
+	        
+	    	int int_month_to_Pay = 0 ;
+	        int int_rate_count = orders.get(currentOrder).getRateCount();	// number of rates
+	        double first_rate = orders.get(currentOrder).getFirstRate();	// first rate
+	        double follow_rate = orders.get(currentOrder).getRate();		// all other rates
+	        
+	        logger.debug("Rate counter: " + int_rate_count + "\nFirst Rate " + first_rate + " Rates: " + follow_rate);
+	        
 	        lst_rates.clear();
 	        // fill rate list with values
 	        for(int fillRates = 0; fillRates < int_rate_count; fillRates++) {  						    
@@ -159,8 +172,12 @@ public class Calculator {
 	            	lst_rates.add(follow_rate);
 	            }   
 	        }
+	        
+	        Date date = orders.get(currentOrder).getPayEnd();
+	        	        
 	        // End Date Year and Month        
-	        LocalDate payment_ends = LocalDate.of(Integer.parseInt(split_end_date[2]), Integer.parseInt(split_end_date[1]), 01);          
+	           
+	        LocalDate payment_ends = LocalDate.from(Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate()); 
 	        // make Date Diff
 	        Period date_diff = Period.between(currentDate,payment_ends);                                                                  
 	        int diff_in_months = date_diff.getMonths();
@@ -183,6 +200,8 @@ public class Calculator {
 	        	int_month_to_Pay = int_month_to_Pay + 1; 
 	        }
 	        
+	        logger.debug("Result Complete Month to Pay : " + int_month_to_Pay + "\n");
+	        
 	        // Payment start is in future ? Not startet yet ?  	         
 	        if(int_month_to_Pay > int_rate_count ) {	
 	        	
@@ -193,57 +212,70 @@ public class Calculator {
 	            for(int future_rate = 0; future_rate < int_month_to_Pay;future_rate++) {
 	            	// fill Array beginning with 0 values	
 	                if(future_rate < count_diff) {
-	                	ar_monthly_rates[future_rate] = 0.0;																			  		
+	                	ar_monthly_rates[future_rate] = 0.0;												// Bestehende Bestellung wird nicht berücksichtigt
+	                	// WErte werden komplett neu gefüllt bereits vorhandene Bestellungen werden überschrieben
 	                } else {																						// extension needed for first Rate !!	
 	                	// fill normal rates if start Date is reached										
-	                	ar_monthly_rates[future_rate] = lst_rates.get((future_rate - count_diff));										  
+	                	ar_monthly_rates[future_rate] = lst_rates.get((future_rate - count_diff));
+	                	stillToPay = stillToPay + ar_monthly_rates[future_rate];									// added 15.01.2017
 	                }
 	           }
+	        
 	           logger.debug("List Size and Rates : " + ar_monthly_rates.length + " Rates : " + int_rate_count); 
+	      
 	        } else { 	// Paymentstart reached		 																											  
 	            
 	        	// index adjustment																													
 	            int int_backwards  = lst_rates.size() - 1;																				  
 	            
+	            System.out.println("Zu zahlende Monate : " + int_month_to_Pay);
+	            
 	            // add rates to Array beginning on the End of list
 	            for(int add_rate = int_month_to_Pay; add_rate > 0; add_rate--) {														 
 	                
 	            	ar_monthly_rates[add_rate-1] =ar_monthly_rates[add_rate-1] + lst_rates.get(int_backwards);
+	            	logger.debug("filled in monthly rates : " + ar_monthly_rates[add_rate-1] + " Ratelist : " + lst_rates.get(int_backwards) + "\n");
 	                int_backwards--;
+	                stillToPay = stillToPay + ar_monthly_rates[add_rate - 1];									   // added 15.01.2017
 	            } 
 	            
 	            // add rates already paid
 	            for(int add_still_payed = ((int_rate_count - int_month_to_Pay) - 1); add_still_payed >= 0 ;add_still_payed--) {		      
 	             	ar_still_payed[add_still_payed] = ar_still_payed[add_still_payed] + lst_rates.get(add_still_payed);
+	             	allreadyPaid = allreadyPaid + ar_still_payed[add_still_payed]; 
 	            }
-	        
-	           logger.debug("Rates to Pay : " + ar_monthly_rates.length + "\nRates payed : " + ar_still_payed.length ); 
-	        } 
-	        
+		       
+	           orders.get(currentOrder).setAlreadyPaid(allreadyPaid);
+		       orders.get(currentOrder).setStillToPay(stillToPay);
+		       
+		       
+	           //logger.debug("Rates to Pay : " + ar_monthly_rates.length + "\nRates payed : " + ar_still_payed.length );
+	           logger.debug("Summary to Pay : " + stillToPay + "\nRates payed : " + allreadyPaid + "\n" + "Rate:" + orders.get(currentOrder).getRate() + "\nMonth to Pay:" + int_month_to_Pay ); 
 	           
-       
-	    double payed = 0;
-	    double to_pay = 0;
-	    
-	    // add up rates to pay
-	    for(int x = 0; x < ar_monthly_rates.length; x++) { 																				 
-	    	to_pay = to_pay + ar_monthly_rates[x];
-	    }
-	    
-	    // add up rates still payed   
-	    for(int x = 0; x < ar_still_payed.length; x++) { 																				 
-	        payed = payed + ar_still_payed[x];
-	    }
-	        
-         logger.debug("Summary to Pay : " + to_pay + "\nSummary payed : " + payed );     
-	    }
-	 // convert doubles to string  
-	 convert_double_to_string(ar_monthly_rates);																						
+	           
+	           completeToPay = completeToPay + stillToPay;
+	         
+	           allPaid = allPaid + allreadyPaid;
+	           
+	           allreadyPaid = 0;
+	           stillToPay = 0;
+	           
+	        } 
+    	      
+	     }
+	 // convert doubles to string 
+	 logger.debug("\nSummary to Pay : " + completeToPay + "\nRates payed : " + allPaid + "\n"); 
+	 logger.debug("Monthly Rate list 5er steps :\n" + ar_monthly_rates[4] + "\n" + ar_monthly_rates[9] + "\n" + ar_monthly_rates[14] + "\n"+ ar_monthly_rates[19] + "\n"); 
+	
+	 //System.exit(0);
+	 convert_double_to_string(ar_monthly_rates);
+ 
 	 }  
 	 
 	 private void convert_double_to_string(Double[] monthly_rates) {
 	     for(int rate_counter = 0; rate_counter < 72; rate_counter++) {
 	         str_monthly_rate.add(monthly_rates[rate_counter].toString());
+	         System.out.println("hinzugefügte Rate " + monthly_rates[rate_counter] + "\n");
 	    
 	     }
 	 }
@@ -252,5 +284,9 @@ public class Calculator {
 	    public void setLstMonth(ArrayList<String> lst_month) { this.lst_month = lst_month; }
 	    public ArrayList<String> getMonthlyRate() { return str_monthly_rate; }
         public ArrayList<String> getMonatsliste() { return monatsliste;}
+		public ArrayList<Obj_Order> getObj_orderlist() { return obj_orderlist; };
+		
+
+        
 	
 }

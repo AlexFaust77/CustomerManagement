@@ -3,7 +3,12 @@ package com.customermanagement.inputchecks;
 import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.helpers.Calculator;
 import com.customermanagement.main.Cust_Gui;
+import com.customermanagement.main.OrderGui;
 import com.customermanagement.messages.HintMessages;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -14,78 +19,105 @@ public class InputChecks {
 	private double modifiedDouble = 0.0;
 	private int modifiedInteger = 0;
 	private HintMessages message = new HintMessages();
+	Calculator calculate = new Calculator();	
 	
 	// check if input is Date and the correct Special Characters are use
-	public void checkAllDates(Cust_Gui Obj_Cust_Gui,Logger logger, Obj_Order obj_Order) {   
+	public void checkAllDates(OrderGui orderGui,Logger logger, Obj_Order objOrder) {   
 	
 		
-		// Check all Input Dates from user - Order Date
-		checkDates(Obj_Cust_Gui.getOrderDate(),logger);
+		// Check all Input Dates from user - Order Date and Start Payment Date
+		checkDates(orderGui.getOrderDate(),logger);
 		
-		// if check Dates ok set into object
+		// if check Dates ok set into object - experimental design
 		if(check_ok) {
-		   obj_Order.setOrderDate(modifiedString);	
-		   System.out.println("Date Values : " + modifiedString);
-		} else {
+		   	
+		   Date newOrderDate;
+		   try {
+			   newOrderDate = new SimpleDateFormat("dd-MM-yyyy").parse(modifiedString);				
+	
+			   objOrder.setOrderDate(newOrderDate);	// => Datentyp Date muss übertragen werden nicht String
+		        
+			   logger.debug("OrderDate Ok " + newOrderDate );
+		   
+		   } catch (ParseException e) {
+			   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		   }
+		   		   
+    	} else {
 		   message.inputFailMessage("Datumseingaben", "Fehlerhafte Eingabe", "Das Bestelldatum entspricht nicht dem geforderten Format (dd.mm.yyyy)");
 		   check_ok = false;
-		}
+      	
+    	}
+    	
 		
-		// Check Input Dates from user - Start Payment Date
-		checkDates(Obj_Cust_Gui.getPayStart(),logger);
+	     checkDates(orderGui.getPayStart(),logger);
 		
 		// if check Dates ok set into object
 		if(check_ok) {
-		   obj_Order.setPayStart(modifiedString);	
-		   System.out.println("Date Values : " + modifiedString);
+		   Date newPayStartDate;
+		 
+		 	try {
+		 		newPayStartDate = new SimpleDateFormat("dd-MM-yyyy").parse(modifiedString);
+		 		
+		 		Date paymentEnds = calculate.paymentEndDate(newPayStartDate,objOrder.getRateCount(),logger);
+		        
+		 		objOrder.setPayEnd(paymentEnds);
+		 		objOrder.setPayStart(newPayStartDate);
+		 		logger.debug("Start Payment Date " + newPayStartDate + "\nCaculated End Date" + paymentEnds );	
+		 
+		 	} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		 	}	
+			 
 		} else {
 		   message.inputFailMessage("Datumseingaben", "Fehlerhafte Eingabe", "Das Zahlstartdatum entspricht nicht dem geforderten Format (dd.mm.yyyy)");
 		   check_ok = false;
 		}
+		
+		
+		
 	
 	}
 	
-	public void checkAllDouble(Cust_Gui Obj_Cust_Gui,Logger logger, Obj_Order obj_Order) {
+	public void checkAllDouble(OrderGui orderGui,Logger logger, Obj_Order objOrder) {
 		
-		// Check all Input Values from user - First Rate
-		checkDoubles(Obj_Cust_Gui.getFirstRate(),logger);
+		// Check all Input Values from user - First Rate and Rate - If ok set into Object
+		checkDoubles(orderGui.getFirstRate(),logger);
 		
-		// if check Value ok - set into object
 		if(check_ok) {
-		   obj_Order.setFirstRate(modifiedDouble);	
-		   System.out.println("Double Values : " + modifiedDouble);
+		   objOrder.setFirstRate(modifiedDouble);	
+		   logger.debug("inputCheck - Double First Rate " + modifiedDouble );	
 		} else {
 		   message.inputFailMessage("Erste Rate", "Fehlerhafte Eingabe", "Die Erste Rate entspricht nicht dem geforderten Format (dd.dd)");
 		   check_ok = false;
 		}
 		
-		// Check all Input Values from user - Following Rates
-		checkDoubles(Obj_Cust_Gui.getRate(),logger);
+		checkDoubles(orderGui.getRate(),logger);
 		
-		// if check Value ok - set into object and calculate the Order Summary
 		if(check_ok) {
-		   obj_Order.setRate(modifiedDouble);
-		   double summary = obj_Order.getFirstRate() + ((obj_Order.getRateCount() - 1 ) * obj_Order.getRate());
-		   obj_Order.setOrderSummary(summary);
-		   Obj_Cust_Gui.setOrderSummary(summary);
+		   objOrder.setRate(modifiedDouble);
+		   double summary = objOrder.getFirstRate() + ((objOrder.getRateCount() - 1 ) * objOrder.getRate());
+		   objOrder.setOrderSummary(summary);
+		   orderGui.setOrderSummary(summary);
 		   
-		   System.out.println("Double Values : " + modifiedDouble);
+		   logger.debug("inputCheck - Double Rate " + modifiedDouble );	
 		} else {
 		   message.inputFailMessage("Folge Rate", "Fehlerhafte Eingabe", "Die Folge Rate entspricht nicht dem geforderten Format (dd.dd)");
 		   check_ok = false;
 		}
 
 	}
-	public void checkAllIntegers(Cust_Gui Obj_Cust_Gui,Logger logger, Obj_Order obj_Order, Calculator calculate) {
-		// Check all Input Values from user - OrderSummary
-		checkIntegers(Obj_Cust_Gui.getRateCount(),logger);
+	public void checkAllIntegers(OrderGui orderGui,Logger logger, Obj_Order objOrder, Calculator calculate) {
+		// Check all Input Values from user - RateCount
+		checkIntegers(orderGui.getRateCount(),logger);
 		
-		// if check Value - if ok set into object and into GUI
 		if(check_ok) {
-		   obj_Order.setRateCount(modifiedInteger);	
-		   String paymentEnddate = calculate.paymentEndDate(obj_Order.getPayStart(), modifiedInteger,logger);
-		   obj_Order.setPayEnd(paymentEnddate);
-		   Obj_Cust_Gui.setPayEnd(paymentEnddate);
+		   objOrder.setRateCount(modifiedInteger);	
+		   Date paymentEnddate = calculate.paymentEndDate(objOrder.getPayStart(), modifiedInteger,logger);
+		   objOrder.setPayEnd(paymentEnddate);
+		   logger.debug("inputCheck - Integer Rate Count " + modifiedInteger );
 		} else {
 		   message.inputFailMessage("Ratenanzahl", "Fehlerhafte Eingabe", "Die Ratenanzahl entspricht nicht dem geforderten Format (dd)");
 		   check_ok = false;
@@ -100,7 +132,7 @@ public class InputChecks {
 		// and replaced into the correct one for Database
 		if (orderDate.matches("\\d{2}-\\d{2}-\\d{4}")) {
 		    modifiedString = orderDate;
-		    check_ok=true;
+		    check_ok = true;
 		} else {
 		    logger.debug("Input is not matching : " + orderDate);
 		    check_ok = false;
@@ -115,9 +147,7 @@ public class InputChecks {
 		    modifiedString = orderDate.replace("/", "-");
 		    check_ok = true;
 		}
-		
-
-				
+						
 		// Date splitet and check the input values for all Parts of Date
 		String[] dateSplit = modifiedString.split("-");
 		int days=0;
@@ -130,7 +160,7 @@ public class InputChecks {
 				 years = Integer.parseInt(dateSplit[2]);
 		         logger.debug("Values for Parts of Date - Days : " + days + "\nMonths : " + months + "\nYear : " + years);		 
 		} catch (NumberFormatException e) {
-			logger.error("Parser Error String to int : " + e);
+			logger.error("com.customermanagement.inputchecks - CheckDates => Input: " + orderDate + "\n" + e);
 			check_ok = false;
 		}
 	

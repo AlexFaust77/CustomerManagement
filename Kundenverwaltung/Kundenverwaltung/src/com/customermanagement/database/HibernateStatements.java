@@ -3,6 +3,7 @@ package com.customermanagement.database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.apache.log4j.Logger;
 
 import com.customermanagement.entities.Obj_Customer;
 
@@ -16,25 +17,24 @@ public class HibernateStatements {				                       // Collection of al
 	
 	private boolean databaseResult = false;
 	
-	public boolean writeCustomer (Obj_Customer customer) {
+	public boolean writeCustomer (Obj_Customer customer, Logger logger) {
 		   
 			// create Session
 			Session session = factory.getCurrentSession();
 			
 			try {
-				// use the session object Java object
-				System.out.println("Creating new Customer object ..... ");
-														
+																		
 				// start a transaction
 				session.beginTransaction();
 				
-				// save the student object
-				System.out.println("Saving the Customer");
+				// save Customer object
+				logger.info("Saving the Customer");
 				session.save(customer);
 				
 				// commit transaction
 				session.getTransaction().commit();
-				System.out.println("It´s Done!");
+				databaseResult = true;
+				logger.info("databaseResult");
 					
 			} finally {
 				factory.close();
