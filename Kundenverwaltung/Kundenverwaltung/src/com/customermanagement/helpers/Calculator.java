@@ -212,11 +212,13 @@ public class Calculator {
 	            for(int future_rate = 0; future_rate < int_month_to_Pay;future_rate++) {
 	            	// fill Array beginning with 0 values	
 	                if(future_rate < count_diff) {
-	                	ar_monthly_rates[future_rate] = 0.0;												// Bestehende Bestellung wird nicht berücksichtigt
+	                	//ar_monthly_rates[future_rate] = 0.0;												// Bestehende Bestellung wird nicht berücksichtigt
+	                	ar_monthly_rates[future_rate] = ar_monthly_rates[future_rate] + 0.0;
 	                	// WErte werden komplett neu gefüllt bereits vorhandene Bestellungen werden überschrieben
 	                } else {																						// extension needed for first Rate !!	
 	                	// fill normal rates if start Date is reached										
-	                	ar_monthly_rates[future_rate] = lst_rates.get((future_rate - count_diff));
+	                	// ar_monthly_rates[future_rate] = lst_rates.get((future_rate - count_diff));
+	                	ar_monthly_rates[future_rate] = ar_monthly_rates[future_rate] + lst_rates.get((future_rate - count_diff));
 	                	stillToPay = stillToPay + ar_monthly_rates[future_rate];									// added 15.01.2017
 	                }
 	           }

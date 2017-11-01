@@ -38,6 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Cust_Gui extends Application {
+	
 	    // Gui Buttons
 	    public Button btn_Cust_Save = new Button("Datensatz speichern");   				
 	    public Button btn_Cust_NoSave = new Button("Abbruch");
@@ -196,15 +197,9 @@ public class Cust_Gui extends Application {
 	       VBox hBoxContainer = new VBox();
 	       		hBoxContainer.getChildren().addAll(hbAllCustFields,vb_lblList,hbAllCustFields2);
 	       		
-	       // Database Buttons
-          /* HBox hb_Db_Btn = new HBox(10);                                            
-	         	HBox.setHgrow(btn_Select_Db, Priority.ALWAYS);
-	            HBox.setHgrow(btn_New_Db, Priority.ALWAYS);
-	            HBox.setHgrow(chkHibernate, Priority.ALWAYS);
-	            btn_Select_Db.setMaxWidth(Double.MAX_VALUE);
-	            btn_New_Db.setMaxWidth(Double.MAX_VALUE);
-	            hb_Db_Btn.getChildren().addAll(btn_Select_Db,btn_New_Db,chkHibernate);
-	       */
+
+	       
+	
 	       // vbox customer Buttons            
 	       VBox vb_Cust_Btn = new VBox(5);                                         
 	            btn_Cust_Search.setMaxWidth(Double.MAX_VALUE);
@@ -272,30 +267,49 @@ public class Cust_Gui extends Application {
 	       Gui_States gui_States = new Gui_States();
 	                  gui_States.gui_State_Start(this);
 	       
+	                         
 	       OrderGui orderGui = new OrderGui();										 // GUI for Order Management
 	       Calculator calculate = new Calculator();									 // Calculate the Rates
 	       InputChecks checkInput = new InputChecks();  							 // Check all Input from User
 	       SQL_Statements dataBaseRequest = new SQL_Statements();			         // all SQL - Lite statements
 	       
-	       
-	       
-	       Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger,primaryStage,calculate,dataBaseRequest,fx_Table_View);
+		   OrderGuiController orderGuiControl = new OrderGuiController(); 			 // FXML Controller for Order Form
+		  
+		   
+		   
+		   
+		   MainGuiController mainGuiControl = new MainGuiController();			     // FXML Controller for Main Gui yet without Ojbekt - empty Constructor
+		 		   
+		   Stage mainGuiStage = new Stage();
+		   
+		  
+		   
+		   
+		   
+	       Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger,primaryStage,calculate,dataBaseRequest,fx_Table_View,orderGuiControl);
 	       OrderListeners orderListener = new OrderListeners(gui_States,this,logger, primaryStage,orderGui,checkInput,calculate,dataBaseRequest,fx_Table_View);
 	        
 	       // Feldueberwachung absichern = new Feldueberwachung(gui_States,this,primaryStage);
 	        
 	       Save_Database_Information database_Exists = new Save_Database_Information();
-	        						  database_Exists.check_Database_File(gui_States,this,logger);
-	                         
-	       primaryStage.setTitle("Kundenverwaltung");
-	       primaryStage.setScene(scene);
-	       primaryStage.show();
+	        						 database_Exists.check_Database_File(gui_States,this,logger);
+	    //   Old GUI                     
+	    //   primaryStage.setTitle("Kundenverwaltung");
+	    //   primaryStage.setScene(scene);
+	    //   primaryStage.show();
+	       
+	       mainGuiControl.startFXMLMainGui(mainGuiStage);
 	    	
 	    }
 
 	
 	public static void main(String[] args) {
 		launch(args);
+		
+		
+	//	MainGuiController mainGuiControl = new MainGuiController();			     // FXML Controller for Main Gui yet without Ojbekt - empty Constructor
+	//	Stage mainGuiStage = new Stage();
+	//	mainGuiControl.startFXMLMainGui(mainGuiStage);
 
 	}
 		    

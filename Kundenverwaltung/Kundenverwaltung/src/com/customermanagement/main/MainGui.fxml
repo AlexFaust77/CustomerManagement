@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="lblCustomerID" layoutX="20.0" layoutY="60.0" text="Datensatz ID: " />
+      <Label fx:id="lblCustomerNo" layoutX="20.0" layoutY="115.0" prefHeight="17.0" prefWidth="132.0" text="Kundennr.:" />
+      <Label fx:id="lblCustomerName" layoutX="18.0" layoutY="141.0" prefHeight="17.0" prefWidth="138.0" text="Name :" />
+      <Label fx:id="lblCustomerSurname" layoutX="20.0" layoutY="167.0" prefHeight="17.0" prefWidth="138.0" text="Vorname :" />
+      <Label fx:id="lblCustomerStreet" layoutX="18.0" layoutY="196.0" prefHeight="17.0" prefWidth="138.0" text="Strasse :" />
+      <Label fx:id="lblCustomerHouseNo" layoutX="18.0" layoutY="225.0" prefHeight="17.0" prefWidth="138.0" text="Hausnummer :" />
+      <Label fx:id="lblCustomerPlc" layoutX="20.0" layoutY="252.0" prefHeight="17.0" prefWidth="132.0" text="Postleitzahl :" />
+      <Label fx:id="lblCustomerTown" layoutX="22.0" layoutY="279.0" prefHeight="17.0" prefWidth="132.0" text="Ort :" />
+      <Label fx:id="lblCustomerOrderAmount" layoutX="18.0" layoutY="344.0" text="Anzahl Bestellungen :" />
+      <Label fx:id="lblCustomerSummary" layoutX="22.0" layoutY="376.0" text="Gesamtumsatz :" />
+      <Label fx:id="lblCustomerOutstanding" layoutX="21.0" layoutY="413.0" text="Noch Offen :" />
+      <Label fx:id="lblCurrentDatabase" layoutX="9.0" layoutY="694.0" text="Verbundene Datenbank :" />
+      <Label fx:id="lblOrderList" layoutX="20.0" layoutY="440.0" prefHeight="17.0" prefWidth="132.0" text="Bestellungen :" />
+      <TextField fx:id="txtCustomerID" layoutX="161.0" layoutY="56.0" prefHeight="25.0" prefWidth="56.0" />
+      <TextField fx:id="txtCustomerNo" layoutX="161.0" layoutY="111.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txtCustomerName" layoutX="161.0" layoutY="137.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txtCustomerSurname" layoutX="161.0" layoutY="163.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txtCustomerStreet" layoutX="161.0" layoutY="192.0" />
+      <TextField fx:id="txtCustomerHouseNo" layoutX="161.0" layoutY="221.0" />
+      <TextField fx:id="txtCustomerPlc" layoutX="161.0" layoutY="248.0" />
+      <TextField fx:id="txtCustomerTown" layoutX="161.0" layoutY="275.0" />
+      <TextField fx:id="txtCustomerOrderAmount" layoutX="161.0" layoutY="340.0" />
+      <TextField fx:id="txtCustomerSummary" layoutX="161.0" layoutY="372.0" />
+      <TextField fx:id="txtCustomerOutstanding" layoutX="161.0" layoutY="409.0" />
+      <TextField fx:id="txtCurrentDatabase" layoutX="161.0" layoutY="690.0" />
+      <ListView fx:id="lstCustomerOrders" layoutX="161.0" layoutY="440.0" prefHeight="200.0" prefWidth="149.0" />
+      <Separator layoutX="17.0" layoutY="312.0" prefHeight="3.0" prefWidth="476.0" />
+      <Separator layoutX="20.0" layoutY="97.0" prefHeight="3.0" prefWidth="476.0" />
+      <Separator layoutX="14.0" layoutY="666.0" prefHeight="3.0" prefWidth="485.0" />
+      <Button fx:id="btnCustomerSearch" layoutX="333.0" layoutY="111.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="132.0" text="Kunde suchen" />
+      <Button fx:id="btnCreateOrder" layoutX="333.0" layoutY="340.0" mnemonicParsing="false" onAction="#createOrder" prefHeight="25.0" prefWidth="132.0" text="Neue Bestellung" />
+      <Button fx:id="btnDeleteCustomer" layoutX="333.0" layoutY="275.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="25.0" prefWidth="132.0" text="Kunde Löschen" />
+      <Button fx:id="btnNewDatabase" layoutX="333.0" layoutY="690.0" mnemonicParsing="false" onAction="#createDataBase" prefHeight="25.0" prefWidth="132.0" text="Neue Datenbank" />
+      <Button fx:id="btnNewCustomer" layoutX="333.0" layoutY="150.0" mnemonicParsing="false" onAction="#createNewCustomer" prefHeight="25.0" prefWidth="132.0" text="Neuer Kunde" />
+      <TableView fx:id="orderTable" layoutX="513.0" layoutY="152.0" prefHeight="200.0" prefWidth="1019.0">
+        <columns>
+          <TableColumn fx:id="orderNo" maxWidth="150.0" minWidth="75.0" prefWidth="100.0" text="Bestellnummer" />
+          <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bestelldatum" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bestellsumme" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Ratenzahl" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Zahlungsstart" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Zahlungsende" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Erste Rate" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Folgende Raten" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Ausstehend" />
+            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bereits gezahlt" />
+        </columns>
+      </TableView>
+      <MenuBar fx:id="mainMenuBar" layoutY="2.0" prefHeight="25.0" prefWidth="1600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Datei">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#displayCustomerOverview" text="Alle Kunden" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Bearbeiten" />
+          <Menu mnemonicParsing="false" text="Info">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#aboutApplication" text="Info" />
+              <MenuItem fx:id="menuItemClose" mnemonicParsing="false" onAction="#closeApplication" text="Beenden" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <LineChart fx:id="orderLineChart" layoutX="495.0" layoutY="368.0" prefHeight="372.0" prefWidth="1037.0" title="Ratendiagramm">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Button fx:id="btnPrintPaymentPlan" layoutX="513.0" layoutY="111.0" mnemonicParsing="false" onAction="#printPaymentPlan" prefHeight="25.0" prefWidth="132.0" text="Ratenplan Drucken" />
+      <Button fx:id="btnExportToPDF" layoutX="652.0" layoutY="111.0" mnemonicParsing="false" onAction="#exportAsPDF" prefHeight="25.0" prefWidth="132.0" text="Export als PDF" />
+      <Button fx:id="btnExportToExel" layoutX="791.0" layoutY="111.0" mnemonicParsing="false" onAction="#exportAsExcel" prefHeight="25.0" prefWidth="132.0" text="Export als Excel" />
+   </children>
+</AnchorPane>

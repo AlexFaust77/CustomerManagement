@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="534.0" prefWidth="629.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="txtOrderCustNo" editable="false" layoutX="185.0" layoutY="61.0" />
+      <TextField fx:id="txtOrderNo" layoutX="185.0" layoutY="97.0" />
+      <TextField fx:id="txtOrderDate" layoutX="185.0" layoutY="134.0" />
+      <TextField fx:id="txtPayStart" layoutX="185.0" layoutY="172.0" />
+      <TextField fx:id="txtPayEnd" editable="false" focusTraversable="false" layoutX="185.0" layoutY="208.0" />
+      <Label fx:id="lblOrderCustNo" layoutX="59.0" layoutY="65.0" text="Für Kundennummer:" />
+      <Label fx:id="lblOrderNo" layoutX="59.0" layoutY="101.0" text="Bestellnr:" />
+      <Label fx:id="lblOrderDate" layoutX="59.0" layoutY="138.0" text="Bestelldatum:" />
+      <Label fx:id="lblPayStart" layoutX="59.0" layoutY="176.0" text="Zahlungsstart:" />
+      <Label fx:id="lblPayEnd" layoutX="59.0" layoutY="212.0" text="Zahlungsende:" />
+      <Label fx:id="lblPayEnd" layoutX="61.0" layoutY="246.0" text="Ratenanzahl:" />
+      <Label fx:id="lblFirstRate" layoutX="59.0" layoutY="302.0" text="Erste Rate:" />
+      <Label fx:id="lblRate" layoutX="59.0" layoutY="339.0" text="Folge Rate:" />
+      <Label fx:id="lblOrderSummary" layoutX="59.0" layoutY="376.0" text="Bestellsumme:" />
+      <Label fx:id="lblStillToPay" layoutX="62.0" layoutY="411.0" text="Zu zahlen:" />
+      <Label fx:id="lblAlreadyPaid" layoutX="58.0" layoutY="453.0" prefHeight="17.0" prefWidth="99.0" text="Bereits gezahlt:" />
+      <TextField fx:id="txtRateCount" layoutX="185.0" layoutY="242.0" />
+      <TextField fx:id="txtFirstRate" layoutX="185.0" layoutY="298.0" />
+      <TextField fx:id="txtRate" layoutX="185.0" layoutY="335.0" />
+      <TextField fx:id="txtOrderSummary" editable="false" focusTraversable="false" layoutX="185.0" layoutY="372.0" />
+      <TextField fx:id="txtStillToPay" editable="false" layoutX="185.0" layoutY="407.0" />
+      <TextField fx:id="txtAlreadyPaid" editable="false" layoutX="185.0" layoutY="449.0" />
+      <Separator layoutX="29.0" layoutY="280.0" prefHeight="6.0" prefWidth="569.0" />
+      <Button fx:id="btnOrderSave" layoutX="418.0" layoutY="61.0" mnemonicParsing="false" onAction="#orderSaveAction" prefHeight="25.0" prefWidth="131.0" text="Speichern" />
+      <Button fx:id="btnOrderCancel" layoutX="418.0" layoutY="97.0" mnemonicParsing="false" onAction="#orderCancelAction" prefHeight="25.0" prefWidth="131.0" text="Abrechen" />
+      <Button fx:id="btnOrderDelete" layoutX="418.0" layoutY="242.0" mnemonicParsing="false" onAction="#orderDeleteAction" prefHeight="25.0" prefWidth="131.0" text="Löschen" />
+   </children>
+</AnchorPane>

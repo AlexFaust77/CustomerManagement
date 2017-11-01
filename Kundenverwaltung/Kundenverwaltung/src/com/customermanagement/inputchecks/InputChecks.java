@@ -4,6 +4,7 @@ import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.helpers.Calculator;
 import com.customermanagement.main.Cust_Gui;
 import com.customermanagement.main.OrderGui;
+import com.customermanagement.main.OrderGuiController;
 import com.customermanagement.messages.HintMessages;
 
 import java.text.ParseException;
@@ -22,11 +23,11 @@ public class InputChecks {
 	Calculator calculate = new Calculator();	
 	
 	// check if input is Date and the correct Special Characters are use
-	public void checkAllDates(OrderGui orderGui,Logger logger, Obj_Order objOrder) {   
+	public void checkAllDates(OrderGuiController orderGuiController,Logger logger, Obj_Order objOrder) {   
 	
 		
 		// Check all Input Dates from user - Order Date and Start Payment Date
-		checkDates(orderGui.getOrderDate(),logger);
+		checkDates(orderGuiController.getOrderDate(),logger);
 		
 		// if check Dates ok set into object - experimental design
 		if(check_ok) {
@@ -51,7 +52,7 @@ public class InputChecks {
     	}
     	
 		
-	     checkDates(orderGui.getPayStart(),logger);
+	     checkDates(orderGuiController.getPayStart(),logger);
 		
 		// if check Dates ok set into object
 		if(check_ok) {
@@ -81,10 +82,10 @@ public class InputChecks {
 	
 	}
 	
-	public void checkAllDouble(OrderGui orderGui,Logger logger, Obj_Order objOrder) {
+	public void checkAllDouble(OrderGuiController orderGuiController,Logger logger, Obj_Order objOrder) {
 		
 		// Check all Input Values from user - First Rate and Rate - If ok set into Object
-		checkDoubles(orderGui.getFirstRate(),logger);
+		checkDoubles(orderGuiController.getFirstRate(),logger);
 		
 		if(check_ok) {
 		   objOrder.setFirstRate(modifiedDouble);	
@@ -94,13 +95,13 @@ public class InputChecks {
 		   check_ok = false;
 		}
 		
-		checkDoubles(orderGui.getRate(),logger);
+		checkDoubles(orderGuiController.getRate(),logger);
 		
 		if(check_ok) {
 		   objOrder.setRate(modifiedDouble);
 		   double summary = objOrder.getFirstRate() + ((objOrder.getRateCount() - 1 ) * objOrder.getRate());
 		   objOrder.setOrderSummary(summary);
-		   orderGui.setOrderSummary(summary);
+		   orderGuiController.setOrderSummary(summary);
 		   
 		   logger.debug("inputCheck - Double Rate " + modifiedDouble );	
 		} else {
@@ -109,9 +110,9 @@ public class InputChecks {
 		}
 
 	}
-	public void checkAllIntegers(OrderGui orderGui,Logger logger, Obj_Order objOrder, Calculator calculate) {
+	public void checkAllIntegers(OrderGuiController orderGuiController,Logger logger, Obj_Order objOrder, Calculator calculate) {
 		// Check all Input Values from user - RateCount
-		checkIntegers(orderGui.getRateCount(),logger);
+		checkIntegers(orderGuiController.getRateCount(),logger);
 		
 		if(check_ok) {
 		   objOrder.setRateCount(modifiedInteger);	

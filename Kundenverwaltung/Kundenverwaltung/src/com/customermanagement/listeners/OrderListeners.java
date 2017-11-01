@@ -1,5 +1,6 @@
 package com.customermanagement.listeners;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
@@ -13,10 +14,16 @@ import com.customermanagement.helpers.Gui_States;
 import com.customermanagement.inputchecks.InputChecks;
 import com.customermanagement.main.Cust_Gui;
 import com.customermanagement.main.OrderGui;
+import com.customermanagement.main.OrderGuiController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -24,6 +31,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class OrderListeners {
@@ -31,22 +40,24 @@ public class OrderListeners {
 	private boolean dataBaseResult; 										   // DB Contact Result
 	Obj_Order objOrder = new Obj_Order("",null,null,null,0,0.0,0.0,0.0,"");    // Object Order
 	Stage orderStage = new Stage();											   // Stage for Orders
+	
 	DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
 	int orderFlag = 0;														   // Order Flag 0 = new Order 1 = Update Order
 	
 	public OrderListeners(Gui_States guiState,Cust_Gui mainGui,Logger logger, Stage mainGuiStage, OrderGui orderGui, 
 						  InputChecks checkInput, Calculator calculate, SQL_Statements dataBaseRequest, TableView<Obj_Order> fx_Table_View) {
-		
+		/*
 		 mainGui.btn_New_Order.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
 	            	// create new order GUI
 	            	orderFlag = 0;
 	              	createNewOrderGui(orderGui,mainGui,guiState,logger,objOrder);
-	              	mainGuiStage.hide();
+	              	//mainGuiStage.hide();
 	            }
 	        });  
-		 
+		 */
+		 /*
 		 orderGui.btn_Order_Save.setOnAction(new EventHandler<ActionEvent>() {					 					
 	            // New Order Dialog or Update Order Dialog
 	            @Override
@@ -76,7 +87,8 @@ public class OrderListeners {
 	            	}
 	            }
           });
-		 
+		 */
+		 /*
 		 orderGui.btn_Order_Del.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -93,8 +105,9 @@ public class OrderListeners {
 				}
 			}
 		 });
-		 
-		 orderGui.btn_Order_Cancel.setOnAction(new EventHandler<ActionEvent>() {
+		 */
+		 /*
+		 orderGui.btn_Order_Cancel.setOnAction(new EventHandler<ActionEvent>() {  // not needed for FXML FOrm
 
 			@Override
 			public void handle(ActionEvent event) {
@@ -102,8 +115,8 @@ public class OrderListeners {
 				orderStage.close();
 			}
 		 });
-		 
-		 
+		 */
+		/* 
 		mainGui.orderList.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
 			@Override
@@ -125,7 +138,7 @@ public class OrderListeners {
 			
 			
 		}); 
-	 
+	    */
 		mainGui.orderPanel.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent> () {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
@@ -199,9 +212,9 @@ TableView selectedTable = selectedContent.lookup("CurrentOrders")
 	private void saveOrderData(OrderGui orderGui, Logger logger, Obj_Order objOrder,InputChecks checkInput, 
 			                   Calculator calculate, SQL_Statements dataBaseRequest, Cust_Gui mainGui, Gui_States guiState) {
 				
-	 	    checkInput.checkAllDates(orderGui, logger,objOrder);
-			checkInput.checkAllIntegers(orderGui, logger, objOrder,calculate);
-			checkInput.checkAllDouble(orderGui, logger,objOrder);
+	 //	    checkInput.checkAllDates(orderGui, logger,objOrder);
+	//		checkInput.checkAllIntegers(orderGui, logger, objOrder,calculate);
+	//		checkInput.checkAllDouble(orderGui, logger,objOrder);
 			
 			logger.debug("All input Values checked" + "\n");
 
@@ -239,7 +252,12 @@ TableView selectedTable = selectedContent.lookup("CurrentOrders")
 	
 	
 	private void createNewOrderGui(OrderGui orderGui, Cust_Gui mainGui, Gui_States guiState, Logger logger, Obj_Order objOrder) {
-    	
+    		
+		 /*                  
+		                   
+		    Unterer Block wird entfernt wenn neu OrderGui fertig implementiert wurde               
+		                   
+		 */                  
     	if(orderFlag == 0) {
     		try {
     			
@@ -266,6 +284,8 @@ TableView selectedTable = selectedContent.lookup("CurrentOrders")
     		}
     		
     	}
+    	
+    	
 	}
 		
 	private boolean userDialog(String title, String header, String content) {
@@ -311,5 +331,7 @@ TableView selectedTable = selectedContent.lookup("CurrentOrders")
 		orderGui.setAlreadyPaid(objOrder.getAlreadyPaid());
 	
 	}
+	
+
 
 }

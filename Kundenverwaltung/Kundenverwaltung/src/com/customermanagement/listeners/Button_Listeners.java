@@ -17,6 +17,8 @@ import com.customermanagement.helpers.Gui_States;
 import com.customermanagement.helpers.Save_Database_Information;
 import com.customermanagement.inputchecks.InputChecks;
 import com.customermanagement.main.Cust_Gui;
+import com.customermanagement.main.MainGuiController;
+import com.customermanagement.main.OrderGuiController;
 import com.customermanagement.reports.Excel_Export;
 import com.customermanagement.reports.PDF_Builder;
 import com.customermanagement.statistics.All_Customers_View;
@@ -31,6 +33,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
@@ -42,12 +45,17 @@ public class Button_Listeners {
 	 private boolean dataBase_Result;										     // DB Contact Result
 	
 	 Obj_Customer obj_Customer =new Obj_Customer();						         // Object Customer
-	 Obj_Order obj_Order = new Obj_Order("",null,null,null,0,0.0,0.0,0.0,"");    // Object Order
+	 Obj_Order objOrder = new Obj_Order("",null,null,null,0,0.0,0.0,0.0,"");     // Object Order
 	 Clear_Data data_cleaner = new Clear_Data();							     // for clearing all Lists
 	
 	 FileChooser select_Database = new FileChooser();						     // Filechooser for Database
 	 Excel_Export excel_Export;				     								 // Excel Export class
 	 InputChecks checkInput = new InputChecks();
+	 																			 // FXML Parameter
+	 Stage orderFXMLStage = new Stage();										 // FXML Stage or Orders
+	 
+	 int orderFlag = 0;															 // FXML OrderFlag Update = 1 - New Order = 0
+	 
 	 private HibernateStatements statementsHibernate = new HibernateStatements();// for Hibernate Database Access
 	 
 	 private ArrayList<String> lst_month = new ArrayList<String>();			     // list for Months
@@ -62,7 +70,8 @@ public class Button_Listeners {
 	 
 	 // Stage primaryStage will be removed  look line 222 if its neccesary
 	 public Button_Listeners(Gui_States gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, 
-			 				 Stage primaryStage, Calculator calculate, SQL_Statements dataBaseRequest, TableView<Obj_Order> fx_Table_View) {
+			 				 Stage primaryStage, Calculator calculate, SQL_Statements dataBaseRequest, 
+			 				 TableView<Obj_Order> fx_Table_View, OrderGuiController orderGuiControl) {
 	
 		 // Search one Customer with Customernumber
 		 Obj_Cust_Gui.btn_Cust_Search.setOnAction(new EventHandler<ActionEvent>() {                                     								  
@@ -309,42 +318,24 @@ public class Button_Listeners {
 	            	logger.info("PDF Export Done");
 	            }
 	        });
-	       /* 
-	       // Delete Order  
-	       Obj_Cust_Gui.btn_Order_Del.setOnAction(new EventHandler<ActionEvent>() {
-	             @Override
-	             public void handle(ActionEvent e) {
-	                 // Message - Really Delete the Order ?
-	                 Alert customer_Confirmation = new Alert(AlertType.CONFIRMATION);
-	                 	   customer_Confirmation.setTitle("Bestellung loeschen ?");
-	                 	   customer_Confirmation.setHeaderText("Bestellung wirklich loeschen ?");
-	                 	   customer_Confirmation.setContentText("Soll die Bestellung Nr.: " + Obj_Cust_Gui.getOrderNr() + "\n wirklich geloescht werden?" );
-	                       Optional<ButtonType> result = customer_Confirmation.showAndWait();
-	                       // Delete Order if OK
-	                       if(result.get() == ButtonType.OK) {															
-	                           
-	                           dataBase_Result = dataBase_Request.delete_Order(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(), Obj_Cust_Gui.getOrderNr(),logger);
-	                           gui_State.cancel_Order(Obj_Cust_Gui);
-	                           logger.info("Order deleted - GUI was reset");
-	                       } else {
-	                           // MSG - Class Impl
-	                       }
-	            }
-	        });
-	       */
-		   /*
-	       // Change Order  
-	       Obj_Cust_Gui.btn_Order_Change.setOnAction(new EventHandler<ActionEvent>() {
-	             @Override
-	             public void handle(ActionEvent e) {
-	            	// GUI State => Change Order 
-	                gui_State.change_Order(Obj_Cust_Gui); 
-	                // Set Flag for Order Update
-	                Obj_Cust_Gui.setOrderFlag(1);         												   
-	                logger.info("Order Change - Flag for Update Order is set");
-	            }
-	        });
-	        */
+
+		   Obj_Cust_Gui.btn_New_Order.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent e) {
+	            	// create new FXML order GUI
+	            	orderFlag = 0;
+	              	orderGuiControl.startFXMLOrderGui(orderFXMLStage,objOrder);
+				    orderGuiControl.setMainGui(Obj_Cust_Gui);
+				    orderGuiControl.setMainStage(primaryStage);
+				    orderGuiControl.setOrderFlag(orderFlag);
+				    
+	                gui_State.newFXMLOrder(orderGuiControl);
+	                orderGuiControl.setOrderCustNo(Obj_Cust_Gui.getCustNr());
+	                        
+	                             	
+                }
+	        });  
+	    
 	       //  View All Customer as Table
 	       Obj_Cust_Gui.m_Cust_View.setOnAction(new EventHandler<ActionEvent>() {
 	             @Override
@@ -390,8 +381,55 @@ public class Button_Listeners {
 	                 }
 	             }
 	        });
+	        
+	        
+	   	 ////
+	        
+	   	 Obj_Cust_Gui.orderList.setOnMouseClicked(new EventHandler<MouseEvent>(){
+	   			
+	   		    @Override
+	   			public void handle(MouseEvent click) {
+	   				if(click.getClickCount() == 2) {
+	   					String currentOrderNo = Obj_Cust_Gui.orderList.getSelectionModel().getSelectedItem();
+	   					orderFlag = 1;
+	   					
+	   					objOrder = dataBaseRequest.getOneOrderData(objOrder, currentOrderNo, Obj_Cust_Gui.getCustNr(), Obj_Cust_Gui.getActiveDB(), logger);
+	   					logger.debug("com.customermanagement.listeners.OrderListeners - orderList" + objOrder.getOrderNo());
+	   					
+	   					orderFlag = 1;
+		              	orderGuiControl.setMainGui(Obj_Cust_Gui);
+					    orderGuiControl.setMainStage(primaryStage);
+					    orderGuiControl.setOrderFlag(orderFlag);
+					    orderGuiControl.startFXMLOrderGui(orderFXMLStage,objOrder);
+		               
+		                //orderGuiControl.setOrderCustNo(Obj_Cust_Gui.getCustNr());
+	   					
+	   					
+	   					
+	   					//createNewOrderGui(orderGui, mainGui, guiState, logger,objOrder);
+	   					// Nicht vollständig
+	   					System.out.println("Selected Orderno. " + currentOrderNo);
+	   				}
+	   			}
+	   	}); 
+
+	    
+	        
+	        
+	        
+	        
+	        
+	        
        }
 	
+	 
+	 
+	 
+	 
+
+	 
+	 
+	 
 	 // 18 ***************** FINISHED !!!!! - internal Method returns file Name include Path  ********************************************************************************************************     
 	private String getFileName(String title, String fileExt,Stage primaryStage) {
 
