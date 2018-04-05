@@ -1,76 +1,41 @@
 package com.customermanagement.statistics;
-import com.customermanagement.entities.Obj_Order;
+import org.apache.log4j.Logger;
 
-import javafx.collections.FXCollections;
+import com.customermanagement.entities.Obj_Order;
+import com.customermanagement.main.MainGuiController;
+
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class Table_fx {																															// Tableview for Order View for one Customer
-
-	   
-	    private TableView<Obj_Order> fxTableView = new TableView<Obj_Order>();
-	    private ObservableList<Obj_Order> orders = FXCollections.observableArrayList();
-	    
-	    @SuppressWarnings({ "unchecked", "rawtypes" })
-		public TableView<Obj_Order> createTable() {
-	        
-			System.out.println("Orderlist grösse : " + orders.size());
-	        if (orders.size() > 0 ) {
-	           
-	           TableColumn colOrderNo   = new TableColumn("Bestellnummer");																	// create all Columns for Table
-	           			   colOrderNo.setMinWidth(100);
-	                       colOrderNo.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("orderNo"));	         					
-                      
-	           TableColumn colOrderDate  = new TableColumn("Bestelldatum");
-	                       colOrderDate.setMinWidth(100);
-	                       colOrderDate.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("orderDate"));
-	                       
-	           TableColumn colOrderSummary  = new TableColumn("Bestellsumme");
-	                       colOrderSummary.setMinWidth(100);
-	                       colOrderSummary.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("orderSummary"));
-	                       
-	           TableColumn colOrderCount  = new TableColumn("Ratenzahl");
-	                       colOrderCount.setMinWidth(100);
-	                       colOrderCount.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("rateCount"));
-	           
-	           TableColumn colPayStart = new TableColumn("Zahlungsstart");
-	                       colPayStart.setMinWidth(100);
-	                       colPayStart.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("payStart"));
-	           
-	           TableColumn colPayEnd = new TableColumn("Zahlungsende");    
-	                       colPayEnd.setMinWidth(100);
-	                       colPayEnd.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("payEnd"));
-	                       
-	           TableColumn colFirstRate = new TableColumn("Erste Rate");    
-	                       colFirstRate.setMinWidth(100);
-	                       colFirstRate.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("firstRate"));       
-	                       
-	           TableColumn colRates = new TableColumn("Folgende Raten");    
-	                       colRates.setMinWidth(100);
-	                       colRates.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("rate"));
-	                       
-	           TableColumn colToPay = new TableColumn("Noch Offen");    
-	                       colToPay.setMinWidth(100);
-	                       colToPay.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("stillToPay"));            
-
-	           TableColumn colPayed = new TableColumn("Bereits gezahlt");    
-	                       colPayed.setMinWidth(100);
-	                       colPayed.setCellValueFactory(new PropertyValueFactory<Obj_Order,String>("alreadyPaid"));              
-       
-	           fxTableView.getColumns().addAll(colOrderNo,colOrderDate,colOrderSummary,colOrderCount,						// Add all visible Columns
-	        		   						   colPayStart,colPayEnd,colFirstRate,colRates,colToPay,colPayed);		             
-	           fxTableView.setItems(orders);
-	           
-	          
-	       }
-	    
-     
-	    return fxTableView; 																								 // return finished Tableview
-	    }
-	   
-    
-	    public void setOrderlist(ObservableList<Obj_Order> orders) { this.orders = orders; }												    // Setter for order Objects
+// Fill Tableview with Data / Orders - Orderdata
+public class Table_fx {	
 	
+	String loggerInfo ="com.customermanagement.statistics -> Table_fx.java";
+	   
+		public void fillTheTable(TableView<Obj_Order> orderTable, ObservableList<Obj_Order> allOrders, MainGuiController mainGuiController, Logger logger){
+	    	
+	    	logger.info(loggerInfo + "Start create Tableviewdata - Checkorderdata");
+			
+	    	if (allOrders.size() > 0 ) {
+		          
+				   logger.debug(loggerInfo + "Check Amount of orders - Done - Orders counted: " + allOrders.size() + "\n");
+				 
+				   mainGuiController.getColOrderNo().setCellValueFactory(new PropertyValueFactory<>("orderNo"));  
+				   mainGuiController.getColOrderDate().setCellValueFactory(new PropertyValueFactory<>("orderDate"));  
+				   mainGuiController.getColOrderSummary().setCellValueFactory(new PropertyValueFactory<>("orderSummary"));            
+		           mainGuiController.getColRateCount().setCellValueFactory(new PropertyValueFactory<>("rateCount"));  
+		           mainGuiController.getColPayStart().setCellValueFactory(new PropertyValueFactory<>("payStart"));
+		           mainGuiController.getColPayEnd().setCellValueFactory(new PropertyValueFactory<>("payEnd"));
+		           mainGuiController.getColFirstRate().setCellValueFactory(new PropertyValueFactory<>("firstRate"));
+		           mainGuiController.getColRate().setCellValueFactory(new PropertyValueFactory<>("rate"));               
+		           mainGuiController.getColStillToPay().setCellValueFactory(new PropertyValueFactory<>("stillPay"));    
+		           mainGuiController.getColAlreadyPaid().setCellValueFactory(new PropertyValueFactory<>("alreadyPaid"));   
+		           		           	           
+		           orderTable.setItems(allOrders);
+		           
+		           logger.debug(loggerInfo + "Data assigned - Items set - Success: " + allOrders.size() + "\n");
+			
+			 }
+		}
 }

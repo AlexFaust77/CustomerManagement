@@ -21,18 +21,18 @@
       <Label fx:id="lblCustomerOutstanding" layoutX="21.0" layoutY="413.0" text="Noch Offen :" />
       <Label fx:id="lblCurrentDatabase" layoutX="9.0" layoutY="694.0" text="Verbundene Datenbank :" />
       <Label fx:id="lblOrderList" layoutX="20.0" layoutY="440.0" prefHeight="17.0" prefWidth="132.0" text="Bestellungen :" />
-      <TextField fx:id="txtCustomerID" layoutX="161.0" layoutY="56.0" prefHeight="25.0" prefWidth="56.0" />
-      <TextField fx:id="txtCustomerNo" layoutX="161.0" layoutY="111.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextField fx:id="txtCustomerName" layoutX="161.0" layoutY="137.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextField fx:id="txtCustomerSurname" layoutX="161.0" layoutY="163.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextField fx:id="txtCustomerStreet" layoutX="161.0" layoutY="192.0" />
-      <TextField fx:id="txtCustomerHouseNo" layoutX="161.0" layoutY="221.0" />
-      <TextField fx:id="txtCustomerPlc" layoutX="161.0" layoutY="248.0" />
-      <TextField fx:id="txtCustomerTown" layoutX="161.0" layoutY="275.0" />
-      <TextField fx:id="txtCustomerOrderAmount" layoutX="161.0" layoutY="340.0" />
-      <TextField fx:id="txtCustomerSummary" layoutX="161.0" layoutY="372.0" />
-      <TextField fx:id="txtCustomerOutstanding" layoutX="161.0" layoutY="409.0" />
-      <TextField fx:id="txtCurrentDatabase" layoutX="161.0" layoutY="690.0" />
+      <TextField fx:id="txtCustomerID" editable="false" layoutX="161.0" layoutY="56.0" prefHeight="25.0" prefWidth="56.0" />
+      <TextField fx:id="txtCustomerNo" editable="false" layoutX="161.0" layoutY="111.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txtCustomerName" editable="false" layoutX="161.0" layoutY="137.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txtCustomerSurname" editable="false" layoutX="161.0" layoutY="163.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txtCustomerStreet" editable="false" layoutX="161.0" layoutY="192.0" />
+      <TextField fx:id="txtCustomerHouseNo" editable="false" layoutX="161.0" layoutY="221.0" />
+      <TextField fx:id="txtCustomerPlc" editable="false" layoutX="161.0" layoutY="248.0" />
+      <TextField fx:id="txtCustomerTown" editable="false" layoutX="161.0" layoutY="275.0" />
+      <TextField fx:id="txtCustomerOrderAmount" editable="false" layoutX="161.0" layoutY="340.0" />
+      <TextField fx:id="txtCustomerSummary" editable="false" layoutX="161.0" layoutY="372.0" />
+      <TextField fx:id="txtCustomerOutstanding" editable="false" layoutX="161.0" layoutY="409.0" />
+      <TextField fx:id="txtCurrentDatabase" layoutX="161.0" layoutY="690.0" prefHeight="25.0" prefWidth="315.0" />
       <ListView fx:id="lstCustomerOrders" layoutX="161.0" layoutY="440.0" prefHeight="200.0" prefWidth="149.0" />
       <Separator layoutX="17.0" layoutY="312.0" prefHeight="3.0" prefWidth="476.0" />
       <Separator layoutX="20.0" layoutY="97.0" prefHeight="3.0" prefWidth="476.0" />
@@ -40,20 +40,20 @@
       <Button fx:id="btnCustomerSearch" layoutX="333.0" layoutY="111.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="132.0" text="Kunde suchen" />
       <Button fx:id="btnCreateOrder" layoutX="333.0" layoutY="340.0" mnemonicParsing="false" onAction="#createOrder" prefHeight="25.0" prefWidth="132.0" text="Neue Bestellung" />
       <Button fx:id="btnDeleteCustomer" layoutX="333.0" layoutY="275.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="25.0" prefWidth="132.0" text="Kunde Löschen" />
-      <Button fx:id="btnNewDatabase" layoutX="333.0" layoutY="690.0" mnemonicParsing="false" onAction="#createDataBase" prefHeight="25.0" prefWidth="132.0" text="Neue Datenbank" />
+      <Button fx:id="btnNewDatabase" layoutX="325.0" layoutY="740.0" mnemonicParsing="false" onAction="#createDataBase" prefHeight="25.0" prefWidth="149.0" text="Neue Datenbank" />
       <Button fx:id="btnNewCustomer" layoutX="333.0" layoutY="150.0" mnemonicParsing="false" onAction="#createNewCustomer" prefHeight="25.0" prefWidth="132.0" text="Neuer Kunde" />
       <TableView fx:id="orderTable" layoutX="513.0" layoutY="152.0" prefHeight="200.0" prefWidth="1019.0">
         <columns>
-          <TableColumn fx:id="orderNo" maxWidth="150.0" minWidth="75.0" prefWidth="100.0" text="Bestellnummer" />
-          <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bestelldatum" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bestellsumme" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Ratenzahl" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Zahlungsstart" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Zahlungsende" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Erste Rate" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Folgende Raten" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Ausstehend" />
-            <TableColumn maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bereits gezahlt" />
+          <TableColumn fx:id="colOrderNo" maxWidth="150.0" minWidth="75.0" prefWidth="100.0" text="Bestellnummer" />
+          <TableColumn fx:id="colOrderDate" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bestelldatum" />
+            <TableColumn fx:id="colOrderSummary" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bestellsumme" />
+            <TableColumn fx:id="colRateCount" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Ratenzahl" />
+            <TableColumn fx:id="colPayStart" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Zahlungsstart" />
+            <TableColumn fx:id="colPayEnd" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Zahlungsende" />
+            <TableColumn fx:id="colFirstRate" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Erste Rate" />
+            <TableColumn fx:id="colRate" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Folgende Raten" />
+            <TableColumn fx:id="colStillToPay" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Ausstehend" />
+            <TableColumn fx:id="colAlreadyPaid" maxWidth="125.0" minWidth="75.0" prefWidth="100.0" text="Bereits gezahlt" />
         </columns>
       </TableView>
       <MenuBar fx:id="mainMenuBar" layoutY="2.0" prefHeight="25.0" prefWidth="1600.0">
@@ -83,5 +83,8 @@
       <Button fx:id="btnPrintPaymentPlan" layoutX="513.0" layoutY="111.0" mnemonicParsing="false" onAction="#printPaymentPlan" prefHeight="25.0" prefWidth="132.0" text="Ratenplan Drucken" />
       <Button fx:id="btnExportToPDF" layoutX="652.0" layoutY="111.0" mnemonicParsing="false" onAction="#exportAsPDF" prefHeight="25.0" prefWidth="132.0" text="Export als PDF" />
       <Button fx:id="btnExportToExel" layoutX="791.0" layoutY="111.0" mnemonicParsing="false" onAction="#exportAsExcel" prefHeight="25.0" prefWidth="132.0" text="Export als Excel" />
+      <Button fx:id="btnSelectDatabase" layoutX="158.0" layoutY="740.0" mnemonicParsing="false" onAction="#SelectDataBase" prefHeight="25.0" prefWidth="149.0" text="Datenbank auswählen" />
+      <Button fx:id="btnSaveCustomer" layoutX="334.0" layoutY="184.0" mnemonicParsing="false" onAction="#saveCustomer" prefHeight="25.0" prefWidth="132.0" text="Kunde Speichern" visible="false" />
+      <Button fx:id="btnCancelNewCustomer" layoutX="333.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancelNewCustomer" prefHeight="25.0" prefWidth="132.0" text="Nicht Speichern" visible="false" />
    </children>
 </AnchorPane>

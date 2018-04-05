@@ -1,6 +1,6 @@
 package com.customermanagement.main;
 
-import com.customermanagement.helpers.Gui_States;
+import com.customermanagement.helpers.GuiState;
 import com.customermanagement.helpers.Save_Database_Information;
 import com.customermanagement.listeners.Button_Listeners;
 

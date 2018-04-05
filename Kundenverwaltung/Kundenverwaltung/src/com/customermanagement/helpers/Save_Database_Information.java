@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import org.apache.log4j.Logger;
 
 import com.customermanagement.main.Cust_Gui;
+import com.customermanagement.main.MainGuiController;
 
 public class Save_Database_Information {
 
@@ -39,7 +40,7 @@ public class Save_Database_Information {
     }
     
    // Load the information about the last used Database
-   public void check_Database_File(Gui_States gui_states, Cust_Gui obj_Gui,Logger logger) {				
+   public void check_Database_File(GuiState gui_states, MainGuiController mainGuiController,Logger logger) {				
     	
         if(database_Info_File.exists() && database_Info_File.isFile() && database_Info_File.canRead()) {
             
@@ -51,8 +52,8 @@ public class Save_Database_Information {
                 
                   while((filePath = readFile.readLine()) != null) {
                         
-                      obj_Gui.setActiveDB(filePath);
-                      obj_Gui.setGoodResult();
+                      mainGuiController.setTxtCurrentDatabase(filePath);
+                    //  mainGuiController.setGoodResult();
                       logger.info("Database Information - Read - OK");
                   }
                 

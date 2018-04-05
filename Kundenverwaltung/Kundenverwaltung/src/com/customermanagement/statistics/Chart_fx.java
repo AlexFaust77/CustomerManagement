@@ -20,7 +20,7 @@ public class Chart_fx {
 	private XYChart.Series data_Series = new XYChart.Series<>();  
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public LineChart createChartWithToolTips() {
+public void createChartWithToolTips(LineChart<String, Number> orderLineChart) {
          
     final CategoryAxis xAxis = new CategoryAxis();
                        xAxis.setLabel("Monat");
@@ -28,7 +28,7 @@ public LineChart createChartWithToolTips() {
     NumberAxis yAxis = new NumberAxis();
                yAxis.setLabel("Rate in Euro");
     
-    LineChart<String,Number> linechart = new LineChart<>(xAxis,yAxis);
+   orderLineChart = new LineChart<>(xAxis,yAxis);
     
     if(lst_Months.size() == 0) {
         
@@ -42,9 +42,9 @@ public LineChart createChartWithToolTips() {
         	data_Series.getData().add(new XYChart.Data<>(lst_Months.get(months),num_Rates.get(months)));
         }    
         
-        linechart.getData().add(data_Series);
+        orderLineChart.getData().add(data_Series);
                 
-    		for(XYChart.Series<String,Number> s : linechart.getData()) {					    // create Tooltips for Chart => Display by Mouse Hover
+    		for(XYChart.Series<String,Number> s : orderLineChart.getData()) {					    // create Tooltips for Chart => Display by Mouse Hover
           
     			for(XYChart.Data<String, Number> d : s.getData()) {
                         
@@ -68,7 +68,6 @@ public LineChart createChartWithToolTips() {
 			}
 		} 
     }
-    return linechart;																			// return the complete Chart Object
 }   
     
     public void convert_String_Number() { 														// convert String to Number format for chart

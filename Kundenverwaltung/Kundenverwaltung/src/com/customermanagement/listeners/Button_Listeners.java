@@ -13,7 +13,7 @@ import com.customermanagement.entities.Obj_Customer;
 import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.helpers.Calculator;
 import com.customermanagement.helpers.Clear_Data;
-import com.customermanagement.helpers.Gui_States;
+import com.customermanagement.helpers.GuiState;
 import com.customermanagement.helpers.Save_Database_Information;
 import com.customermanagement.inputchecks.InputChecks;
 import com.customermanagement.main.Cust_Gui;
@@ -69,7 +69,7 @@ public class Button_Listeners {
 	 private ObservableList<Obj_Customer>lst_Obj_Customer = FXCollections.observableArrayList(); // list for all Customer Objects
 	 
 	 // Stage primaryStage will be removed  look line 222 if its neccesary
-	 public Button_Listeners(Gui_States gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, 
+	 public Button_Listeners(GuiState gui_State,Cust_Gui Obj_Cust_Gui,Logger logger, 
 			 				 Stage primaryStage, Calculator calculate, SQL_Statements dataBaseRequest, 
 			 				 TableView<Obj_Order> fx_Table_View, OrderGuiController orderGuiControl) {
 	
@@ -78,7 +78,7 @@ public class Button_Listeners {
 	            @Override
 	            public void handle(ActionEvent e) {
 	            	  obj_Customer = data_cleaner.cleanObjCustomer(obj_Customer);
-	                  				 data_cleaner.cleanLists(lst_month,orderlist,lst_Obj_Customer,lst_All_Customers,lst_monthly_Rate);
+	                  				 //data_cleaner.cleanLists(lst_month,orderlist,lst_Obj_Customer,lst_All_Customers,lst_monthly_Rate);
 	                  // Database request				
 	                  obj_Customer = dataBaseRequest.getCustomer(obj_Customer,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger);  	
 	                  logger.info("Database Request - Done");
@@ -97,25 +97,15 @@ public class Button_Listeners {
 	                  			  calculate.fill_month_lst(Obj_Cust_Gui,dataBaseRequest,logger);
 	                  lst_month = calculate.getLstMonth();
 	                  logger.info("Monthlist filled - Done");
-	                  
-	                  
-	                  
-	                  
+	          	                  
 	                  lstAllOrders = dataBaseRequest.getAllOrderObjects(obj_Customer,Obj_Cust_Gui.getCustNr(),Obj_Cust_Gui.getActiveDB(),logger); 
 	                  
 	                  fillOrderNumberList(lstAllOrders,Obj_Cust_Gui,logger);
-	                  
-	                  System.out.println("Grösse der Order Liste " + lstAllOrders.size());
-	                  
-	                  //hier der weiter damit ich weis wo ich war
-	                  
+	                            
                       //orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBase_Request,logger);
 	                  			    calculate.setLstMonth(lst_month);
 	                  			    calculate.getAll_Rates(logger,lstAllOrders); // <= hier läuft was schief -- Hier weiter
-	                  
-	                  
-	                  System.out.println("Vorhandene Bestellungen : " + lstAllOrders.size()+ "\n");
-	                  
+	                            
 	                  if(lstAllOrders.size() > 0 ) {
 	                	  	   obj_Customer.setLstAllOrders(lstAllOrders);	 // Bestellobjekte werden Kunden zugewiesen
 	                	  	   System.out.println("Anzahl Bestellobjekte Customer : " + obj_Customer.getLstAllOrders().size() + "\n");
@@ -123,30 +113,22 @@ public class Button_Listeners {
 	                	  	   lst_monthly_Rate = calculate.getMonthlyRate();
 	                	  	   logger.info("All Rates calculated - Done");
 	                  
-	                	  	   for(int i = 0; i < lst_monthly_Rate.size(); i++) {
-	                	  		   	System.out.println("Liste der Monatesraten Rate => " + (i + 1) + " Aktueller Wert : " + lst_monthly_Rate.get(i)  +"\n" );
-	                	  	   }
-	                  
 	                	  	   // create chart for monthly Rates
 	                	  	   Chart_fx rate_Chart = new Chart_fx();																									
 	                	  	   		    rate_Chart.setMonthlyRate(lst_monthly_Rate);
 	                	  	   		    rate_Chart.setMonthslist(lst_month);
-	                	  	   		    rate_Chart.createChartWithToolTips();
+	                	  	   		  //  rate_Chart.createChartWithToolTips();
 	                	  	   		    Obj_Cust_Gui.setLineData(rate_Chart.getChartData());
 	                  
 	                	  	   logger.info("ratechart created - Done"); 
 	                
 	                	  	   //Table for Order Overview - getestet funktioniert
-	                	  	  
-	                	  	   
-	                	  	   
-	                	  	   
-	                	  	   
+	                	  	                	  	   
 	                	  	   TableView<Obj_Order> view_fx_Table = new TableView<Obj_Order>();
 	                	  	                        view_fx_Table.setId("CurrentOrders");
 	                	  	   Table_fx table = new Table_fx();
-	                	  	   			table.setOrderlist(lstAllOrders);
-	                	  	   			view_fx_Table = table.createTable();
+	                	  	   		//	table.setOrderlist(lstAllOrders);
+	                	  	   			//view_fx_Table = table.createTable();
 	                	  	   			
 	                	  	   			Obj_Cust_Gui.tabCurrentOrders.setContent(view_fx_Table);
 	                	  	   			
@@ -157,91 +139,17 @@ public class Button_Listeners {
 	            }
 	        });
 	
-		 // GUI State New Customer
-		 Obj_Cust_Gui.btn_Cust_New.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {  
-	                   gui_State.create_Customer(Obj_Cust_Gui);
-	                   logger.info("Gui State set - Done"); 
-	            }
-	        });
-
-	     // Delete all Orders from one Customer - and Delete the Selected Customer
+			     // Delete all Orders from one Customer - and Delete the Selected Customer
 		 Obj_Cust_Gui.btn_Cust_Del.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
 	            public void handle(ActionEvent e) {
-	                Alert customer_Confirmation = new Alert(AlertType.CONFIRMATION);
-	                	  customer_Confirmation.setTitle("Kunde wirklich loeschen ?");
-	                	  customer_Confirmation.setHeaderText("Kunde wirklich loeschen ?\nEs werden alle Datensaetze zu diesem Kunden geloescht !");
-	                	  customer_Confirmation.setContentText("Soll der Kunde-Nr.: " + Obj_Cust_Gui.getCustNr() + "\n wirklich geloescht werden?" );
-	                      Optional<ButtonType> result = customer_Confirmation.showAndWait(); 
-	                      // if OK - Delete Customer
-	                      if(result.get() == ButtonType.OK) {
-	                    	   logger.info("OK - Start to Delete Datarecord");
-	                    	   // First Delete all Orders from this Customer
-	                     //      for(int each_Order = 0; each_Order < Obj_Cust_Gui.getBestellNummernListe().size();each_Order++) {             			
-	                     //          String act_Order = orderlist.get(each_Order).getOrderNo();
-	                     //          dataBase_Result = dataBase_Request.delete_Order(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(), act_Order,logger);
-	                      //     }
-	                           logger.info("Orders Deleted - Done");
-	                           // Then Delete Customer
-	                           dataBase_Result = dataBaseRequest.delete_Customer(Obj_Cust_Gui.getActiveDB(), Obj_Cust_Gui.getCustNr(),logger);				
-	                           logger.info("Customer Deleted - Done");
-	                          
-	                           gui_State.gui_State_Start(Obj_Cust_Gui);
-	                           logger.info("GUI State - Set Start - Done");
-	                       } else {
-	                           // MSG - Customer not found
-	                       }
+	                
 	            }
 	        });
 	        
-	        // Select Database  
-		    Obj_Cust_Gui.btn_Select_Db.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-	                                          
-	            	select_Database.setTitle("Bitte Datenbank auswaehlen !");
-	                                               
-	                               File selected_database = select_Database.showOpenDialog(primaryStage);					
-	                                    if(selected_database != null) {
-	                                                
-	                                    	        // connect to selected Database
-	                                                dataBase_Result = dataBaseRequest.DatabaseConnection(selected_database.getAbsolutePath(),logger);
-	                                                
-	                                                if(dataBase_Result) {  // Connection OK
-	                                                	Obj_Cust_Gui.setActiveDB(selected_database.getAbsolutePath());
-	                                                	Save_Database_Information last_used_database = new Save_Database_Information();
-	                                                							  last_used_database.save_Database_Info(selected_database.getAbsolutePath(), logger);
-	                                                	Obj_Cust_Gui.setGoodResult();
-	                                                	logger.info("DB selection - Status : OK" + selected_database.getAbsolutePath());
-	                                                }  else {             // connection failed
-	                                                	Obj_Cust_Gui.setActiveDB("Verbindungsaufbau fehlgeschlagen");
-	                                                	logger.error("DB selection - Arrrrgg : something wrong with your File" + selected_database.getAbsolutePath());
-	                                                	Obj_Cust_Gui.setBadResult();
-	                                                }       
-	                                    }
-	            }
-	        });
-	        
-	        // Build the new SQL - Lite Database 
-		    Obj_Cust_Gui.btn_New_Db.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-	            	select_Database.setTitle("Neue Datenbank erstellen !");
-	            	
-	                File dataBase_Name = select_Database.showSaveDialog(primaryStage);
-	                     if(dataBase_Name != null) {
-	                                        	 				   
-	                    	 dataBaseRequest.build_Database(dataBase_Name.getName() + ".db",logger);
-	                    	 Obj_Cust_Gui.setActiveDB(dataBase_Name.getAbsolutePath() + ".db");
-	                         logger.info("Database builded - Information Field set");
-	                         
-	                     } else {
-	                         // Nichts tun
-	                     }
-	            }
-	        });
+	       
+     
+
 	        // Save new Customer  
 		    Obj_Cust_Gui.btn_Cust_Save.setOnAction(new EventHandler<ActionEvent>() {
 	            boolean doubled_Customer = false;
@@ -276,7 +184,7 @@ public class Button_Listeners {
 	    		logger.info("Object is saved to selected Database");
 	    		Obj_Cust_Gui.setBtnCustCancel(false);
 	    		Obj_Cust_Gui.setBtnCustSave(false);
-	    		gui_State.gui_State_Start(Obj_Cust_Gui);
+	    	// ---	gui_State.gui_State_Start(Obj_Cust_Gui);
 	    	//} else {
 	        // 	JOptionPane.showMessageDialog(null, "Datensatz konnte nicht gespeichert werden !!!\n"
 	        //  + "Kundennummer bereits vorhanden !!!", "Fehler beim anlegen des Kunden", JOptionPane.CANCEL_OPTION);
@@ -289,52 +197,6 @@ public class Button_Listeners {
 	        }
 	     }
 	});
-	        // Cancel - Not Saving Customer Data  
-		    Obj_Cust_Gui.btn_Cust_NoSave.setOnAction(new EventHandler<ActionEvent>() {   
-	            @Override
-	            public void handle(ActionEvent e) {
-	            	   // Reset GUI State
-	                   gui_State.gui_State_Start(Obj_Cust_Gui);
-	                   logger.info("GUI State is resetet");
-	            }
-	        });
-
-
-	        // Export as PDF File
-		    Obj_Cust_Gui.btn_Plan_Pdf.setOnAction(new EventHandler<ActionEvent>() {
-	            
-	            @Override
-	            public void handle(ActionEvent e) {
-	                // calculations for PDF Export
-	            	//orderlist = calculate.getOrder_Objects(Obj_Cust_Gui, obj_Order,dataBaseRequest,logger);
-	            				calculate.setLstMonth(lst_month);
-	                logger.info("Calculations Done for PDF Export");               
-	            	// Create PDF Export
-	                PDF_Builder create_Pdf = new PDF_Builder();							
-	            	     		create_Pdf.setCustomer(obj_Customer);
-	            		    	create_Pdf.setListMonthlyRate(lst_monthly_Rate);
-	            			    create_Pdf.setListMonths(lst_month);
-	            			    create_Pdf.create_PDF_Export(logger);
-	            	logger.info("PDF Export Done");
-	            }
-	        });
-
-		   Obj_Cust_Gui.btn_New_Order.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-	            	// create new FXML order GUI
-	            	orderFlag = 0;
-	              	orderGuiControl.startFXMLOrderGui(orderFXMLStage,objOrder);
-				    orderGuiControl.setMainGui(Obj_Cust_Gui);
-				    orderGuiControl.setMainStage(primaryStage);
-				    orderGuiControl.setOrderFlag(orderFlag);
-				    
-	                gui_State.newFXMLOrder(orderGuiControl);
-	                orderGuiControl.setOrderCustNo(Obj_Cust_Gui.getCustNr());
-	                        
-	                             	
-                }
-	        });  
 	    
 	       //  View All Customer as Table
 	       Obj_Cust_Gui.m_Cust_View.setOnAction(new EventHandler<ActionEvent>() {
@@ -355,32 +217,13 @@ public class Button_Listeners {
 	            }
 	        });
 	        // System exit
-	       Obj_Cust_Gui.m_Exit.setOnAction(new EventHandler<ActionEvent>() {
-	             @Override
-	             public void handle(ActionEvent e) {
-	                    System.exit(0);
-	            }
-	        });
-	        // Excel Export   
-	        Obj_Cust_Gui.btn_Plan_Excel.setOnAction(new EventHandler<ActionEvent>() {
-	             @Override
-	             public void handle(ActionEvent e) {
-	                 try {
-	                	// using save Dialog for Filename => getFileName
-	                    String fileName = getFileName("Excel Export",".xls",primaryStage);
-	                   	// create Excel Export                    
-	                    excel_Export = new Excel_Export(); 
-	                    excel_Export.setObj_Customer(obj_Customer);
-	                    excel_Export.setLstMonthlyRate(lst_monthly_Rate);
-	                    excel_Export.setLst_Month(lst_month);
-	                    excel_Export.setOutputFile(fileName);
-	                    excel_Export.write_Excel_Export();
-	                    logger.info("Excel Export is created");
-	                 } catch (IOException | WriteException ex) {
-	                	logger.error("Excel Export : " + ex.getLocalizedMessage());
-	                 }
-	             }
-	        });
+	      // Obj_Cust_Gui.m_Exit.setOnAction(new EventHandler<ActionEvent>() {
+	      //       @Override
+	      //       public void handle(ActionEvent e) {
+	      //              System.exit(0);
+	      //      }
+	      //  });
+
 	        
 	        
 	   	 ////
@@ -397,7 +240,7 @@ public class Button_Listeners {
 	   					logger.debug("com.customermanagement.listeners.OrderListeners - orderList" + objOrder.getOrderNo());
 	   					
 	   					orderFlag = 1;
-		              	orderGuiControl.setMainGui(Obj_Cust_Gui);
+		              	//orderGuiControl.setMainGui(Obj_Cust_Gui);
 					    orderGuiControl.setMainStage(primaryStage);
 					    orderGuiControl.setOrderFlag(orderFlag);
 					    orderGuiControl.startFXMLOrderGui(orderFXMLStage,objOrder);
@@ -412,23 +255,7 @@ public class Button_Listeners {
 	   				}
 	   			}
 	   	}); 
-
-	    
-	        
-	        
-	        
-	        
-	        
-	        
-       }
-	
-	 
-	 
-	 
-	 
-
-	 
-	 
+      }
 	 
 	 // 18 ***************** FINISHED !!!!! - internal Method returns file Name include Path  ********************************************************************************************************     
 	private String getFileName(String title, String fileExt,Stage primaryStage) {

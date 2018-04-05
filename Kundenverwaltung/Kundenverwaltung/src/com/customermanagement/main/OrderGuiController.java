@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import com.customermanagement.database.SQL_Statements;
 import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.helpers.Calculator;
-import com.customermanagement.helpers.Gui_States;
+import com.customermanagement.helpers.GuiState;
 import com.customermanagement.helpers.Logger_Init;
 import com.customermanagement.inputchecks.InputChecks;
 
@@ -34,13 +34,13 @@ public class OrderGuiController {
 	Stage orderStage = new Stage();
 	private boolean dataBaseResult; 										   // DB Contact Result
 	Obj_Order objOrder = new Obj_Order("",null,null,null,0,0.0,0.0,0.0,"");    // Object Order
-	Gui_States guiState = new Gui_States();								       // Change GuiStateas and Styles
+	GuiState guiState = new GuiState();								       // Change GuiStateas and Styles
     Calculator calculate = new Calculator();								   // Calculate the Rates
     InputChecks checkInput = new InputChecks();      						   // Check all Input from User
     SQL_Statements dataBaseRequest = new SQL_Statements();	     		       // all SQL - Lite statements
     private static final Logger logger = Logger_Init.getInstance();			   // Logger
     DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-    Cust_Gui mainGui = new Cust_Gui(); 											
+    MainGuiController mainGui; 											
     Stage mainStage = new Stage();
     int orderFlag = 0;											               // Order Flag 0 = new Order 1 = Update Order
 	
@@ -124,7 +124,7 @@ public class OrderGuiController {
      	   saveOrderData();
      		            	
      	   if(userDialog("Eine weitere Bestellung ?","Frage","Möchten Sie eine weitere Bestellung erfassen ?")) {
-     		  this.setOrderCustNo(mainGui.getCustNr());
+     		 // this.setOrderCustNo(mainGui.getTxtCustomerNo());
      		  guiState.newFXMLOrder(this);	
      	   } else {
      		 
@@ -164,7 +164,7 @@ public class OrderGuiController {
                   // Delete Order if OK
                   if(result.get() == ButtonType.OK) {															
                       
-                      dataBaseResult = dataBaseRequest.deleteOrder(mainGui.getActiveDB(), mainGui.getCustNr(), orderNo,logger);
+                      dataBaseResult = dataBaseRequest.deleteOrder(mainGui.getTxtCurrentDatabase(), mainGui.getTxtCustomerNo(), orderNo,logger);
                       orderStage.close();
                       
                       // Remove OrderNO from orderlist
@@ -184,7 +184,7 @@ public class OrderGuiController {
 	// Setter
 	public void setOrderFlag(int orderFlag)        { this.orderFlag = orderFlag;                             }
 	public void setOrderCustNo(String orderCustNo) { this.txtOrderCustNo.setText(orderCustNo);               }
-	public void setMainGui(Cust_Gui mainGui)       { this.mainGui = mainGui;                                 }
+	public void setMainGui(MainGuiController mainGuiController)       { this.mainGui = mainGuiController;    }
 	public void setOrderNo(String orderNo)		   { this.txtOrderNo.setText(orderNo);                       }
 	public void setMainStage(Stage mainStage)      { this.mainStage = mainStage;                             } 
 	public void setOrderSummary(Double summary)    { this.txtOrderSummary.setText(summary.toString());       }
@@ -242,9 +242,9 @@ public class OrderGuiController {
        	   logger.debug("com.customermanagement.listeners saveOrderData - OrderListeners - check OK"); 
            	                    
            if(orderFlag == 0) {
-              dataBaseResult = dataBaseRequest.new_Order(objOrder, mainGui.getActiveDB(),logger);
+              dataBaseResult = dataBaseRequest.new_Order(objOrder, mainGui.getTxtCurrentDatabase(),logger);
            } else {
-              dataBaseResult = dataBaseRequest.updateOrder(objOrder, mainGui.getActiveDB(),logger);
+              dataBaseResult = dataBaseRequest.updateOrder(objOrder, mainGui.getTxtCurrentDatabase(),logger);
            }
                         
            if(dataBaseResult) {

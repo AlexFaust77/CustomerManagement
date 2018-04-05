@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import com.customermanagement.database.SQL_Statements;
 import com.customermanagement.entities.Obj_Order;
 import com.customermanagement.helpers.Calculator;
-import com.customermanagement.helpers.Gui_States;
+import com.customermanagement.helpers.GuiState;
 import com.customermanagement.inputchecks.InputChecks;
 import com.customermanagement.main.Cust_Gui;
 import com.customermanagement.main.OrderGui;
@@ -44,7 +44,7 @@ public class OrderListeners {
 	DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
 	int orderFlag = 0;														   // Order Flag 0 = new Order 1 = Update Order
 	
-	public OrderListeners(Gui_States guiState,Cust_Gui mainGui,Logger logger, Stage mainGuiStage, OrderGui orderGui, 
+	public OrderListeners(GuiState guiState,Cust_Gui mainGui,Logger logger, Stage mainGuiStage, OrderGui orderGui, 
 						  InputChecks checkInput, Calculator calculate, SQL_Statements dataBaseRequest, TableView<Obj_Order> fx_Table_View) {
 		/*
 		 mainGui.btn_New_Order.setOnAction(new EventHandler<ActionEvent>() {
@@ -210,7 +210,7 @@ TableView selectedTable = selectedContent.lookup("CurrentOrders")
 	
 	
 	private void saveOrderData(OrderGui orderGui, Logger logger, Obj_Order objOrder,InputChecks checkInput, 
-			                   Calculator calculate, SQL_Statements dataBaseRequest, Cust_Gui mainGui, Gui_States guiState) {
+			                   Calculator calculate, SQL_Statements dataBaseRequest, Cust_Gui mainGui, GuiState guiState) {
 				
 	 //	    checkInput.checkAllDates(orderGui, logger,objOrder);
 	//		checkInput.checkAllIntegers(orderGui, logger, objOrder,calculate);
@@ -251,7 +251,7 @@ TableView selectedTable = selectedContent.lookup("CurrentOrders")
 	}
 	
 	
-	private void createNewOrderGui(OrderGui orderGui, Cust_Gui mainGui, Gui_States guiState, Logger logger, Obj_Order objOrder) {
+	private void createNewOrderGui(OrderGui orderGui, Cust_Gui mainGui, GuiState guiState, Logger logger, Obj_Order objOrder) {
     		
 		 /*                  
 		                   

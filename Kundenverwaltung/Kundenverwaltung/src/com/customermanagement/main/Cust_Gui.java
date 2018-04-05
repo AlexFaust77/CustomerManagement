@@ -48,7 +48,6 @@ public class Cust_Gui extends Application {
 	    public Button btn_Order_New = new Button("Neue Bestellung");				// will be removed - new Gui Design in Progress
 	    public Button btn_Cust_Del = new Button("Kunde Loeschen");
 	    public Button btn_Select_Db = new Button("Datenbankauswahl");
-	    public Button btn_New_Db = new Button("Neue Datenbank");
 	    public Button btn_Plan_Pdf = new Button("Ratenplan als PDF");
 	    Button btn_Plan_Print = new Button("Ratenplan Drucken");
 	    public Button btn_Order_Change = new Button("Bestellung ändern");
@@ -75,12 +74,8 @@ public class Cust_Gui extends Application {
 	    // Logger   ==> Log4j - Framework
 	    private static final Logger logger = Logger_Init.getInstance();			                     
 	    
-	    TableView<Obj_Order> fx_Table_View = new TableView<Obj_Order>();
-	    ObservableList<Obj_Order> tbl_Data_Records = FXCollections.observableArrayList();
-		    
-	    XYChart.Series daten;
-	    ObservableList<XYChart.Series<String, Double>> obs_Lst_Data = FXCollections.observableArrayList();
-	    Series<String, Double> series_Data = new Series<String, Double>();
+
+
 	     
 	    public TabPane orderPanel = new TabPane();
 	    TabPane chartPanel = new TabPane();
@@ -211,14 +206,10 @@ public class Cust_Gui extends Application {
 	        	btn_Plan_Print.setMaxWidth(Double.MAX_VALUE);
 	            btn_Cust_Del.setMaxWidth(Double.MAX_VALUE);
 	            btn_Plan_Excel.setMaxWidth(Double.MAX_VALUE);
-	            btn_New_Db.setMaxWidth(Double.MAX_VALUE);
-	            vb_Cust_Btn.getChildren().addAll(btn_Cust_Search,btn_Cust_New,btn_Cust_Save,btn_Cust_NoSave,btn_New_Order,btn_Cust_Del,
-	                 	 						 btn_Plan_Pdf,btn_Plan_Print,btn_Plan_Excel,btn_New_Db);
+		            vb_Cust_Btn.getChildren().addAll(btn_Cust_Search,btn_Cust_New,btn_Cust_Save,btn_Cust_NoSave,btn_New_Order,btn_Cust_Del,
+	                 	 						 btn_Plan_Pdf,btn_Plan_Print,btn_Plan_Excel);
 	       
-	       orderPanel.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-	       tabCurrentOrders.setText("Bestellungen");
-	       tabCurrentOrders.setContent(fx_Table_View);
-	       
+       
 	       chartPanel.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 	       xAxis.setLabel("Monate");
 	       yAxis.setLabel("Rate in Euro");
@@ -264,8 +255,8 @@ public class Cust_Gui extends Application {
 	               
 	       guiGruppe.getChildren().addAll(mainpane,mbar_Cust);
 	                  
-	       Gui_States gui_States = new Gui_States();
-	                  gui_States.gui_State_Start(this);
+	       GuiState gui_States = new GuiState();
+	       //           gui_States.gui_State_Start(this);
 	       
 	                         
 	       OrderGui orderGui = new OrderGui();										 // GUI for Order Management
@@ -274,31 +265,26 @@ public class Cust_Gui extends Application {
 	       SQL_Statements dataBaseRequest = new SQL_Statements();			         // all SQL - Lite statements
 	       
 		   OrderGuiController orderGuiControl = new OrderGuiController(); 			 // FXML Controller for Order Form
-		  
-		   
-		   
+		     
 		   
 		   MainGuiController mainGuiControl = new MainGuiController();			     // FXML Controller for Main Gui yet without Ojbekt - empty Constructor
-		 		   
-		   Stage mainGuiStage = new Stage();
-		   
 		  
+		   mainGuiControl.startFXMLMainGui(primaryStage);
 		   
 		   
-		   
-	       Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger,primaryStage,calculate,dataBaseRequest,fx_Table_View,orderGuiControl);
-	       OrderListeners orderListener = new OrderListeners(gui_States,this,logger, primaryStage,orderGui,checkInput,calculate,dataBaseRequest,fx_Table_View);
+	     //  Button_Listeners btn_Listener = new Button_Listeners(gui_States,this,logger,primaryStage,calculate,dataBaseRequest,fx_Table_View,orderGuiControl);
+	     //  OrderListeners orderListener = new OrderListeners(gui_States,this,logger, primaryStage,orderGui,checkInput,calculate,dataBaseRequest,fx_Table_View);
 	        
 	       // Feldueberwachung absichern = new Feldueberwachung(gui_States,this,primaryStage);
 	        
-	       Save_Database_Information database_Exists = new Save_Database_Information();
-	        						 database_Exists.check_Database_File(gui_States,this,logger);
+	    //   Save_Database_Information database_Exists = new Save_Database_Information();
+	    //    						 database_Exists.check_Database_File(gui_States,this,logger);
 	    //   Old GUI                     
 	    //   primaryStage.setTitle("Kundenverwaltung");
 	    //   primaryStage.setScene(scene);
 	    //   primaryStage.show();
 	       
-	       mainGuiControl.startFXMLMainGui(mainGuiStage);
+	       
 	    	
 	    }
 
@@ -338,34 +324,13 @@ public class Cust_Gui extends Application {
 	 public void setActiveDB(String db){this.txt_Selected_Db.setText(db); }
 	 
 	 public Boolean getChkHibernateValue() { return chkHibernate.selectedProperty().getValue(); }
-	 	 
-	 public void setEditCustNr(boolean on_off,String color)    { this.txt_Cust_Nr.setEditable(on_off); 				// Customer Field Design and activation
-        													   this.txt_Cust_Nr.setStyle("-fx-control-inner-background: " + color + ";"); }
-	 public void setEditLastName(boolean on_off,String color)   { this.txt_Cust_LastName.setEditable(on_off);
-     															  this.txt_Cust_LastName.setStyle("-fx-control-inner-background: " + color + ";");}
-	 public void setEditCustName(boolean on_off,String color) { this.txt_Cust_Name.setEditable(on_off);
-     															this.txt_Cust_Name.setStyle("-fx-control-inner-background: " + color + ";");}
-     public void setEditCustStreet(boolean on_off,String color) { this.txt_Cust_Street.setEditable(on_off); 
-        	             										  this.txt_Cust_Street.setStyle("-fx-control-inner-background: " + color + ";");}
-     public void setEditCustHNr(boolean on_off,String color)  { this.txt_Cust_HNr.setEditable(on_off); 
-        												  this.txt_Cust_HNr.setStyle("-fx-control-inner-background: " + color + ";");}
-     public void setEditCustPc(boolean on_off, String color)    { this.txt_Cust_Pc.setEditable(on_off);
-        													 this.txt_Cust_Pc.setStyle("-fx-control-inner-background: " + color + ";");}
-     public void setEditCustRes(boolean on_off,String color)     { this.txt_Cust_Res.setEditable(on_off);
-     															  this.txt_Cust_Res.setStyle("-fx-control-inner-background: " + color + ";");}
      
 	 public void setBadResult() { this.txt_Selected_Db.setStyle("-fx-control-inner-background: red;"); }  			// Extra Fields Database Status etc.
 	 public void setGoodResult() { this.txt_Selected_Db.setStyle("-fx-control-inner-background: green;"); }
 	       
 	 public void setBtnCustSave(boolean on_off)              { this.btn_Cust_Save.setVisible(on_off);        }    // Button visibillity
 	 public void setBtnCustCancel(boolean on_off)            { this.btn_Cust_NoSave.setVisible(on_off); }
- 	  
-	    //  public void setTabellenRegister(TableView tabelle) { this.tabellenRegister.setContent(tabelle);}
-	 public void setFxTableItems(ObservableList<Obj_Order> tbl_Data_Records) { this.tbl_Data_Records = tbl_Data_Records; }
-	 public TableView<Obj_Order> getTableView() { return this.fx_Table_View; }
-	 
-	 public void setTableView(TableView tableView ) { this.fx_Table_View = tableView;
-	 												  this.fx_Table_View.refresh();}
-    
+  
+   
 	 public void setLineData(XYChart.Series data) { this.linechart.getData().add(data); }
 }
